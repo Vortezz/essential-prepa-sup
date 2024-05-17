@@ -68,6 +68,7 @@
 #let derivativePart(a, b, c) = $(cal(d) #a)/(cal(d) #b) | #c$
 #let derivative(a, b) = $(d #a)/(d #b)$
 #let dt = $d t$
+#let ddt(a) = $derivative(#a, t)$
 
 #show: project.with(
   title: "Thermodynamique",
@@ -81,11 +82,15 @@
 
 #outline(depth:1,indent: 10pt, title: "Électricité :", target: heading.where(supplement: [elec]))
 
+// Faire des circuits : https://www.circuit-diagram.org/editorb/
+
 #outline(depth:1,indent: 10pt, title: "Ondes :", target: heading.where(supplement: [waves]))
 
 #outline(depth:1,indent: 10pt, title: "Mécanique :", target: heading.where(supplement: [meca]))
 
 #outline(depth:1,indent: 10pt, title: "Thermodynamique :", target: heading.where(supplement: [thermo]))
+
+#outline(depth:1,indent: 10pt, title: "Annexe :", target: heading.where(supplement: [annex]))
 
 #let pext = $P_"ext"$
 
@@ -204,6 +209,8 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
 
 == Associations des résistors
 
+#figure(image("elec/serial_res.png", width: 30%))
+
 #theorem([Association série de résistors],[
   Soit $R_1$ et $R_2$ deux résistances en série, on a $R_e = R_1 + R_2$ la résistance équivalente
 ])
@@ -211,6 +218,8 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
 #demo([
   On a $U_1 = R_1 I$ et $U_2 = R_2 I$ ainsi $U = U_1 + U_2 = R_1 I + R_2 I = (R_1 + R_2) I$ ainsi $R_e = R_1 + R_2$
 ])
+
+#figure(image("elec/parallel_res.png", width: 25%))
 
 #theorem([Association parallèle de résistors],[
   Soit $R_1$ et $R_2$ deux résistances en parallèle, on a $1/R_e = 1/R_1 + 1/R_2$ la résistance équivalente
@@ -222,11 +231,15 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
 
 == Ponts diviseurs
 
+#figure(image("elec/serial_res.png", width: 30%))
+
 #theorem([Pont diviseur tension],[Soit $R_1$ et $R_2$ deux résistances en séries, $U = R_1/(R_1 + R_2) I$])
 
 #demo([
   On a $U_1 = R_1 I$ et $U = (R_1 + R_2) I$ d'où $U_1/U = (R_1 I)/((R_1+R_2) I)$
 ])
+
+#figure(image("elec/parallel_res.png", width: 25%))
 
 #theorem([Pont diviseur courant],[Soit $R_1$ et $R_2$ deux résistances en parallèle, $I_1 = R_2/(R_1 + R_2) I$])
 
@@ -246,6 +259,8 @@ $U$ est donc indépendante, c'est une dipôle actif.
 
 #figure(image("elec/thevenin.png", width: 20%))
 
+// TODO : REDO THE PICTURE
+
 Un générateur réel est un générateur de Thévenin, on a :
 
 #theorem([Générateur de Thévenin],[
@@ -260,7 +275,135 @@ Il existe des *générateurs de courant* qui fixent une intensité dans le circu
 
 #heading([Circuits d'ordre 1], supplement: [elec])
 
-A faire
+== Le condensateur
+
+=== Généralités
+
+Le *condensateur* est un dipôle linéaire composé de deux armatures séparées par un milieu isolant (_diélectrique_).
+
+#figure(image("elec/condensator.jpg", width: 10%))
+
+On a $Q$ la charge algébrique par l'armature de gauche et $-Q$ par celle de droite : le condensateur est globalement neutre.
+
+On a $Q = C U$ avec $C$ la *capacité du condensateur* en Farad ($F$)
+
+#theorem([Intensité aux bornes d'un condensateur],[
+  En convention récepteur, $I = C ddt(U)$
+])
+
+#demo([
+  On a $ddt(Q) = (delta Q)/dt = I$ et $Q = C U$ donc $I = ddt(Q) = ddt(C U) = c ddt(U)$
+])
+
+#theorem([Énergie stockée dans un condensateur],[
+  En convention récepteur, on a $E = 1/2 C U^2$
+])
+
+#demo([
+  On a $P_"reçue" = U I = U times c ddt(U) = ddt(1/2 C U^2)$ or $P_"reçue" = ddt(E)$ d'où $E = 1/2 C U^2$
+])
+
+#theorem([Continuité de $U$ au bornes d'un condensateur],[
+  Aux bornes d'un condensateur $U$ est continue
+])
+
+#demo([
+  On suppose $U$ discontinue donc $E$ aussi, ainsi $P = ddt(E)$ diverge donc $P_"reçue"$ infinie n'est pas possible
+])
+
+#theorem([Comportement en régime permanant],[
+  En régime permanent un condensateur est équivalent à un interrupteur ouvert ($I = 0A$)
+])
+
+=== Associations
+
+#figure(image("elec/serial_capa.png", width: 30%))
+
+#theorem([Association série de condensateurs],[
+  Soit $C_1$ et $C_2$ deux condensateurs en parallèle, on a $1/C_e = 1/C_1 + 1/C_2$ le condensateur équivalent
+])
+
+#demo([
+  On a $U = U_1 + U_2$ avec $i = i_1 = i_2$ d'où $i = C_1 ddt(U_1)= C_2 ddt(U_2)$.
+
+  Ainsi on a $ddt(U) = ddt(U_1) + ddt(U_2)$ soit $i/C_e = i/C_1 + i/C_2$ d'où la relation cherchée.
+])
+
+#figure(image("elec/parallel_capa.png", width: 25%))
+
+#theorem([Association parallèle de condensateurs],[
+  Soit $C_1$ et $C_2$ deux condensateurs en série, on a $C_e = C_1 + C_2$ le condensateur équivalent
+])
+
+#demo([
+  Loi des noeuds on a $i = i_1 + i_2$ d'où on a $i_1 = C_1 ddt(U)$ et $i_2 = C_2 ddt(U)$ d'où $i = (C_1 + C_2) ddt(U)$
+])
+
+== Charge d'un condensateur
+
+On peut étudier la charge d'un condensateur (ou sa décharge) avec une équation d'ordre 1 dans un circuit RC
+
+#theorem([Équation différentielle RC],[
+  On a $ ddt(U) + 1/(R C) U = A $ avec $tau = R C$ le temps caractéristique
+])
+
+== La bobine
+
+=== Généralités
+
+La *bobine* est un dipôle linéaire composé d'un enroulement de fils sur lui même
+
+#figure(image("elec/inductor.png", width: 20%))
+
+On associe à une bobine une *inductance* $L$ en Henry ($H$), dépendant du nombre de fils et la quantités de spires (tours)
+
+#theorem([Intensité aux bornes d'une bobine],[
+  En convention récepteur, $U = L ddt(i)$
+])
+
+#theorem([Énergie stockée dans une bobine],[
+  En convention récepteur, on a $E = 1/2 L i^2$
+])
+
+#demo([
+  On a $P_"reçue" = U I = L ddt(i) times i = ddt(1/2 L i^2)$ or $P_"reçue" = ddt(E)$ d'où $E = 1/2 L i^2$
+])
+
+#theorem([Continuité de $i$ au bornes d'une bobine],[
+  Aux bornes d'une bobine $i$ est continue
+])
+
+#demo([
+  On suppose $i$ discontinue donc $E$ aussi, ainsi $P = ddt(E)$ diverge donc $P_"reçue"$ infinie n'est pas possible
+])
+
+#theorem([Comportement en régime permanant],[
+  En régime permanent un condensateur est équivalent à un fil ($U = 0A$)
+])
+
+=== Associations
+
+#figure(image("elec/serial_indu.png", width: 30%))
+
+#theorem([Association série de bobines],[
+  Soit $L_1$ et $L_2$ deux bobines en série, on a $L_e = L_1 + L_2$ la bobine équivalente
+])
+
+#demo([
+  On a $U = U_1 + U_2 = L_1 ddt(i) + L_2 ddt(i) = (L_1 + L_2) ddt(i)$
+])
+
+#figure(image("elec/parallel_indu.png", width: 25%))
+
+#theorem([Association parallèle de bobines],[
+  Soit $L_1$ et $L_2$ deux bobines en parallèle, on a $1/L_e = 1/L_1 + 1/L_2$ la résistance équivalente
+])
+
+#demo([
+  Par loi des mailles, $U = U_1 = U_2$, ainsi $U = L_1 ddt(i_1) = L_2 ddt(i_2)$.
+  
+  D'après la loi des noeuds, $i = i_1 + i_2$ d'où $ddt(i) = ddt(i_1) + ddt(i_2)$ soit $U/L = U/L_1 + U/L_2$ d'où la relation recherchée
+])
 
 #heading([Circuits d'ordre 2], supplement: [elec])
 
@@ -741,5 +884,36 @@ Lors d'un changement d'état, l'enthalpie présente une discontinuité, ainsi on
 De plus on a $Delta_"sub"h > 0$, $Delta_"vap"h > 0$ et $Delta_"fus"h > 0$ et $Delta_"con"h = -Delta_"sub"h$, $Delta_"liq"h = -Delta_"vap"h$ et $Delta_"sol"h = -Delta_"fus"h$
 
 D'après l'expression des variations, on en déduit que $S_"gaz" > S_"liq" > S_"sol"$ ce qui est logique d'après la définition de l'entropie
+
+#counter(heading).update(0)
+
+#set heading(numbering: "📝 I.1.a")
+
+#heading([Analyse dimensionnelle], supplement: [annex])
+
+A faire
+// Grand tableau avec tous les unités rencontrées
+
+#heading([Incertitudes], supplement: [annex])
+
+A faire
+// Expliquer les types d'incertitudes
+
+#heading([Équations différentielles], supplement: [annex])
+
+A faire
+
+// Ordre 1/2 en linéaire
+// Temps caractéristique, méthode 63%, tangentes
+// Non linéaires
+
+#heading([Oscillateurs], supplement: [annex])
+
+A faire
+// Prendre un pov elec mais montrer que ça marche aussi en méca
+
+#heading([Numérique], supplement: [annex])
+
+// Monte Carlo/Régression linéaire/Euler...
 
 #outline(depth:2,indent: 10pt, title: "Table des matières :")
