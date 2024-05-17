@@ -405,9 +405,19 @@ On associe à une bobine une *inductance* $L$ en Henry ($H$), dépendant du nomb
   D'après la loi des noeuds, $i = i_1 + i_2$ d'où $ddt(i) = ddt(i_1) + ddt(i_2)$ soit $U/L = U/L_1 + U/L_2$ d'où la relation recherchée
 ])
 
-#heading([Circuits d'ordre 2], supplement: [elec])
+#heading([Circuits d'ordre 2, Oscillateurs], supplement: [elec])
 
-A faire
+== Oscillateur harmonique
+
+== Oscillateur amorti
+
+=== Généralités
+
+=== Régime apériodique
+
+=== Régime critique
+
+=== Régime pseudo-périodique
 
 #heading([Circuits en régime sinusoidal forcé], supplement: [elec])
 
@@ -906,11 +916,6 @@ A faire
 // Ordre 1/2 en linéaire
 // Temps caractéristique, méthode 63%, tangentes
 // Non linéaires
-
-#heading([Oscillateurs], supplement: [annex])
-
-A faire
-// Prendre un pov elec mais montrer que ça marche aussi en méca
 
 #heading([Numérique], supplement: [annex])
 
