@@ -1,4 +1,9 @@
 #set heading(numbering: "I.1.a")
+#import "@local/unify:0.6.0": *
+#import "@local/physica:0.9.3": *
+#import "@local/cetz:0.2.2": *
+
+// TODO : Remplacer les unités jusqu'à température avec unit et qty
 
 #let project(title: "", authors: (), date: none, body) = {
   // Set the document's basic properties.
@@ -29,7 +34,7 @@
   )
 
   // Main body.
-  set par(justify: true)
+  set par(justify: false)
 
   body
 }
@@ -65,10 +70,20 @@
   ),
 )
 
-#let derivativePart(a, b, c) = $(cal(d) #a)/(cal(d) #b) | #c$
+#let derivativePart(a, b, c) = $eval(pdv(#a, #b))_(#c)$
 #let derivative(a, b) = $(d #a)/(d #b)$
-#let dt = $d t$
-#let ddt(a) = $derivative(#a, t)$
+#let dt = $dd(t)$
+#let ddt(a) = $dv(#a, t)$
+
+#let graph(func, size: (10,4), domain: (0, 10), tickx: none, ticky: none, lines: ()) = align(center, canvas({
+  plot.plot(axis-style: "school-book", size: size, x-tick-step: tickx, y-tick-step: ticky, {
+    plot.add(domain: domain, func, samples: 500)
+
+    for line in lines {
+      plot.add-hline(line)
+    }
+  })
+}))
 
 #show: project.with(
   title: "Thermodynamique",
@@ -78,19 +93,23 @@
   date: "2023/2024",
 )
 
-#outline(depth:1,indent: 10pt, title: "Optique :", target: heading.where(supplement: [optical]))
+#outline(depth:1,indent: 10pt, fill: [], title: "Optique :", target: heading.where(supplement: [optical]))
 
-#outline(depth:1,indent: 10pt, title: "Électricité :", target: heading.where(supplement: [elec]))
+// Faire des montages : https://phydemo.app/ray-optics/simulator/
+
+#outline(depth:1,indent: 10pt, fill: [], title: "Électricité :", target: heading.where(supplement: [elec]))
 
 // Faire des circuits : https://www.circuit-diagram.org/editorb/
 
-#outline(depth:1,indent: 10pt, title: "Ondes :", target: heading.where(supplement: [waves]))
+#outline(depth:1,indent: 10pt, fill: [], title: "Ondes :", target: heading.where(supplement: [waves]))
 
-#outline(depth:1,indent: 10pt, title: "Mécanique :", target: heading.where(supplement: [meca]))
+#outline(depth:1,indent: 10pt, fill: [], title: "Mécanique :", target: heading.where(supplement: [meca]))
 
-#outline(depth:1,indent: 10pt, title: "Thermodynamique :", target: heading.where(supplement: [thermo]))
+// Simu pendule : https://phet.colorado.edu/sims/html/pendulum-lab/latest/pendulum-lab_all.html
 
-#outline(depth:1,indent: 10pt, title: "Annexe :", target: heading.where(supplement: [annex]))
+#outline(depth:1,indent: 10pt, fill: [], title: "Thermodynamique :", target: heading.where(supplement: [thermo]))
+
+#outline(depth:1,indent: 10pt, fill: [], title: "Annexe :", target: heading.where(supplement: [annex]))
 
 #let pext = $P_"ext"$
 
@@ -146,7 +165,7 @@ Pour mesurer une intensité on utilise un _ampèremètre_ avec le $+$ sur le $m 
 
 == La tension électrique
 
-La *tension électrique* $U$ est une différence de potentiels en Volts ($V$) et est additive.
+La *tension électrique* $U$ est une différence de potentiels en Volts ($unit("V")$) et est additive.
 
 #theorem([Expression de $U_"AB"$],[
   On a $U_"AB" = V_A - V_B$ avec $V_A$ et $V_B$ deux potentiels.
@@ -178,7 +197,7 @@ Un *résistor* est une dipôle qui conduit $+$ ou $-$ bien l'électricité.
 Une résistance est schématisée ainsi en convention récepteur
 
 #theorem([Loi d'Ohm],[
-  On a $U = R I$ avec $R$ la résistance en Ohm ($Omega$) en convention récepteur.
+  On a $U = R I$ avec $R$ la résistance en Ohm ($unit("Ohm")$) en convention récepteur.
 
   Attention, en convention générateur, on a $U = - R I$
 ])
@@ -203,7 +222,7 @@ Le voltmètre ($approx 10 M Omega$) est modélisée par un interrupteur ouvert, 
   On a $P_"reçue" = U I = U_R I _R = R I_R I_R = R I_R ^2$
 ])
 
-On a la *masse*, un point d'un circuit de potentiel nul, $V = 0V$ c'est l'origine des potentiels.
+On a la *masse*, un point d'un circuit de potentiel nul, $V = 0 unit("V")$ c'est l'origine des potentiels.
 
 En théorie elle est choisie arbitrairement, mais en pratique elle est imposée par certails appareils reliés à la Terre.
 
@@ -285,7 +304,7 @@ Le *condensateur* est un dipôle linéaire composé de deux armatures séparées
 
 On a $Q$ la charge algébrique par l'armature de gauche et $-Q$ par celle de droite : le condensateur est globalement neutre.
 
-On a $Q = C U$ avec $C$ la *capacité du condensateur* en Farad ($F$)
+On a $Q = C U$ avec $C$ la *capacité du condensateur* en Farad ($unit("F")$)
 
 #theorem([Intensité aux bornes d'un condensateur],[
   En convention récepteur, $I = C ddt(U)$
@@ -312,7 +331,7 @@ On a $Q = C U$ avec $C$ la *capacité du condensateur* en Farad ($F$)
 ])
 
 #theorem([Comportement en régime permanant],[
-  En régime permanent un condensateur est équivalent à un interrupteur ouvert ($I = 0A$)
+  En régime permanent un condensateur est équivalent à un interrupteur ouvert ($I = 0 unit("A")$)
 ])
 
 === Associations
@@ -355,7 +374,7 @@ La *bobine* est un dipôle linéaire composé d'un enroulement de fils sur lui m
 
 #figure(image("elec/inductor.png", width: 20%))
 
-On associe à une bobine une *inductance* $L$ en Henry ($H$), dépendant du nombre de fils et la quantités de spires (tours)
+On associe à une bobine une *inductance* $L$ en Henry ($unit("H")$), dépendant du nombre de fils et la quantités de spires (tours)
 
 #theorem([Intensité aux bornes d'une bobine],[
   En convention récepteur, $U = L ddt(i)$
@@ -378,7 +397,7 @@ On associe à une bobine une *inductance* $L$ en Henry ($H$), dépendant du nomb
 ])
 
 #theorem([Comportement en régime permanant],[
-  En régime permanent un condensateur est équivalent à un fil ($U = 0A$)
+  En régime permanent un condensateur est équivalent à un fil ($U = 0 unit("V")$)
 ])
 
 === Associations
@@ -407,17 +426,85 @@ On associe à une bobine une *inductance* $L$ en Henry ($H$), dépendant du nomb
 
 #heading([Circuits d'ordre 2, Oscillateurs], supplement: [elec])
 
+Les oscillateurs sont présentés dans un cas électrique, mais on les retrouve aussi en mécanique ou encore en thermodynamique.
+
 == Oscillateur harmonique
+
+#figure(image("elec/lc.png", width: 30%))
+
+On considère un circuit LC, on trouve $L C dv(U,t,2) + U = E$ d'où en posant $omega_0 = 1/(L C)$ on retrouve :
+
+#theorem([Oscillateur harmonique],[
+  On a l'équation différentielle de l'oscillateur harmonique :
+
+  $ dot.double(theta) + omega_0^2 theta = B $
+  avec $omega_0$ la *pulsation caractéristique* homogène à un $unit("r/s")$ et $B$ une constante
+])
+
+La forme générale est $"sp" + A cos (omega_0 t) + B sin(omega_0 t)$, la résolution étant détaillée en @equa[annexe]. Elle admet la courbe suivante.
+
+#graph(calc.sin, domain: (0,100))
+
+Ainsi l'oscillateur possède un comportement oscillant avec $2 pi f = omega_0$
 
 == Oscillateur amorti
 
 === Généralités
 
+#figure(image("elec/rlc.png", width: 30%))
+
+On considère maintenant un circuit RLC, ainsi on trouve l'équation différentielle suivante $E/(L C) = dv(U, t, 2) + R /L ddt(U) + 1/(L C) U$, en posant $omega_0 = 1/(L C)$ et $Q = 1/R sqrt(L/C)$ on a :
+
+#theorem([Oscillateur amorti], [
+  On a l'équation différentielle de l'oscillateur armorti :
+
+  $ dot.double(theta) + omega_0/Q dot(theta) + omega_0^2 theta = omega_0^2 B $
+  avec $omega_0$ la *pulsation caractéristique* homogène à un $unit("r/s")$, $Q$ le *facteur de qualité* adimensionné et $B$ une constante
+  ])
+
+Si on a beaucoup d'oscillations, $Q$ correspond au nombre de périodes avant armortissement.
+
+Selon la valeur de $Q$ on a un des trois types d'oscillateurs suivants :
+
+- Si $Q < 1/2$, on est en régime apériodique
+- Si $Q = 1/2$, on est en régime critique
+- Si $Q > 1/2$, on est en régime pseudo-périodique
+
 === Régime apériodique
+
+Dans le cas apériodique on a $Delta > 0$ d'où $U(t) = "sp" + A e^(-t/tau_1) + B e^(-t/tau_2)$, la résolution étant détaillée en @equa[annexe].
+
+$U$ s'amortit donc en quelques $max(tau_1, tau_2)$.
+
+#graph((x) => {
+  return calc.pow(calc.e, -x/(25))
+}, domain: (0,100))
 
 === Régime critique
 
+Dans le cas critique, on a $Delta = 0$ d'où $U(t) = "sp" + (A t + B)e^(-t/tau)$, la résolution étant détaillée en @equa[annexe].
+
+Le cas critique est très compliqué à réaliser expérimentalement.
+
+#graph((x) => {
+  return (0.01 * x + 20) * calc.pow(calc.e, -x/(25))
+}, domain: (0,100))
+
 === Régime pseudo-périodique
+
+Dans le cas pseudo-périodique, on a $Delta < 0$ d'où on a $U(t) = "sp" + (A cos (omega t) + B sin (omega t)) e^(-t/tau)$ avec $omega$ la *pseudo-pulsation*, la résolution étant détaillée en @equa[annexe].
+
+Ainsi dans ce cas les oscillateurs voient leur amplitude d'oscillations diminuer avec le temps.
+
+#graph((x) => {
+  return calc.sin(x) * calc.pow(calc.e, -x/(25))
+}, domain: (0,100))
+
+On définit le *décrément logarithmique* $delta = T/tau$, avec $T$ la *pseudo-période*. Le décrément logarithmique s'obtient en prenant deux valeurs maximales et en faisant $delta = ln(v_1/v_2)$ avec $t_1 < t_2$.
+
+La durée du transitoire est de quelques $tau$.
+
+#emoji.warning En régime pseudo-périodique il n'est pas possible de déterminer graphiquement $tau$ comme dans les autres régimes.
 
 #heading([Circuits en régime sinusoidal forcé], supplement: [elec])
 
@@ -479,7 +566,7 @@ A faire
 
 == Généralités
 
-On a $cal(N)_A = 6.02 times 10^(23) m o l^(-1)$ la constante d'Avogadro
+On a $cal(N)_A = 6.02 times 10^(23) unit("mol^-1")$ la constante d'Avogadro
 
 Les 3 états de la matière :
 
@@ -497,7 +584,7 @@ Une grandeur est dite *extensive* si elle dépend de la taille du système (volu
 
 === Pression
 
-La *pression* est une variable d'état en Pascal (Pa) avec $1 b a r = 10^5 P a$, est intensive et est causée par des chocs particulaires sur la paroi
+La *pression* est une variable d'état en Pascal ($unit("Pa")$) avec $1 unit("bar") = 10^5 unit("Pa")$, est intensive et est causée par des chocs particulaires sur la paroi
 
 #theorem([Force de pression], [
   On a $arrow(F) = P S arrow(u)$ avec $arrow(u)$ orienté vers l'extérieur de fluide dans le cas d'une paroi plane
@@ -507,7 +594,7 @@ Si on a une paroi non plane on a $arrow(F) = integral P d S arrow(u)$ avec $arro
 
 === Température
 
-La température s'exprime en Kelvin (k), avec $T > 0 k$ et $0 °C = 273.15k$, est intensive et provient d'une agitation moléculaire.
+La température s'exprime en Kelvin ($unit("K")$), avec $T > 0 unit("K")$ et $0 °C = 273.15 unit("K")$, est intensive et provient d'une agitation moléculaire.
 
 On a $E_c = 3/2 k_B T$ l'énergie thermique moléculaire avec $k_B = R/cal(N)_A$ la constante de Boltzmann.
 
@@ -525,7 +612,7 @@ A l'équilibre thermodynamique un système voit ses variables d'état liées par
 
 #theorem([Gaz parfait], [On parle d'un gaz parfait pour un gaz composé de particules ponctuelles sans intéraction entre elles.])
 
-#theorem([Équation des gaz parfaits], [On a à l'équilibre thermodynamique : $P V = n R T$ avec $R = 8.31 J.k^(-1).m o l^(-1)$ la constante des gaz parfaits.])
+#theorem([Équation des gaz parfaits], [On a à l'équilibre thermodynamique : $P V = n R T$ avec $R = qty("8.31", "J/K/mol")$ la constante des gaz parfaits.])
 
 #heading([Premier principe], supplement: [thermo])
 
@@ -537,7 +624,7 @@ On note $U$ l'*énergie interne* d'un système thermique, c'est une fonction d'�
 
 A noter qu'il y a énormément d'énergie stockée de manière interne.
 
-On défini la *capacité thermique* à volume fixé par $C_v = derivativePart(U,T,V)$ et dans le cas d'un GP on a $C_v = derivative(U,T)$, et est additive, extensif et s'exprime en $J.k^(-1)$
+On défini la *capacité thermique* à volume fixé par $C_v = derivativePart(U,T,V)$ et dans le cas d'un GP on a $C_v = dv(U,T)$, et est additive, extensif et s'exprime en $unit("J/K")$
 
 #theorem([Expression de $Delta U$], [On a $Delta U = integral_(T_i)^T_f C_v d T = C_v Delta T$])
 
@@ -615,7 +702,7 @@ Ainsi on a le second principe :
 
 Avec $W_u$ la puissance utile des autres forces (souvent nulles d'où $Delta H = Q$ dans certains cas)
 
-On définit la capacité thermique à pression fixée par $C_p = derivativePart(H, T, P)$ et $C_p = derivative(H, T)$ dans le cas d'un GP.
+On définit la capacité thermique à pression fixée par $C_p = derivativePart(H, T, P)$ et $C_p = dv(H, T)$ dans le cas d'un GP.
 
 #theorem([Expression de $Delta H$], [On a $Delta H = integral_(T_i)^T_f C_p d T = C_p Delta T$])
 
@@ -639,7 +726,7 @@ On pose $gamma = C_p/C_v$
 
 == Entropie et second principe
 
-On considère un système fermé avec un ou plusieurs thermostats, ainsi il existe une fonction d'état appelée *entropie* notée $S$, additive et extensive en $J.k^(-1)$ qui est une mesure du désordre.
+On considère un système fermé avec un ou plusieurs thermostats, ainsi il existe une fonction d'état appelée *entropie* notée $S$, additive et extensive en $unit("J/K")$ qui est une mesure du désordre.
 
 #theorem([Second principe], [Dans un tel système, on a $Delta S = S_"créée" + S_"échangée"$ avec $S_c >= 0$])
 
@@ -714,17 +801,17 @@ Ainsi sur un diagramme de Watt, le courbe est plus marquée pour une transformat
 
 #theorem([Flux thermique], [Un flux est un échange de chaleur par unité de temps algébrique, on a $Phi = (delta Q)/(d t)$, et on peut définir $Phi_"surf" = (delta Q)/(d t d S)$])
 
-On a $Phi$ en $W$ et $Phi_"surf"$ en $W.m^(-2)$
+On a $Phi$ en $W$ et $Phi_"surf"$ en $unit("W/m^2")$
 
 == Échanges conductifs
 
 #theorem([Flux conductif], [Dans le cas d'un échange convectif (c'est à dire via une paroi) entre 2 systèmes, on a $Phi = 1/R Delta T$ avec $R$ la résistance thermique])
 
 #theorem([Résistance thermique], [
-  Une résistance thermique est homogène à $k.W^(-1)$, et on a $R = e/(S lambda)$ avec $e$ l'épaisseur, $S$ la surface et $lambda$ la conductivité thermique
+  Une résistance thermique est homogène à $unit("K/W")$, et on a $R = e/(S lambda)$ avec $e$ l'épaisseur, $S$ la surface et $lambda$ la conductivité thermique
 ])
 
-La conductivité thermique s'exprime en $W.m^(-1).k^(-1)$, plus la conductivité est grande moins on isole.
+La conductivité thermique s'exprime en $unit("W/m/K")$, plus la conductivité est grande moins on isole.
 
 On a $G = 1/R$ la conductance.
 
@@ -741,7 +828,7 @@ Les résistances thermiques ont le même comportement qu'en électricité, ainsi
 On considère un fluide et un solide et leurs échanges thermiques
 
 #theorem([Loi thermique de Newton], [
-  On a $Phi_"surf" = h (T_"surf" - T_"ext")$ avec $h$ le coefficient de transfert en $W.m^(-2).k^(-1)$, $h$ étant plus grand pour un liquide que pour un gaz.
+  On a $Phi_"surf" = h (T_"surf" - T_"ext")$ avec $h$ le coefficient de transfert en $unit("W/m^2/K")$, $h$ étant plus grand pour un liquide que pour un gaz.
 ])
 
 De manière analogue on peut définir $1/R = S h$
@@ -902,23 +989,65 @@ D'après l'expression des variations, on en déduit que $S_"gaz" > S_"liq" > S_"
 #heading([Analyse dimensionnelle], supplement: [annex])
 
 A faire
-// Grand tableau avec tous les unités rencontrées
+
+== Système SI
+
+== Résoudre une équation de dimension
+
+== Homogénéité
+
+#table(
+  columns: (100pt, 100pt, 100pt,100pt),
+  rows: (18pt),
+  align: center,
+  [*Unité*],
+  [*Unités SI*],
+  [*Dimension*],
+  [*Relation*],
+  [Volts ($unit("V")$)],
+  $$
+)
 
 #heading([Incertitudes], supplement: [annex])
 
 A faire
-// Expliquer les types d'incertitudes
 
-#heading([Équations différentielles], supplement: [annex])
+== Incertitude type A
+
+== Incertitude type B
+
+== Chiffres significatifs
+
+#heading([Équations différentielles], supplement: [annex]) <equa>
 
 A faire
 
-// Ordre 1/2 en linéaire
-// Temps caractéristique, méthode 63%, tangentes
-// Non linéaires
+== Équations linéaires d'ordre 1
+
+== Équations linéaires d'ordre 2
+
+== Temps caractéristique
+
+// Tau/63%/Tangentes
 
 #heading([Numérique], supplement: [annex])
 
-// Monte Carlo/Régression linéaire/Euler...
+A faire
 
-#outline(depth:2,indent: 10pt, title: "Table des matières :")
+== Régression linéaire
+
+== Euler
+
+== Monte-Carlo
+
+#box(height: 10pt)
+
+#{
+  counter(heading).update(0)
+  set heading(numbering: none)
+  heading([Table des matières])
+  box(height: 0pt)
+  show heading: none
+  columns(2, outline(title: [Table des matières], indent: 10pt, fill: [], depth: 3))
+  pagebreak(weak: true)
+}
