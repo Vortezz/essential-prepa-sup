@@ -75,9 +75,11 @@
 #let dt = $dd(t)$
 #let ddt(a) = $dv(#a, t)$
 
-#let graph(func, size: (10,4), domain: (0, 10), tickx: none, ticky: none, lines: ()) = align(center, canvas({
+#let graph(funcs: (), size: (10,4), domain: (0, 10), tickx: none, ticky: none, lines: ()) = align(center, canvas({
   plot.plot(axis-style: "school-book", size: size, x-tick-step: tickx, y-tick-step: ticky, {
-    plot.add(domain: domain, func, samples: 500)
+    for func in funcs {
+      plot.add(domain: domain, func, samples: 500)
+    }
 
     for line in lines {
       plot.add-hline(line)
@@ -443,7 +445,7 @@ On considère un circuit LC, on trouve $L C dv(U,t,2) + U = E$ d'où en posant $
 
 La forme générale est $"sp" + A cos (omega_0 t) + B sin(omega_0 t)$, la résolution étant détaillée en @equa[annexe]. Elle admet la courbe suivante.
 
-#graph(calc.sin, domain: (0,100))
+#graph(funcs: (calc.sin,), domain: (0,100))
 
 Ainsi l'oscillateur possède un comportement oscillant avec $2 pi f = omega_0$
 
@@ -476,9 +478,9 @@ Dans le cas apériodique on a $Delta > 0$ d'où $U(t) = "sp" + A e^(-t/tau_1) + 
 
 $U$ s'amortit donc en quelques $max(tau_1, tau_2)$.
 
-#graph((x) => {
+#graph(funcs: ((x) => {
   return calc.pow(calc.e, -x/(25))
-}, domain: (0,100))
+},), domain: (0,100))
 
 === Régime critique
 
@@ -486,9 +488,9 @@ Dans le cas critique, on a $Delta = 0$ d'où $U(t) = "sp" + (A t + B)e^(-t/tau)$
 
 Le cas critique est très compliqué à réaliser expérimentalement.
 
-#graph((x) => {
+#graph(funcs: ((x) => {
   return (0.01 * x + 20) * calc.pow(calc.e, -x/(25))
-}, domain: (0,100))
+},), domain: (0,100))
 
 === Régime pseudo-périodique
 
@@ -496,9 +498,9 @@ Dans le cas pseudo-périodique, on a $Delta < 0$ d'où on a $U(t) = "sp" + (A co
 
 Ainsi dans ce cas les oscillateurs voient leur amplitude d'oscillations diminuer avec le temps.
 
-#graph((x) => {
+#graph(funcs: ((x) => {
   return calc.sin(x) * calc.pow(calc.e, -x/(25))
-}, domain: (0,100))
+},), domain: (0,100))
 
 On définit le *décrément logarithmique* $delta = T/tau$, avec $T$ la *pseudo-période*. Le décrément logarithmique s'obtient en prenant deux valeurs maximales et en faisant $delta = ln(v_1/v_2)$ avec $t_1 < t_2$.
 
@@ -507,6 +509,141 @@ La durée du transitoire est de quelques $tau$.
 #emoji.warning En régime pseudo-périodique il n'est pas possible de déterminer graphiquement $tau$ comme dans les autres régimes.
 
 #heading([Circuits en régime sinusoidal forcé], supplement: [elec])
+
+== Régime transitoire
+
+#figure(image("elec/rlc.png", width: 30%))
+
+Le circuit est en régime sinusoïdal forcé si le *générateur basse fréquence* (GBF) délivre une tension sinusoïdale. Ainsi on a l'apparition d'un déphasage aux temps longs, et l'amplitude du GBF n'est pas forcément la même que celle de $U$.
+
+Ainsi le second terme dans les équations différentielles devient de la forme $A cos(omega t)$
+
+== Vocabulaire des signaux périodiques
+
+#graph(funcs: (calc.sin,), domain: (0,20))
+
+On définit : 
+- La *période* $T$ en $unit("s")$ correspondant à l'écart entre deux passages au même point
+- La *fréquence* $f$ en $unit("Hz")$ correspondant au nombre de périodes en une seconde d'où $f = 1/T$
+- La *valeur moyenne* $expval(u) = 1/T integral_t^(t + T) u (tilde(t)) dd(tilde(t))$
+- L'*amplitude crête à crête* (peak to peak) $Delta = u_"max" - u_"min"$
+- La *valeur efficace*, $u_"eff" = sqrt(expval(u^2))$
+
+#theorem([Valeur efficace pour un signal sinusoïdal],[
+  Dans le cas d'un signal de la forme $S_0 cos(omega t)$, on a $expval(S) = 0$ et $S_"eff" = S_0/sqrt(2)$
+])
+
+#demo([
+  En effet en intégrant sur une période, on a $expval(S) = 0$
+
+  On a $expval(S^2) = 1/(2 pi) integral_t^(t + 2 pi) (S_0 cos(omega tilde(t)))^2 dd(tilde(t)) = expval(S^2) = S_0^2 /(2 pi) integral_t^(t + 2 pi) (1 + cos(omega tilde(t)))/2 dd(tilde(t)) = S_0^2/(2 pi) (2 pi)/2 = S_0^2/2$ d'où en passant à la racine, $S_"eff" = S_0/sqrt(2)$
+])
+
+== Déphasage entre signaux
+
+Soit $s_1(t) = s cos(omega t + phi_1)$ et $s_2(t) = s cos(omega t + phi_2)$, on définit le *déphasage* de $s_2$ par rapport à $s_1$ par $Delta phi = phi_2 - phi_1$
+
+Le déphasage est défini modulo $2 pi$
+
+- Si $phi_1 equiv phi_2 mod 2pi$ alors les deux signaux sont en *accord de phase*
+- Si $Delta phi = plus.minus pi$, alors les deux signaux sont en *opposition de phase*
+- Si $Delta phi = plus.minus pi/2$, alors les deux signaux sont en *quadrature de phase*
+- Si $phi_2 > phi_1$, $s_2$ est en *avance de phase* sur $s_1$
+- Si $phi_2 < phi_1$, $s_2$ est en *retard de phase* sur $s_1$
+
+#graph(funcs: (calc.cos, (x) => {
+  return calc.cos(x + 2)
+}))
+
+Pour mesurer le déphasage, on mesure l'écart de temps entre 2 passages au même endroit et on obtient $Delta t_1$ et $Delta t_2$, ainsi on doit choisir, en connaissance du système entre $1$ et $2$, et $abs(Delta phi) = (Delta t_i)/T times 2 pi mod 2 pi$
+
+== Représentation complexe d'un signal harmonique
+
+Pour parler d'une représentation complexe en physique on utilise $underline(s) = a + i b$, et le conjugué de $underline(s)$ est noté $underline(s)^* = overline(underline(s)) = a - i b$
+
+#emoji.warning Dans le contexte spécifique de l'électricité et pour éviter des confusions avec l'intensité $i$, on note $j$ le nombre imaginaire tel que $j^2 = -1$ (définition différente des mathématiques)
+
+En posant $u = U_0 cos(omega t + phi)$, on a $underline(u) = U_0 e^(j (omega t + phi))$ d'où $underline(u) = U_0 e^(j phi) e^(j omega t)$ avec $U = U_0 e^(j phi)$ *l'amplitude complexe* et $U = abs(underline(u)(t))$
+
+De plus on a $phi = arg(U) = arg(U_0 e^(j phi))$
+
+Dériver en complexe revient à multiplier par $j omega$
+
+== Impédances complexes
+
+=== Généralités
+
+#theorem([Impédance complexe],[
+  En convention récepteur, on définit $underline(z) = underline(u)/underline(i) = U_0/I_0 e^(j(phi_u-phi_i))$ l'*impédance complexe* homogène à une résistance
+])
+
+#theorem([Cas d'une résistance],[
+  Pour une résistance, on a $underline(z_R) = R$, d'où $underline(z) in RR_+$, on dit que le dipôle est *résistif*
+])
+
+#theorem([Cas d'une bobine],[
+  Pour une bobine, on a $underline(z_L) = j omega L$, d'où $underline(z) in i RR$ et $phi_u - phi_i = pi/2$, donc $u(t)$ est en quadrature de phase avance par rapport à $i(t)$, on dit que le dipôle est *inductif*.
+])
+
+#demo([
+  On a $u_L = L ddt(i)$ d'où $underline(u_L) = L j omega underline(i)$ d'où $underline(z_L) = j omega L$
+])
+
+#theorem([Cas d'un condensateur],[
+  Pour un condensateur, on a $underline(z_C) = 1/(j omega C)$, d'où $underline(z) in i RR$ et $phi_u - phi_i = -pi/2$, donc $u(t)$ est en quadrature de phase retard par rapport à $i(t)$, on dit que le dipôle est *capacitif*.
+])
+
+#demo([
+  On a $i = C ddt(u_C)$ d'où $underline(i) = L j omega underline(u_C)$ d'où $underline(z_C) = 1/(j omega C)$
+])
+
+On définit aussi l'*admittance complexe* comme étant $underline(y) = 1/underline(z)$
+
+=== Comportement basse et haute tension
+
+#theorem([Comportement basse fréquence],[
+  En basse fréquence :
+  - La bobine se comporte comme un *fil*
+  - Le condensateur se comporte comme un *interrupteur ouvert*
+])
+
+#theorem([Comportement haute fréquence],[
+  En haute fréquence :
+  - La bobine se comporte comme un *interrupteur ouvert*
+  - Le condensateur se comporte comme un *fil*
+])
+
+== Lois de l'électricité en RSF
+
+Les lois de l'électricité restant valides dans l'ARQS, elles sont aussi valides si $omega << (2 pi c)/d$.
+
+Les impédances s'associent en série et en parallèle comme des résistances, et les ponts diviseurs s'appliquent aussi aux impédances.
+
+== Étude d'un circuit
+
+Pour étudier un circuit :
+- On peut établir l'équation différentielle de $u$, puis passer dans $CC$ et déterminer $underline(u)$ puis $U$ et $phi$
+- On peut utiliser la méthode des impédances complexes (voir ci dessous), valide uniquement en RSF
+
+On considère le circuit suivant, qu'on peut remplacer avec des impédances :
+
+#grid(
+    columns: 2,
+    figure(image("elec/rc.png", width: 50%)),
+    figure(image("elec/rc_c.png", width: 50%)),
+)
+
+Ainsi en basse et haute fréquence on a :
+
+#grid(
+    columns: 2,
+    figure(image("elec/rc_bf.png", width: 50%)),
+    figure(image("elec/rc_hf.png", width: 50%)),
+)
+
+On peut donc appliquer la loi d'Ohm : $underline(u) = underline(z_C + z_R) underline(i)$
+
+== Résonnance
 
 A faire
 
@@ -1025,6 +1162,10 @@ A faire
 == Équations linéaires d'ordre 1
 
 == Équations linéaires d'ordre 2
+
+== Résolution avec les complexes
+
+// Voir chapitre sur le RSF
 
 == Temps caractéristique
 
