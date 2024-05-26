@@ -641,14 +641,108 @@ Ainsi en basse et haute fréquence on a :
     figure(image("elec/rc_hf.png", width: 50%)),
 )
 
-On peut donc appliquer la loi d'Ohm : $underline(u) = underline(z_C + z_R) underline(i)$
+Par loi des mailles on a $underline(z_R) = R$ et $underline(z_C) = 1/(j omega C)$ d'où le dipole équivalent est $underline(z) = R + 1/(j omega C)$
+
+En utilisant un pont diviseur tension on a $underline(u_C) = underline(z_C)/(underline(z_R) + underline(z_C)) E = 1/(1 + j omega R C) E$
+
+On remarque qu'on peut retrouver l'équation différentielle, on a $underline(u) = 1/(1 + j omega R C) underline(e)$ d'où $underline(u) + j omega R C underline(u) = underline(e)$ d'où $u +  R C dot(u) = e$
 
 == Résonnance
 
-A faire
+Dans un RLC série alimeté par un générateur de tension idéal, on a : $underline(I) = underline(U)/underline(R) = (U_0\/R)/(1 + j Q(omega/omega_0 - omega_0/omega))$ ($omega_0 = 1/(sqrt(L C))$ et $Q = 1/(R) sqrt(L/C)$)
+
+Si on trace la *réponse en amplitude*, l'amplitude réelle présente un maximum, alors on dit qu'il y a *résonance en intensité*. On définit $omega_"res"$ la *pulsation de résonnance*, pas toujours égale à $omega_0$ (notamment dans du 2nd ordre).
+
+On définit $omega_c$ les *pulsations de coupure* tel que $I(omega_c/omega_0) = I_max/sqrt(2)$
+
+On a $Delta omega_c = abs(omega_c_1 - omega_c_2)$ la *largeur de résonance*
+
+De plus on a aussi $omega_"res"/(Delta omega_c)$ l'*acuité de résonance*, plus elle est élevée, plus on a un pic.
+
+On peut tracer la *réponse en phase*, $phi = - arctan(Q (omega/omega_0 - omega_0/omega))$, on remarque dans le cas d'un RLC que $phi(omega_"res") = 0$, $abs(phi(omega_c)) = pi/4$ et $omega_"res" = omega_0$.
+
+On a résonance en intensité peu importe le facteur de qualité, mais ça n'est pas toujours le cas (notamment en tension ou en vitesse en mécanique)
 
 #heading([Filtrage], supplement: [elec])
 
+Les signaux dans la réalité sont complexes à analyser car souvent superposés à un bruit qu'on cherche à éliminer. Ainsi on réalise un *filtrage*, analogique (ici) ou numérique.
+
+== Spectre d'un signal, décomposition de Fourier
+
+Un signal périodique de période $T$ peut se décomposer en une superposition de signaux sinusoïdaux de fréquences multiples.
+
+On a $u(t) = E_0 + sum_(n=1)^(+ infinity) E_n cos(2 pi n f t + phi_n)$ (décomposition de Fourier)
+
+On a $E_0$ la *valeur moyenne* du signal et les $E_k cos(2 pi k f t + phi_k)$ sont appelés les *harmoniques*. La première harmonique, $E_1 cos(2 pi f t + phi_1)$ est appelée *le fondamental*.
+
+Donner le spectre en amplitude c'est fournir les valeurs des $E_n$
+
+== Réponse fréquentielle d'un quadripole
+
+Un *quadripôle* est un circuit électrique comportant 2 bornes d'entrée et 2 bornes de sortie. On impose dans ce cours des dipôles linéaires, d'être en sortie ouverte donc l'intensité sortante est nulle.
+
+On a la *réponse fréquentielle*, $e(t) = E cos(omega t)$ et on étudie $s(t)$ en régime établi.
+
+Dans un quadripole linéraire, $e$ et $s$ sont liés par une équation différentielle, et $e$ étant sinusoïdale, les impédances sont autorisées dans ce cadre.
+
+#theorem([Filtre],[
+  Un *filtre* est caractérisé par la *fonction de transfert* complexe $underline(H) = underline(s)/underline(e)$
+])
+
+On a $underline(H) = (underline(S) cancel(e^(j omega t)))/(underline(E) cancel(e^(j omega t))) = (underline(S))/(underline(E))$, et $underline(H)$ est adimensionné.
+
+On a $underline(H) = (P(j omega))/(Q (j omega))$, avec $P, Q in CC[X]$, et le filtre est de l'*ordre* du degré de Q.
+
+#theorem([Gain], [
+  Le *gain* du filtre est défini par $abs(underline(H)) = abs(underline(S)/underline(E)) = S/E$, et la connaissance du gain renseigne sur le rapport des amplitudes de l'entrée et de la sortie.
+])
+
+#theorem([Déphasage], [
+  On a $arg(underline(H)) = phi_s - phi_e$
+])
+
+#demo([
+  On a $arg(underline(H)) = arg(underline(S)/underline(E)) = arg((S e^(j phi_s))/(E e^(j phi_e))) = arg(e^(j(phi_s - phi_e))) = phi_s - phi_e$
+])
+
+Donc l'argument de $underline(H)$ nous renseigne sur le déphasage entre la sortie et l'entrée.
+
+== Filtre d'ordre 1
+
+#theorem([Filtre ordre 1],[
+  Dans un *filtre du premier ordre*, on a $underline(H) = (a_0 + a_i j omega)/(b_0 + b_i j omega)$
+])
+
+Pour trouver $underline(H)$ on peut faire une équation différentielle ou les impédances $CC$.
+
+On peut ensuite mettre $underline(H)$ sous forme canonique, ainsi $underline(H) = (...)/(1 + j omega/omega_0)$ avec $omega_0$ la *pulsation caractéristique du filtre*.
+
+Pour étudier un filtre :
+- On regarde d'abord son comportement BF/HF avec les dipôles équivalents pour les bobines et condensateurs. Si on a $u = cases(0 "en BF", e "en HF")$ on a un *passe-haut* sinon si $u = cases(e "en BF", 0 "en HF")$ on a un *passe-bas*.
+
+#emoji.warning *On est en HF si $omega >> omega_0 <==> 2 pi f >> 2 pi f_0 <==> f >> f_0$*
+
+- On regarde ensuite le gain $abs(underline(H))$ en BF et HF en négligeant $omega/omega_0$ ou $omega_0/omega$ selon le cas.
+
+#theorem([Gain en décibel],[
+  On a le *gain en décibel* $G_unit("dB") = 20 log_10 (underline(H))$, l'échelle log étant plus adaptée car à chaque facteur $times 10$ on a $plus.minus 20k$
+])
+
+On a la *pulsation de coupure* à $-3 unit("dB")$ telle que $G_unit("dB") = - 3 unit("dB")$
+
+La *bande passante du filtre* à $-3 unit("dB")$ sont les $omega$ tels que $G_unit("dB")(omega) >= G_(unit("dB") max) - 3 unit("dB")$
+
+On peut retrouver ces valeurs avec $abs(underline(H))$, en effet $abs(underline(H))(omega_c) = abs(underline(H))_max/sqrt(2)$
+
+On a la *largeur de la bande passante*, $Delta omega = max(omega) - min(omega)$ avec $omega$ dans la bande passante.
+
+Dans un filtre du premier ordre, $omega_c = omega_0$ et $Delta omega = omega_0$
+
+// TODO : Table with all first order filters (low and high frequence)
+
+== Filtre d'ordre 2
+
+// TODO : Do that part from scratch
 A faire
 
 #counter(heading).update(0)
