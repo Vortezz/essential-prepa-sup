@@ -56,6 +56,23 @@
       ),
     );
 
+#let todo() = box(
+    radius: 4pt, 
+    fill: yellow,
+    width: 100%,
+    align(
+        right, 
+        block(
+          radius: 4pt, 
+          fill: rgb("#fcfcd2"),
+          width: 100%-3pt, 
+          inset: 1em,
+          stroke: stroke(cap: "round", thickness: 0.5pt, paint: yellow),
+          align(left, [#emoji.pencil A faire])
+        ),
+      ),
+    );
+
 #let demo(t) = box(
   stroke: (
     left: 5pt + gray,
@@ -88,7 +105,7 @@
 }))
 
 #show: project.with(
-  title: "Thermodynamique",
+  title: "Essentiel Physique",
   authors: (
     (name: "Victor Sarrazin", phone: ""),
   ),
@@ -120,15 +137,98 @@
 
 #heading([Introduction à l'optique], supplement: [optical])
 
-A faire
+== Généralités
+
+On considère des milieux *transparent homogène isotropes* (THI) :
+- Transparent : La lumière n'est pas absorbée
+- Homogène : Invariant par translation
+- Isotrope : Invariant par quelque soit la direction depuis laquelle on regarde
+
+On a la *vitesse de la lumière* dans le vide, $c = qty("3.0e8", "m/s")$
+
+#theorem([Indice optique],[
+  On a l'*indice optique* $n$ (ou _indice de réfraction_), usuellement $n > 1$.
+  On a $v = c/n$ la vitesse dans un THI donné.
+])
+
+On a $n_"vide" = 1$, $n_"air" - n_"vide" = num("3e-4")$ et $n_"eau" = 1.3$
+
+#theorem([Relation de dispertion], [
+  On a $lambda = c/f$ avec $f$ la fréquence temporelle et $lambda$ la longueur d'onde. Dans un THI on a donc $lambda = c/(n f)$
+])
+
+#figure(image("optical/spectrum.png", width: 70%))
+
+On a $lambda_"violet" = qty("400", "nm")$ et $lambda_"rouge" = qty("800", "nm")$. Si $lambda < qty("400", "nm")$ on est dans le domaine des *ultraviolets* et si $lambda > qty("800", "nm")$ on est dans le domaine des *infrarouges*.
+
+La puissance lumineuse moyenne par unité de surface est appelée *éclairement* ou *intensité lumineuse*.
+
+== Caractérisation spectrale des sources lumineuses
+
+Une onde lumineuse possède une décomposition spectrale. On utilise principalement un spectromètre à réseau pour déterminer cette décomposition.
+
+#figure(image("optical/laser_spectrum.png", width: 50%))
+
+On a dans le cas du laser une seule raie spectrale, on parle alors de lumière *monochromatique*.
+
+#figure(image("optical/spectral_spectrum.jpg", width: 50%))
+
+On a dans le cas d'une lampe spectrale plusieurs raies, c'est un spectre des éléments qui composent la valeur dans l'ampoule. Chaque pic correspond à un 1 photon d'énergie donnée
+
+#figure(image("optical/sun_spectrum.png", width: 50%))
+
+On a dans le cas du soleil un spectre continu (corps noir) avec des "trous" liés aux absoptions sélectives des espèces chimiques présentes dans l'atmosphère.
+
+== Source lumineuse ponctuelle, rayon lumineux
+
+Une *source lumineuse ponctuelle* est une source de lumière dont les dimesions sont négligeables devant les distances caractéristiques du problème.
+
+On appelle *rayon lumineux* une ligne selon laquelle se propage la lumière.
+
+#theorem([Propriétés des rayons lumineux],[
+  - Les rayons lumineux sont indépendants les uns des autres
+  - Les rayons lumineux se propagent de façon rectilligne uniforme dans les milieux THI
+])
+
+== Approximation de l'optique géométrique
+
+#theorem([Approximation de l'optique géométrique],[
+  Les systèmes rencontrés par la lumière lors de sa propagation sont de dimension grande devant la longueur d'onde.
+])
+
+Dans la suite on se place dans cette approximation
+
+== Lois de Snell-Descartes
+
+#figure(image("optical/snell_descartes.jpg", width: 50%))
+
+=== Lois de l'optique géométrique
+
+#theorem([Principe de retour inverse],[La forme d'un rayon lumineux ne dépend pas du sens dans lequel la lumière le parcourt])
+
+#theorem([Loi de Descartes pour la réflexion],[Les rayons incidents et réfléchis sont dans le même plan , et $ alpha = i $ Avec $alpha$ l'angle réféchi et $i$ d'incidence])
+
+#theorem([Loi de Descartes pour la réfraction],[Les rayons incidents et réfractés sont dans le même plan , et $ n_r sin(r) = n_i sin(i) $ Avec $r$ l'angle réféchi et $i$ d'incidence, avec $n_r, n_i$ les indices optiques des 2 milieux])
+
+=== Réflexion totale
+
+Si $n_1 > n_2$, on dit que le milieu $1$ est plus *réfringent* que le milieu $2$.
+
+#theorem([Réflexion totale],[Il existe un angle d'incidence limite $i_"1,lim" = arcsin(n_2/n_1)$ tel que si $i_1 > i_"1,lim"$ il n'y a plus de rayon réfracté])
+
+#demo([
+  On part de la loi de Descartes pour la réfraction, $n_1 sin(i) = n_r sin(r)$ avec $r > i$ et $n_1 > n_2$ d'où $n_1/n_2 = sin(r)/sin(i) > 1$ d'où $sin(r) > sin(i)$.
+
+  Ainsi $sin(r) = n_i/n_r sin(i)$ d'où si $i > arcsin(n_2/n_1)$ on a $sin(r) > 0$ ce qui est contradictoire.
+])
 
 #heading([Lentilles minces et miroir plan], supplement: [optical])
 
-A faire
+#todo()
 
 #heading([L'oeil], supplement: [optical])
 
-A faire
+#todo()
 
 #counter(heading).update(0)
 #set heading(numbering: "⚡ I.1.a")
@@ -265,7 +365,7 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
 #theorem([Pont diviseur courant],[Soit $R_1$ et $R_2$ deux résistances en parallèle, $I_1 = R_2/(R_1 + R_2) I$])
 
 #demo([
-  A faire :O
+  #todo()
 ])
 
 == Générateurs
@@ -280,6 +380,7 @@ $U$ est donc indépendante, c'est une dipôle actif.
 
 #figure(image("elec/thevenin.png", width: 20%))
 
+#todo()
 // TODO : REDO THE PICTURE
 
 Un générateur réel est un générateur de Thévenin, on a :
@@ -738,12 +839,14 @@ On a la *largeur de la bande passante*, $Delta omega = max(omega) - min(omega)$ 
 
 Dans un filtre du premier ordre, $omega_c = omega_0$ et $Delta omega = omega_0$
 
+
+#todo()
 // TODO : Table with all first order filters (low and high frequence)
 
 == Filtre d'ordre 2
 
 // TODO : Do that part from scratch
-A faire
+#todo()
 
 #counter(heading).update(0)
 
@@ -751,13 +854,15 @@ A faire
 
 #heading([Introduction aux ondes], supplement: [waves])
 
-A faire
+#todo()
 
 #heading([Diffraction/Interférences], supplement: [waves])
 
-A faire
+#todo()
 
 #heading([La lumière onde], supplement: [waves])
+
+#todo()
 
 #counter(heading).update(0)
 
@@ -765,29 +870,31 @@ A faire
 
 #heading([Cinématique du point], supplement: [meca])
 
-A faire
+#todo()
 
 #heading([Dynamique du point], supplement: [meca])
 
-A faire
+#todo()
 
 #heading([Énergétique du point], supplement: [meca])
 
-A faire
+#todo()
 
 #heading([Introduction à la dynamique des particules chargées], supplement: [meca])
 
-A faire
+#todo()
 
 #heading([Loi du moment cinématique], supplement: [meca])
 
-A faire
+#todo()
 
 #heading([Mouvement dans un champ de force newtonien], supplement: [meca])
 
-A faire
+#todo()
 
 #heading([Mécanique du solide], supplement: [meca])
+
+#todo()
 
 #counter(heading).update(0)
 
@@ -1219,7 +1326,7 @@ D'après l'expression des variations, on en déduit que $S_"gaz" > S_"liq" > S_"
 
 #heading([Analyse dimensionnelle], supplement: [annex])
 
-A faire
+#todo()
 
 == Système SI
 
@@ -1241,7 +1348,7 @@ A faire
 
 #heading([Incertitudes], supplement: [annex])
 
-A faire
+#todo()
 
 == Incertitude type A
 
@@ -1251,7 +1358,7 @@ A faire
 
 #heading([Équations différentielles], supplement: [annex]) <equa>
 
-A faire
+#todo()
 
 == Équations linéaires d'ordre 1
 
@@ -1267,7 +1374,7 @@ A faire
 
 #heading([Numérique], supplement: [annex])
 
-A faire
+#todo()
 
 == Régression linéaire
 
