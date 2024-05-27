@@ -56,7 +56,7 @@
       ),
     );
 
-#let todo() = box(
+#let todo(text:"") = box(
     radius: 4pt, 
     fill: yellow,
     width: 100%,
@@ -68,7 +68,7 @@
           width: 100%-3pt, 
           inset: 1em,
           stroke: stroke(cap: "round", thickness: 0.5pt, paint: yellow),
-          align(left, [#emoji.pencil A faire])
+          align(left, [#emoji.pencil A faire #text])
         ),
       ),
     );
@@ -224,7 +224,110 @@ Si $n_1 > n_2$, on dit que le milieu $1$ est plus *réfringent* que le milieu $2
 
 #heading([Lentilles minces et miroir plan], supplement: [optical])
 
-#todo()
+== Vocabulaire
+
+Un *système optique* est un système plus ou moins complexe susceptible de perturber le trajet des rayons lumineux.
+
+On a :
+
+#align(center, text([Rayons incidents $-->$ Système optique $-->$ Rayons émergents]))
+
+Si des rayons incidents proviennent d'un même point, on parle de *point objet*.
+
+Si des rayons émergents proviennent d'un même point, on parle de *point image*.
+
+On dit que $A'$ est conjugué à $A$ si $A'$ est l'image de $A$, et on note $A arrow.cw.half^"miroir" A'$
+
+Un système qui conjugue à un point objet un point image est dit *stigmatique*. Seul le *miroir plan* l'est parfaitement.
+
+On parle de *système centré* pour un système possédant un axe de symétrie appelé *axe optique* ($O A$)
+
+On parle d'*aplanétisme* si $2$ points objets dans le même plan orthogonal à $O A$ sont conjugués à $2$ points image dans un même plan orthogonal à $O A$ (encore le cas du miroir plan)
+
+Un point est *réel* si il existe, et *virtuel* si on le voit dans un instrument d'optique (ou pas du tout)
+
+== Lentilles minces
+
+On parle de lentille mince car l'épaisseur est petite devant les rayons de courbure.
+
+#theorem([Conditions de Gauss],[
+  Tous les rayons sont *paraxiaux*, soit peu inclinés et peu éloigné de $O A$.
+
+  Dans ces conditions on a un stigmatisme approché et un applanétisme approché.
+
+  On peut aussi se placer dans l'approximation des petits angles, $alpha << 1$ d'où $tan alpha = sin alpha = alpha$ et $cos alpha = 1$
+])
+
+Le *centre optique* est le point d'un système optique où les rayons ne sont pas déviés.
+
+Le *foyer principal image* ($F'$) est l'image conjuguée d'un point objet à l'infini dans la direction de l'axe optique.
+
+Le *foyer principal objet* ($F$) est l'objet conjugé d'un point image à l'infini dans la direction de l'axe optique.
+
+#theorem([Distance focale],[
+  On a la *distance focale image* : $overline(O F') = f'$ et on a la *distance focale objet* : $overline(O F) = f$
+
+  Ces deux grandeurs sont algébriques
+])
+
+On a $abs(f) = abs(f')$. Une lentille est très convergente/divergente quand $abs(f')$ est très petit.
+
+On note la *vergence* d'une lentille $v = 1/f$ en dioptrie $delta$ avec $[delta] = unit("m^-1")$
+
+On définit le *grandissement*, $gamma = overline(A' B')/overline(A B)$ soit la taille de l'image sur la taille de l'objet
+
+=== Lentille convergente
+
+Une lentille est dite *convergente* si elle est à bords fins.
+
+#figure(image("optical/lentille_cv.jpg", width: 60%))
+
+=== Lentille divergente
+
+Une lentille est dite *divergente* si elle est à bords épais.
+
+#figure(image("optical/lentille_dv.jpg", width: 60%))
+
+== Constructions 
+
+- Un rayon incident qui passe par $O$ est non dévié
+- Un rayon incident qui passe par $F$ émerge parallèlement à $O A$
+- Un rayon émergent qui passe par $F'$ incide parallèlement à $O A$
+- Deux rayons incidents parallèles entre eux émergent en se croisant en un même point du plan focal image
+- Deux rayons émergents parallèles entre eux incident en se croisant en un même point du plan focal objet
+
+#todo(text: [(Ajouter des schémas?)])
+
+== Relations de conjugaison
+
+#theorem([Relations de Descartes (centre optique)],[
+  On a :
+    $ 1/overline(O A') - 1/overline(O A) = 1/f' $
+    $ gamma = overline(O A')/overline(O A) $
+])
+
+#theorem([Relations de Newton (foyer)],[
+  On a :
+    $ overline(F' A') times overline(F A) = - (f')^2 $
+    $ gamma = - overline(F' A')/f' = - f/overline(F A) $
+])
+
+#demo([Cette preuve est hors programme théoriquement.
+#figure(image("optical/conjug.png"))
+
+#todo(text:[(Si pas la flemme)])
+])
+
+== Condition $4 f'$
+
+#theorem([Condition $4f'$],[
+  Pour obtenir une image réelle d'un objet réel avec une lentille convergente,
+  $ D >= 4f' $
+])
+
+#demo([
+  #todo()
+])
 
 #heading([L'oeil], supplement: [optical])
 
@@ -932,7 +1035,7 @@ Si on a une paroi non plane on a $arrow(F) = integral P d S arrow(u)$ avec $arro
 
 === Température
 
-La température s'exprime en Kelvin ($unit("K")$), avec $T > 0 unit("K")$ et $0 °C = 273.15 unit("K")$, est intensive et provient d'une agitation moléculaire.
+La température s'exprime en Kelvin ($unit("K")$), avec $T > 0 unit("K")$ et $0 unit("dC") = 273.15 unit("K")$, est intensive et provient d'une agitation moléculaire.
 
 On a $E_c = 3/2 k_B T$ l'énergie thermique moléculaire avec $k_B = R/cal(N)_A$ la constante de Boltzmann.
 
