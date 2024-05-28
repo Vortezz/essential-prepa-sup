@@ -94,17 +94,21 @@
 #let dt = $dd(t)$
 #let ddt(a) = $dv(#a, t)$
 
-#let graph(funcs: (), size: (10,4), domain: (0, 10), tickx: none, ticky: none, lines: ()) = align(center, canvas({
-  plot.plot(axis-style: "school-book", size: size, x-tick-step: tickx, y-tick-step: ticky, {
-    for func in funcs {
-      plot.add(domain: domain, func, samples: 500)
-    }
+#let graph(funcs: (), size: (10,4), domain: (0, 10), tickx: none, ticky: none, lines: (), x_axis: $x$, y_axis: $y$, width: 100%) = box(width: width, 
+  align(center, 
+    canvas({
+      plot.plot(axis-style: "school-book", size: size, x-label: x_axis, y-label: y_axis, x-tick-step: tickx, y-tick-step: ticky, {
+        for func in funcs {
+          plot.add(domain: domain, func, samples: 500)
+        }
 
-    for line in lines {
-      plot.add-hline(line)
-    }
-  })
-}))
+        for line in lines {
+          plot.add-hline(line)
+        }
+      })
+    })
+  )
+)
 
 #show: project.with(
   title: "Essentiel Physique",
@@ -985,7 +989,133 @@ Dans un filtre du premier ordre, $omega_c = omega_0$ et $Delta omega = omega_0$
 
 #heading([Introduction aux ondes], supplement: [waves])
 
-#todo()
+== Définition et exemples
+
+Une *onde progressive* est une perturbation du champ qui se propage de proche en proche sans transport global de matière mais avec transport global d'énergie.
+
+Une one est dit *transverse* si si la perturbation est orthogonale au sens de propagation
+
+#graph(funcs: ((x) => {
+    return calc.sin(x)+ 0.3* calc.cos(20 * x)
+  },), domain: (0, 6))
+
+Une onde est dite *longitudinale* si cette perturbation est dans le même sens que la direction de propagation
+
+#graph(funcs: ((x) => {
+    return calc.sin(x *(1-0.001*x))
+  },), domain: (0, 200))
+
+#theorem([Onde mécanique],[
+Une *onde mécanique* est une onde qui a besoin d'un milieu matériel pour se propager
+  ])
+
+On se limitera à la description de la propagation des ondes dans un milieu illimité, non dispersif et transparent :
+- *Illimité* : On néglige les effets de bord
+- *Non dispersif* : La vitesse ne dépend pas de la longueur d'onde
+- *Transparent* : Pas de perte d'énergie de l'onde vers le milieu
+
+== Célérité, couplage temps/espace
+
+Dans les conditions d'études, une onde unidimensionnelle se propage en se translatant
+
+On a une onde qui se déplace de la manière suivante, en #text("bleu", fill: blue) en $t_0$ et en #text("rouge", fill: red) en $t_1 > t_0$
+
+#graph(funcs: ((x) => {
+  if (x == 0) {
+    return 0
+  }
+
+  if (x < 0.2) {
+    return 1
+  } else if (x < 0.4) {
+    return 4 * (x + 0.2) - 0.6
+  } else if (x < 0.665) {
+    return - 3 * (x + 0.2) + 3.6
+  } else {
+    return 1
+  }
+},(x) => {
+  if (x == 0) {
+    return 0
+  }
+
+  if (x < 0.4) {
+    return 1
+  } else if (x < 0.6) {
+    return 4 * x - 0.6
+  } else if (x < 0.865) {
+    return - 3 * x + 3.6
+  } else {
+    return 1
+  }
+}), domain: (0,1), width: 100%, x_axis: $t$)
+
+#theorem([Forme de l'onde planaire],[
+  Dans le cas d'une onde planaire on a : $ s(x, t) = F(x plus.minus v t) $
+
+avec $v$ la *célérité de l'onde* et $F$ dépendant  de la forme de l'onde.
+
+Si l'onde se déplace vers les $x$ croissants on a $x - v t$ et si $x$ se déplace vers les $x$ décroissants on a $x + v t$
+])
+
+Dans le cas *sphérique isotrope* (onde émise dans toutes les directions), on a $s(d, t) = A(d) times F(d - v t)$
+
+== Ondes planes progressives harmoniques
+
+Une onde *plane* est une onde 3D mais ne nécessitant qu'une seule dimension pour être décrite un plan $P(x,t)$.
+
+Une onde est dite *harmonique* lorsque $P(x,t) = P_0 cos(k (x plus.minus v t))$
+
+Le $k$ est appelé *vecteur d'onde* et est de dimension $unit("L^-1")$ et $k = (2 pi)/lambda$
+
+#theorem([Relations avec $k$],[
+  On a $T = lambda/v$, $f = v/lambda$ et $omega = k v$
+])
+
+Une onde harmonique possède une double périodicité : spatiale de longueur d'onde $lambda$ et temporelle de périodicité de période $T$.
+
+#theorem([Vitesse de phase],[
+  On a $v = omega/k$, dans notre cas c'est la célérité.
+])
+
+La *surface d'onde* est le lieu des points qui sont dans le même état vibratoire (dans une onde harmonique c'est le lieu des points qui ont la même phase).
+
+== Puissance d'une onde
+
+On définit la *puissance surfacique moyenne d'une onde*, $P_"surf" = k expval(s^2)$
+
+On définit aussi la *quantité moyenne d'énergie par unité de temps* qui traverse cette surface, $P = integral.double_"surface" P_"surf" dd(s)$
+
+Pour une onde plane se déplaçant vers les $x$ croissants, on a $P_"surf" = k S_0^2/2$
+
+#demo([
+  Soit $s(x,t) = cos(omega t - x t + phi)$, ainsi $P_"surf" = k expval(S_0^2 cos^2(...)) = k S_0^2/2$
+])
+
+Dans un volume d'espace, $P_"entrante" = P_"sortante"$
+
+#demo([
+ $P_"entrante" = k S_e^2/2$ et 
+ $P_"sortante" = k S_s^2/2$ or $S_e = S_s$ dans ce cours d'où $P_"entrante" = P_"sortante"$
+])
+
+De même, dans un milieu sphérique isotrope, on a $P_"entrante" = P_"sortante" = P_"source"$
+
+#demo([
+  $P_"entrante" = P_"source"$ et $P_"sortante" = P_"surf" times 4 pi R^2$ et puisqu'il n'y a pas d'absorption et de stockage, $P_"entrante" = P_"sortante" = P_"source"$
+])
+
+De plus, on a $S = C/R$ avec $R$ le rayon du cercle considéré
+
+== Spectre d'une onde périodique
+
+On considère $s(0, t) = S_0 + sum_(m=1)^(+ infinity) S_m cos(m omega t + phi_m)$ comme dans le cours d'optique
+
+#theorem([Principe de superposition],[
+  Dans un milieu linéaire, l'onde totale qui résulte de plusieurs ondes est la somme des ondes
+])
+
+De plus on a la *relation de dispersion* entre $k_omega$ et $m_omega$, $m_omega = k_m c$
 
 #heading([Diffraction/Interférences], supplement: [waves])
 
