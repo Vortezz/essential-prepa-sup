@@ -1599,7 +1599,7 @@ Pour étudier un moteur on peut utiliser le diagramme de Raveau avec les zones s
 
 Ainsi on a le tableau suivant :
 
-#table(columns: (120pt, 120pt), align: center, rows: 20pt,
+#table(columns: (120pt, 140pt), align: center, rows: 20pt,
 [*Type de machine*],
 [*Rendement/Efficacité*],
 [Moteur],
@@ -1617,6 +1617,8 @@ $ eta_c = 1 - T_F/T_C$  avec $eta <= eta_c$])
   On a $Q_F + Q_C + W = 0$, $Q_C/T_C + Q_F/T_F <= 0$ et $eta = -W/Q_C$ \ \
   D'où $eta = (Q_C + Q_F)/Q_C = 1 + Q_F/Q_C$ or $Q_F <= -Q_C T_F/T_C$ d'où $eta <= 1 - T_F/T_C$
 ])
+
+#todo(text: [(Efficacité de Carnot)])
 
 #heading([Changement de phase du corps pur], supplement: [thermo])
 
@@ -1861,13 +1863,23 @@ Dans le cas d'un aimant on a :
 
 // Tau/63%/Tangentes
 
-#heading([Numérique], supplement: [annex])
+== Euler
+
+#heading([Fiches TP], supplement: [annex])
 
 #todo()
 
 == Régression linéaire
 
-== Euler
+== Instruments optique
+
+== Auto-collimation
+
+== Multimètre
+
+== Pont de Wheatstone
+
+== Oscilloscope
 
 == Monte-Carlo
 
