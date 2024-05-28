@@ -184,7 +184,7 @@ On a $n_"vide" = 1$, $n_"air" - n_"vide" = num("3e-4")$ et $n_"eau" = 1.3$
 
 On a $lambda_"violet" = qty("400", "nm")$ et $lambda_"rouge" = qty("800", "nm")$. Si $lambda < qty("400", "nm")$ on est dans le domaine des *ultraviolets* et si $lambda > qty("800", "nm")$ on est dans le domaine des *infrarouges*.
 
-La puissance lumineuse moyenne par unité de surface est appelée *éclairement* ou *intensité lumineuse*.
+La puissance lumineuse moyenne par unité de surface est appelée *éclairement* ($xi$) ou *intensité lumineuse* ($I$).
 
 == Caractérisation spectrale des sources lumineuses
 
@@ -1119,9 +1119,107 @@ De plus on a la *relation de dispersion* entre $k_omega$ et $m_omega$, $m_omega 
 
 #heading([Diffraction/Interférences], supplement: [waves])
 
-#todo()
+La *diffraction* et les *interférences* sont deux principes intrinsèques aux ondes qui ne dépendent pas de leur nature.
+
+== Diffraction
+
+La *diffraction* se fait selon le schéma suivant :
+
+#figure(image("waves/diffraction.png", width: 50%))
+
+#theorem([Critère de diffraction],[
+  On a le *critère de diffraction* $lambda/a$ (addimensionné) :
+
+  - Si $a < lambda/2$ il ne se passe rien
+  - Si $lambda approx a$, on a une onde circulaire avec la même pulsation et la même longueur d'onde
+  - Si $a > "qq" lambda$ on a une onde restreinte angulairement
+  - Si $a >> lambda$ l'onde n'est pas diffractée
+])
+
+Si $lambda <= a$, l'onde est contrainte dans un secteur angulaire d'un demi angle au sommet $theta$ tel que $sin(theta) approx lambda/a$
+
+== Interférences
+
+Les interférences résultent d'une superposition de plusieurs ondes selon le principe de superposition.
+
+Les *interférences* se font selon le schéma suivant :
+
+Les zones noires sont appelées *inteférences destructives* et les zones blanches sont appelées *interférences constructives*.
+
+#figure(image("waves/interferences.png", width: 30%))
+
+L'*intensité* d'une onde est la puissance surfacique.
+
+On a la représentation complexe d'une onde, $s = S cos(omega t + phi(M))$ d'où $underline(s) = S exp^(j(omega t + phi(M)))$
+
+#theorem([Formule de Fresnel],[
+  On a la *formule des interférences* ou *de Fresnel* en considérant 2 ondes harmoniques de même pulsation :
+  $ I = I_1 + I_2 + 2sqrt(I_1 I_2) cos(phi_1(M) - phi_2(M)) $
+])
+
+#demo([
+  On a $underline(s) = underline(s_1) + underline(s_2)$ d'où $S^2 = abs(underline(u))^2 = (underline(s_1) + underline(s_2))(underline(s_1)^* + underline(s_2)^*) = underline(s_1) underline(s_1)^* + underline(s_2) underline(s_2)^* + underline(s_1) underline(s_2)^* + underline(s_1)^* underline(s_2)$
+
+  Et $S_1 e^(j(omega t - phi_1)) S_2 e^(-j(omega t - phi_2)) + S_1 e^(-j(omega t - phi_1)) S_2 e^(j(omega t - phi_2)) = S_1 S_2 [e^(j(phi_1 - phi_2)) + e^(-j(phi_1 - phi_2))] = 2 S_1 S_2 cos(phi_1 - phi_2)$
+
+  D'où $S^2 = S_1^2 + S_2^2 + 2 S_1 S_2 cos(phi_1 - phi_2)$ 
+  
+  Soit $k/2 S^2 = k/2 S_1^2 + k/2 S_2^2 + 2 (sqrt(k/2) S_1) (sqrt(k/2) S_2) cos(phi_1 - phi_2)$
+
+  Donc on a bien $I = I_1 + I_2 + 2sqrt(I_1 I_2) cos(phi_1- phi_2)$
+])
+
+On remarque donc bien que si $I_1=I_2=I_0$, on a $I = 2I_0 (1+ cos(Delta phi))$
+
+Si les deux ondes sont en phase, on a $cos(Delta phi) = 1$ d'où $I = I_1 + I_2 + 2 sqrt(I_1 I_2)$ ou encore $I = 4I_0$ sous les hypothèses précédentes. On dit dans ce cas qu'on a des *inteférences constructives*.
+
+Si les deux ondes sont opposition en phase, on a $cos(Delta phi) = -1$ d'où $I = I_1 + I_2 - 2 sqrt(I_1 I_2)$ ou encore $I = 0$ sous les hypothèses précédentes. On dit dans ce cas qu'on a des *inteférences destructives*.
+
+#todo(text:[(Voir pour expliciter les expressions des trous d'Young)])
 
 #heading([La lumière onde], supplement: [waves])
+
+== Généralités
+
+Dans le point de vue ondulatoire, la lumière est une onde se déplaçant à $qty("299792458","m/s")$
+
+La plupart des diélectriques suivent la *loi de Cauchy*, $n(lambda) = A + B/lambda^2$, $A>0$ dépendant du matériau et $B$ dépendant du diélectrique
+
+On parle de *diélectrique dispersent* une dispersion de la lumière avec $lambda$ dans le prisme arc-en-ciel.
+
+Souvent on fera l'hypothèse que cette dispersion est négligeable.
+
+== Modèle scalaire
+
+La lumière est une onde scalaire $(arrow(E), arrow(B))$ (3D) mais on se place en 1D en disant que la lumière est de forme $s(x, y,z,t)$
+
+Dans le cas d'un milieu homogène et d'une onde plane harmonique avec $lambda_0$ la longueur d'onde dans le vide on a $lambda = lambda_0/n$ et $k = (2 pi)/lambda = (2 pi)/lambda_0 n$
+
+#demo([
+  Le milieu est linéaire, d'òu on a $omega_"vide" = omega_"diélectrique" = omega$ avec $omega = c k_0 = c (2 pi)/lambda_0$ dans le vide et $omega = c/n k = c/n (2 pi)/lambda$
+
+  Ainsi $c/n (2 pi)/lambda = c (2 pi)/lambda_0$ d'où $n lambda = lambda_0$ soit $lambda = lambda_0/n$
+])
+
+Dans un milieu homogène, le *chemin optique* est $L_"AB" = n x$
+
+#theorem([Expression générale du chemin optique],[
+Dans un milieu inhomogène, le chemin optique est $L_"AB" = integral_A^B n dd(l)$
+])
+
+#theorem([Retard de phase],[
+  On a le *retard de phase* entre $A$ et $B$ noté $Delta phi = (2 pi)/lambda_0 L_"AB"$
+])
+
+#demo([
+  On a $Delta phi = (Delta t)/T times 2 pi = 1/(c T) times L_"AB" = (2 pi)/lambda_0 L_"AB"$ car $c T = lambda_0$
+])
+
+== Diffraction
+
+#todo()
+
+== Interférences
 
 #todo()
 
