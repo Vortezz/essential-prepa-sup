@@ -41,6 +41,44 @@
   body
 }
 
+
+#show raw.where(block: true): it => { set par(justify: false); grid(
+  columns: (100%, 100%),
+  column-gutter: -100%,
+  block(width: 100%, inset: 1em, for (i, line) in it.text.split("\n").enumerate() {
+    box(width: 0pt, align(right, str(i + 1) + h(2em)))
+    hide(line)
+    linebreak()
+  }),
+  box(
+    radius: 4pt, 
+    fill: black,
+    width: 100%,
+    align(
+        right, 
+        block(
+          radius: 4pt, 
+          fill: if it.lang == "python" or it.lang == "ml" { rgb("#fffcdf") } 
+                else if it.lang == "c" { rgb("#e8f1fd") } 
+                else { luma(246) }, 
+          width: 100%-3pt, 
+          inset: 1em,
+          stroke: stroke(cap: "round", thickness: 0.5pt),
+          align(
+            left, 
+            stack(
+              place(
+                dx: 100%-12pt,
+                image("languages/" + it.lang + ".svg", width: 12pt)
+              ),
+              it
+            ),
+          ),
+        ),
+      ),
+    ),
+)}
+
 #let theorem(name, t) = box(
     radius: 4pt, 
     fill: red,
@@ -1863,21 +1901,301 @@ Dans le cas d'un aimant on a :
 
 // Tau/63%/Tangentes
 
-== Euler
-
 #heading([Fiches TP], supplement: [annex])
 
 #todo()
 
 == Régression linéaire
 
+=== Explication
+
+La régression linéaire consiste à établir une relation linéaire entre une variable dépendante $y$ et une ou plusieurs variables indépendantes $x_1, dots, x_n$.
+
+Pour cela, on utilise Python et les bibliothèques `numpy` et `matplotlib`.
+
+=== Comment faire?
+
+==== Importer les bibliothèques
+
+Pour importer les bibliothèques, on utilise la commande `import`.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+```
+
+==== Créer les données
+
+On considère les listes $X$ et $Y$ suivantes (ces données sont fictives et sont normalement issues d'une expérience réelle) :
+
+```python
+X = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+Y = [1, 2.4, 3.6, 4.8, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5]
+```
+
+==== Tracer le nuage de points
+
+En physique on ne relie jamais des points expérimentaux par des segments, mais on trace un nuage de points. Pour cela, on utilise la commande `plt.plot` avec `o` comme forme.
+
+```python
+plt.plot(X, Y, "o")
+plt.label("X (unité)")
+plt.ylabel("Y (unité)")
+
+plt.show()
+```
+
+==== Réaliser la régression linéaire
+
+Pour réaliser la régression linéaire, on utilise la commande `np.polyfit` qui prend en argument les listes $X$ et $Y$ ainsi que le degré du polynôme (ici 1 car on veut une droite).
+
+```python
+a, b = np.polyfit(X, Y, 1)
+```
+
+==== Tracer la droite de régression
+
+Pour tracer la droite de régression, on utilise la commande `plt.plot` avec `--` comme forme.
+
+Pour avoir des valeurs régulières en abscisse, on utilise la commande `np.linspace` qui prend en argument la valeur minimale, la valeur maximale et le nombre de valeurs voulues dans l'intervalle.
+
+```python
+# Si on veut laisser les points expérimentaux on utilise la commande suivante
+plt.plot(X, Y, "o")
+
+# Tracé de la droite de régression
+list_x = np.linspace(min(X), max(X), 100) # 100 valeurs entre min(X) et max(X)
+plt.plot(list_x, a * np.array(X) + b, "--")
+plt.xlabel("X (unité)")
+plt.ylabel("Y (unité)")
+
+plt.show()
+```
+
+Il est ensuite possible de récupérer les coefficients de la droite de régression avec `a` et `b` et de les afficher.
+
+```python
+print("a = ", a)
+print("b = ", b)
+```
+
+Il est bien sûr aussi possible de les récupérer de manière géométrique avec une règle.
+
 == Instruments optique
 
 == Auto-collimation
 
+== Euler
+
+=== Présentation
+
+La méthode d'Euler est une méthode de résolution numérique d'équations différentielles. Elle est basée sur le principe de la tangente à la courbe représentative de la solution de l'équation différentielle.
+
+=== Principe algorithmique
+
+On considère une équation différentielle de la forme $y' = f(x, y)$, avec $f$ une fonction continue. On cherche à déterminer une fonction $y$ telle que $y' = f(x, y)$.
+
+On divise l'intervalle $[t_"min", t_"max"]$ en $n$ sous-intervalles de longueur $Delta t$ (appelé pas de résolution). Et on a donc $t_k$ = $t_"min" + k * Delta t$.
+
+On cherche à déterminer $y_k$ tel que $y_k$ = $y(t_k)$. Puisque l'on connaît $y_0$ (on connaît $y(t_"min")$), on peut déterminer tous les $y_k$ en utilisant la relation de récurrence suivante :
+
+$ y_(k+1) = y_k + f(t_k, y_k) * Delta t $
+
+=== Exemple d'application
+
+On considère la fonction `euler` suivante :
+
+```python
+def euler(F, y_0, tmin, tmax, dt):
+    list_t = np.arange(tmin, tmax + dt, dt)
+    N = len(list_t)
+    y = np.zeros(N)
+
+    y[0] = y_0
+
+    for k in range(N - 1):
+        y[k + 1] = y[k] + F(y[k], tmin + k * dt) * dt
+
+    return list_t, y
+```
+
+On considère l'équation différentielle $y' = y$ avec $y(0) = 1$.
+
+On a donc $f(x, y) = y$ et $y_0 = 1$.
+
+On peut donc définir la fonction `F` suivante :
+
+```python
+def F(y, x):
+    return y
+```
+
+On peut alors tracer la solution de l'équation différentielle sur l'intervalle $[0, 10]$ avec un pas de résolution de $0.1$ (valeurs prises pour l'exemple) :
+
+```python
+import matplotlib.pyplot as plt
+
+t, y = euler(F, 1, 0, 10, 0.1)
+
+plt.clf()
+plt.figure()
+
+plt.plot(t, y, ".") # On ne relie pas les points en physique
+plt.xlabel("X (unité)")
+plt.ylabel("Y (unité)")
+
+plt.legend()
+
+plt.show()
+```
+
+Il sera donc possible de visualiser l'allure de la solution de l'équation différentielle.
+
+=== Bonnes pratiques
+
+Il faut toujours vérifier que le pas de résolution est suffisamment petit pour que la solution obtenue soit proche de la solution réelle.
+
+Si le pas de résolution est trop grand, la solution obtenue sera très éloignée de la solution réelle.
+
+Mais si le pas de résolution est trop petit, le temps de calcul sera très long.
+
+Il faut donc trouver un compromis entre la précision de la solution et le temps de calcul.
+
 == Multimètre
 
+=== Présentation
+
+Le multimètre est un appareil de mesure qui permet de mesurer des grandeurs électriques telles que la tension, l'intensité ou la résistance. On appelle voltmètre la partie du multimètre qui permet de mesurer la tension, ampèremètre la partie qui permet de mesurer l'intensité et ohmmètre la partie qui permet de mesurer la résistance.
+
+=== Voltmètre
+
+Pour mesurer la tension aux bornes d'un dipôle, il faut brancher le voltmètre en dérivation du dipôle.
+
+Il faut brancher le $+$ sur la borne $Omega$ et le $-$ sur la borne $C O M$.
+
+#todo(text:[(Ajouter un schema)])
+// #figure(
+//   cetz.canvas(length: 1cm, debug: false, {
+//     import cetz.draw: line
+//     import "@local/circuitypst:0.0.1": node, to
+
+//     to("R", (-2,0), (2,0), label: "R")
+
+//     line((-1,0), (-1,1.5))
+//     line((1,0), (1,1.5))
+
+//     to("voltmeter", (-1,1.5), (1,1.5), label: "")
+//   }),
+//   caption: [Mesure avec un voltmètre]
+// )
+
+Pour avoir une mesure correcte, il faut que le voltmètre ait une résistance interne très grande devant la résistance du dipôle. (Le voltmètre est modélisé par un interrupteur ouvert.)
+
+Il est aussi possible d'ajuster le _RANGE_ du voltmètre pour avoir une mesure avec différents ordres de grandeur.
+
+=== Ampèremètre
+
+Pour mesurer l'intensité qui traverse un dipôle, il faut brancher l'ampèremètre en série avec le dipôle.
+
+Il faut brancher le $+$ sur la borne $m A$ (ou $mu A$) et le $-$ sur la borne $C O M$.
+
+#todo(text:[(Ajouter un schema)])
+// #figure(
+//   cetz.canvas(length: 1cm, debug: false, {
+//     import cetz.draw: line
+//     import "@local/circuitypst:0.0.1": node, to
+
+//     to("amperemeter", (-2,0), (0,0), label: "")
+//     to("R", (0,0), (2,0), label: "R")
+//   }),
+//   caption: [Mesure avec un ampèremètre]
+// )
+
+Pour avoir une mesure correcte, il faut que l'ampèremètre ait une résistance interne très faible devant la résistance du dipôle. (L'ampèremètre est modélisé par un fil.)
+
+Il est aussi possible d'ajuster le _RANGE_ de l'ampèremètre pour avoir une mesure avec différents ordres de grandeur.
+
+#emoji.warning *Il est très important de faire attention aux valeurs maximales que peut mesurer l'ampèremètre. Si le courant est trop fort, l'ampèremètre peut être endommagé.*
+
+=== Ohmmètre
+
+Pour mesurer la résistance d'un dipôle, il faut brancher l'ohmmètre en série avec le dipôle. Il faut que le dipôle ne soit pas alimenté.
+
+Il faut brancher le $+$ sur la borne $Omega$ et le $-$ sur la borne $C O M$.
+
+#todo(text:[(Ajouter un schema)])
+// #figure(
+//   cetz.canvas(length: 1cm, debug: false, {
+//     import cetz.draw: line
+//     import "@local/circuitypst:0.0.1": node, to
+
+//     to("ohmmeter", (-2,0), (2,0), label: "")
+
+//     line((-2,0), (-2,1.5))
+//     line((2,0), (2,1.5))
+
+//     to("R", (-2,1.5), (2,1.5), label: "R")
+//   }),
+//   caption: [Mesure avec un ohmmètre]
+// )
+
+Il est aussi possible d'ajuster le _RANGE_ de l'ohmmètre pour avoir une mesure avec différents ordres de grandeur.
+
+#emoji.warning *Il est primordial de ne pas alimenter le dipôle pour utiliser l'ohmmètre.*
+
 == Pont de Wheatstone
+
+=== Présentation
+
+Le pont de Wheatstone est un montage électrique utilisé pour mesurer une résistance inconnue. Il est composé de quatre résistances, dont une inconnue, et d'une source de tension. Il est utilisé dans de nombreux domaines, notamment en physique pour mesurer la résistance d'un conducteur, ou en médecine pour mesurer la résistance de la peau.
+
+=== Principe
+
+Le principe du pont de Wheatstone est de mesurer la valeur de la résistance inconnue en équilibrant le pont. Pour cela, on utilise un voltmètre pour arriver à l'équilibre. On peut alors déterminer la valeur de la résistance inconnue à partir des valeurs des autres résistances.
+
+=== Montage
+
+Le montage du pont de Wheatstone est le suivant :
+
+#todo(text:[(Ajouter un schema)])
+// #figure(
+//   cetz.canvas(length: 1cm, debug: false, {
+//     import cetz.draw: line
+//     import "@local/circuitypst:0.0.1": node, to
+
+//     to("idealTension", (-3,0), (3,0), label: "")
+
+//     to("R", (-2,4), (0,4), label: $R_v$)
+//     to("R", (-2,1), (0,1), label: $X$)
+//     to("R", (0,4), (2,4), label: $R_1$)
+//     to("R", (0,1), (2,1), label: $R_2$)
+
+//     line((-2,4), (-2,1))
+//     line((2,4), (2,1))
+
+//     to("R", (0,4), (0,2.5), label: "R")
+//     to("voltmeter", (0,2.5), (0,1))
+
+//     line((-3,0), (-3,2.5))
+//     line((3,0), (3,2.5))
+
+//     line((-3,2.5), (-2,2.5), label: $U$)
+//     line((2,2.5), (3,2.5), label: $U$)
+//   }),
+//   caption: [Pont de Wheatstone]
+// )
+
+=== Équilibre du pont de Wheatstone
+
+Pour que le pont de Wheatstone soit équilibré, il faut que la tension aux bornes du voltmètre soit nulle. On a alors :
+
+$ frac(R_v,X) = frac(R_1,R_2) $
+
+=== Mesure de la résistance inconnue
+
+On peut alors déterminer la valeur de la résistance inconnue à partir des valeurs des autres résistances :
+
+$ X = frac(R_2 R_v, R_1) $
 
 == Oscilloscope
 
@@ -1891,6 +2209,6 @@ Dans le cas d'un aimant on a :
   heading([Table des matières])
   box(height: 0pt)
   show heading: none
-  columns(2, outline(title: [Table des matières], indent: 10pt, fill: [], depth: 3))
+  columns(2, outline(title: [Table des matières], indent: 10pt, fill: [], depth: 4))
   pagebreak(weak: true)
 }
