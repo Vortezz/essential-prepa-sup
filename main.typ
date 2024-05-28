@@ -12,8 +12,8 @@
   set text(font: "Cantarell", lang: "en")
 
   // Title row.
-  align(center)[
-    #block(text(weight: 700, 1.75em, "Essentiel de physique"))
+  align(center + horizon)[
+    #block(text(weight: 800, 30pt, "🧪 Essentiel de physique"))
     #v(1em, weak: true)
     #date
   ]
@@ -32,6 +32,8 @@
       ]),
     ),
   )
+
+  align(center,image("logo.png", width: 50%))
 
   // Main body.
   set par(justify: false)
@@ -112,6 +114,16 @@
   date: "2023/2024",
 )
 
+#align([_Bienvenue dans l'essentiel de physique de mes cours de prépa. Ce document a pour objectif de contenir l'intégralité des cours de physique afin de les condenser et de les adapter._
+
+_Dans la dernière partie une liste de méthodes est détaillée pour faciliter notre voyage dans la physique._
+
+#align(right, text([_Bonne lecture..._]))])
+
+#pagebreak()
+
+#align(center, text([📋 Sommaire], weight: 800, size: 24pt))
+
 #outline(depth:1,indent: 10pt, fill: [], title: "Optique :", target: heading.where(supplement: [optical]))
 
 // Faire des montages : https://phydemo.app/ray-optics/simulator/
@@ -128,12 +140,19 @@
 
 #outline(depth:1,indent: 10pt, fill: [], title: "Thermodynamique :", target: heading.where(supplement: [thermo]))
 
+#outline(depth:1,indent: 10pt, fill: [], title: "Magnétostatique :", target: heading.where(supplement: [magne]))
+
 #outline(depth:1,indent: 10pt, fill: [], title: "Annexe :", target: heading.where(supplement: [annex]))
 
 #let pext = $P_"ext"$
 
+#pagebreak()
+
 #counter(heading).update(0)
+
 #set heading(numbering: "🔭 I.1.a")
+
+#align(center, text([🔭 Optique], weight: 800, size: 24pt))
 
 #heading([Introduction à l'optique], supplement: [optical])
 
@@ -333,8 +352,13 @@ Une lentille est dite *divergente* si elle est à bords épais.
 
 #todo()
 
+#pagebreak()
+
 #counter(heading).update(0)
+
 #set heading(numbering: "⚡ I.1.a")
+
+#align(center, text([⚡ Électricité], weight: 800, size: 24pt))
 
 #heading([Introduction à l'électricité], supplement: [elec])
 
@@ -951,9 +975,13 @@ Dans un filtre du premier ordre, $omega_c = omega_0$ et $Delta omega = omega_0$
 // TODO : Do that part from scratch
 #todo()
 
+#pagebreak()
+
 #counter(heading).update(0)
 
 #set heading(numbering: "🎶 I.1.a")
+
+#align(center, text([🎶 Ondes], weight: 800, size: 24pt))
 
 #heading([Introduction aux ondes], supplement: [waves])
 
@@ -969,7 +997,11 @@ Dans un filtre du premier ordre, $omega_c = omega_0$ et $Delta omega = omega_0$
 
 #counter(heading).update(0)
 
+#pagebreak()
+
 #set heading(numbering: "🔧 I.1.a")
+
+#align(center, text([🔧 Mécanique], weight: 800, size: 24pt))
 
 #heading([Cinématique du point], supplement: [meca])
 
@@ -999,9 +1031,13 @@ Dans un filtre du premier ordre, $omega_c = omega_0$ et $Delta omega = omega_0$
 
 #todo()
 
+#pagebreak()
+
 #counter(heading).update(0)
 
 #set heading(numbering: "💧 I.1.a")
+
+#align(center, text([💧 Thermodynamique], weight: 800, size: 24pt))
 
 #heading([Introduction à la thermodynamique], supplement: [thermo])
 
@@ -1423,9 +1459,131 @@ De plus on a $Delta_"sub"h > 0$, $Delta_"vap"h > 0$ et $Delta_"fus"h > 0$ et $De
 
 D'après l'expression des variations, on en déduit que $S_"gaz" > S_"liq" > S_"sol"$ ce qui est logique d'après la définition de l'entropie
 
+#pagebreak()
+
+#counter(heading).update(0)
+
+#set heading(numbering: "🧲 I.1.a")
+
+#align(center, text([🧲 Magnétisme], weight: 800, size: 24pt))
+
+#heading([Généralités sur le champ magnétique], supplement: [magne])
+
+== Généralités
+
+Le *champ magnétique* est un champ vectoriel $arrow(B)(M, t)$ s'exprimant en Tesla ($unit("T")$). On le mesure avec une sonde à effet Hall.
+
+On a les ordres de grandeurs suivants :
+- $B_"Terre" = qty("e-5", "T")$
+- $B_"aimant" = qtyrange("0.1", "1", "T")$
+- $B_"IRM" = "qqs" unit("T")$
+- $B_"LABO" = qty("10", "T")$
+
+#theorem([Lignes de champ],[
+  Les *lignes de champ* sont un tracé colinéaire en tout point au champ magnétique.
+
+  Leur principal intêret est la lisibilité et que la distance entre les lignes de champ varie comme l'inverse de l'intensité du champ.
+])
+
+Propriété HP : Les lignes de champ sont orthogonales aux lignes iso-champ.
+
+#theorem([Propriétés des lignes de champ],[
+  - 2 lignes de champ ne se croisent pas, *sauf si le champ est nul localement*
+  - Dans le cas des lignes de champ magnétiques elles sont toujours bouclées sur elles-même.
+])
+
+== Dépendance courant électrique et lignes de champ
+
+#theorem([Champ magnétique créé par un circuit],[
+  Un circuit parcouru par un courant constant (ou lentement variable) crée un champ magnétique constant (ou lentement variable) $arrow(B)(p o s, I)$ proportionnel à $I$
+])
+
+Pour trouver le sens des lignes de champ on utilise la règle de la main droite : on oriente son pouce dans le sens du courant et les lignes de champ vont dans le sens de repliement des mains.
+
+Un fil infiniment mince crée un champ magnétique $arrow(B) = (mu_0 I)/(2 r) arrow(e_theta)$ avec $I$ orienté vers $z > 0$ et $mu_0 = 4 pi qty("e-7","H/m")$ la permittivité magnétique du vide.
+
+Un *spire* est un fil circulaire.
+
+#theorem([Théorème de superposition],[
+  Dans un milieu linéaire, le champ magnétique total est la somme (la superposition) de chaque $arrow(B)_i$ créé par chaque source de $arrow(B)$ prise indépendamment. On a donc :
+  $ arrow(B) = sum_"sources" arrow(B)_i $
+])
+
+Dans le cas d'une série de spires, on a pour chaque spire la courbe suivante :
+
+#graph(funcs: ((x) => {
+  return 1/(calc.sqrt(2 * 3.14)) * calc.exp(-0.001 * calc.pow(x - 40, 2))
+},(x) => {
+  return 1/(calc.sqrt(2 * 3.14)) * calc.exp(-0.001 * calc.pow(x - 50, 2))
+},(x) => {
+  return 1/(calc.sqrt(2 * 3.14)) * calc.exp(-0.001 * calc.pow(x - 60, 2))
+},(x) => {
+  return 1/(calc.sqrt(2 * 3.14)) * calc.exp(-0.001 * calc.pow(x - 70, 2))
+},(x) => {
+  return 1/(calc.sqrt(2 * 3.14)) * calc.exp(-0.001 * calc.pow(x - 80, 2))
+},), domain: (100, 3))
+
+D'où pour $arrow(B)$ on a :
+
+#graph(funcs: ((x) => {
+  return 1/(calc.sqrt(2 * 3.14)) * calc.exp(-0.001 * calc.pow(x - 40, 2)) + 1/(calc.sqrt(2 * 3.14)) * calc.exp(-0.001 * calc.pow(x - 50, 2)) + 1/(calc.sqrt(2 * 3.14)) * calc.exp(-0.001 * calc.pow(x - 60, 2)) + 1/(calc.sqrt(2 * 3.14)) * calc.exp(-0.001 * calc.pow(x - 70, 2)) +1/(calc.sqrt(2 * 3.14)) * calc.exp(-0.001 * calc.pow(x - 80, 2))
+},), domain: (100, 3))
+
+On a donc le champ magnétique dans le solenoïde infini égal à $arrow(B) = mu_0 n i$ avec $n$ le nombre de spires par unité de longueur et $i$ l'intensité
+
+== Champ magnétiques continus dans la nature
+
+Dans la nature il est possible de trouver des champs magnétiques. Certains matériaux possèdent la propriété d'être aimantés ou magnétisables. C'est lié à une propriété magnétique des électrons, le _spin_.
+
+La Terre en est un bon exemple, le noyau externe constitue un champ magnétique sous l'effet d'un mouvement convectif.
+
+== Moment magnétique, dipôle magnétique
+
+#theorem([Moment magnétique],[
+  Dans le cas d'une spire parcourue par un courant $I$, on a :
+  $ arrow(mu) = I S arrow(u) $
+  avec $S$ l'aire du disque, $arrow(u)$ un vecteur unitaire.
+  
+  On a $[arrow(mu)] = unit("A m^2")$
+])
+
+Le moment magnétique quantifie à quel point l'aimant est "fort"
+
+#theorem([Couple de Laplace, Energie potentielle],[
+  Un dipôle magnétique de moment $arrow(mu)$ subit le *couple de Laplace*, $arrow(Gamma) = arrow(mu) and arrow(B)$.
+
+  Cette intéraction étant conservative, on a $E_p = - arrow(mu) dot arrow(B)$
+])
+
+En champ lointant, $arrow(mu)$ traduit l'"intensité" de cette source de champ magnétique et même si un aimant ne présente pas de courant électrique, un aimant possède un moment magnétique.
+
+#emoji.warning On a $arrow(Gamma)$ connu mais pas les forces donc on ne peut pas appliquer un PFD
+
+== Créer un champ magnétique
+
+On peut utiliser des bobines ou un aimant pour créer un champ magnétique.
+
+Dans un solénoïde infini, le champ est continu par morceaux sauf si on s'approche trop près du bord.
+
+== Lire une carte magnétique
+
+#theorem([Lecture d'une carte de champ],[
+  Plus les lignes de champ son proches, plus $norm(arrow(B))$ est grand.
+
+  L'orientation des lignes de champ ou des fils respectent la règle de la main droite
+])
+
+Dans le cas d'un aimant on a :
+
+#figure(image("magnet/magnet.png", width: 50%))
+
+#pagebreak()
+
 #counter(heading).update(0)
 
 #set heading(numbering: "📝 I.1.a")
+
+#align(center, text([📝 Annexe], weight: 800, size: 24pt))
 
 #heading([Analyse dimensionnelle], supplement: [annex])
 
