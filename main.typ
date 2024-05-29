@@ -8,7 +8,20 @@
 #let project(title: "", authors: (), date: none, body) = {
   // Set the document's basic properties.
   set document(author: authors.map(a => a.name), title: "Essentiel de physique")
-  set page(numbering: "1", number-align: center)
+  
+  set page(numbering: "1", number-align: center, footer: locate(loc => 
+      if (loc.page() > 1) {
+        box(width: 100%, grid(
+          columns: (40%, 20%, 40%),
+          rows: (20pt),
+          [],
+          align(center + horizon, str(loc.page())),
+          align(right + horizon, text("Victor Sarrazin", size: 9pt)),
+        ))
+    } else {
+      []
+    }
+  ))
   set text(font: "Cantarell", lang: "en")
 
   // Title row.
@@ -184,6 +197,8 @@ _Dans la dernière partie une liste de méthodes est détaillée pour faciliter 
 
 #outline(depth:1,indent: 10pt, fill: [], title: "Magnétostatique :", target: heading.where(supplement: [magne]))
 
+#outline(depth:1,indent: 10pt, fill: [], title: "Fiches TP :", target: heading.where(supplement: [tp]))
+
 #outline(depth:1,indent: 10pt, fill: [], title: "Annexe :", target: heading.where(supplement: [annex]))
 
 #let pext = $P_"ext"$
@@ -196,7 +211,8 @@ _Dans la dernière partie une liste de méthodes est détaillée pour faciliter 
 
 #align(center, text([🔭 Optique], weight: 800, size: 24pt))
 
-#heading([Introduction à l'optique], supplement: [optical])
+#box(height: 1em)
+#heading([Introduction à l'optique], supplement: [optical],)
 
 == Généralités
 
@@ -283,6 +299,7 @@ Si $n_1 > n_2$, on dit que le milieu $1$ est plus *réfringent* que le milieu $2
   Ainsi $sin(r) = n_i/n_r sin(i)$ d'où si $i > arcsin(n_2/n_1)$ on a $sin(r) > 0$ ce qui est contradictoire.
 ])
 
+#box(height: 1em)
 #heading([Lentilles minces et miroir plan], supplement: [optical])
 
 == Vocabulaire
@@ -390,6 +407,7 @@ Une lentille est dite *divergente* si elle est à bords épais.
   #todo()
 ])
 
+#box(height: 1em)
 #heading([L'oeil], supplement: [optical])
 
 #todo()
@@ -402,6 +420,7 @@ Une lentille est dite *divergente* si elle est à bords épais.
 
 #align(center, text([⚡ Électricité], weight: 800, size: 24pt))
 
+#box(height: 1em)
 #heading([Introduction à l'électricité], supplement: [elec])
 
 == Généralités
@@ -564,6 +583,7 @@ Un générateur réel est un générateur de Thévenin, on a :
 
 Il existe des *générateurs de courant* qui fixent une intensité dans le circuit.
 
+#box(height: 1em)
 #heading([Circuits d'ordre 1], supplement: [elec])
 
 == Le condensateur
@@ -696,6 +716,7 @@ On associe à une bobine une *inductance* $L$ en Henry ($unit("H")$), dépendant
   D'après la loi des noeuds, $i = i_1 + i_2$ d'où $ddt(i) = ddt(i_1) + ddt(i_2)$ soit $U/L = U/L_1 + U/L_2$ d'où la relation recherchée
 ])
 
+#box(height: 1em)
 #heading([Circuits d'ordre 2, Oscillateurs], supplement: [elec])
 
 Les oscillateurs sont présentés dans un cas électrique, mais on les retrouve aussi en mécanique ou encore en thermodynamique.
@@ -778,6 +799,7 @@ La durée du transitoire est de quelques $tau$.
 
 #emoji.warning En régime pseudo-périodique il n'est pas possible de déterminer graphiquement $tau$ comme dans les autres régimes.
 
+#box(height: 1em)
 #heading([Circuits en régime sinusoidal forcé], supplement: [elec])
 
 == Régime transitoire
@@ -933,6 +955,7 @@ On peut tracer la *réponse en phase*, $phi = - arctan(Q (omega/omega_0 - omega_
 
 On a résonance en intensité peu importe le facteur de qualité, mais ça n'est pas toujours le cas (notamment en tension ou en vitesse en mécanique)
 
+#box(height: 1em)
 #heading([Filtrage], supplement: [elec])
 
 Les signaux dans la réalité sont complexes à analyser car souvent superposés à un bruit qu'on cherche à éliminer. Ainsi on réalise un *filtrage*, analogique (ici) ou numérique.
@@ -1023,6 +1046,7 @@ Dans un filtre du premier ordre, $omega_c = omega_0$ et $Delta omega = omega_0$
 
 #set heading(numbering: "🎶 I.1.a")
 
+#box(height: 1em)
 #align(center, text([🎶 Ondes], weight: 800, size: 24pt))
 
 #heading([Introduction aux ondes], supplement: [waves])
@@ -1155,6 +1179,7 @@ On considère $s(0, t) = S_0 + sum_(m=1)^(+ infinity) S_m cos(m omega t + phi_m)
 
 De plus on a la *relation de dispersion* entre $k_omega$ et $m_omega$, $m_omega = k_m c$
 
+#box(height: 1em)
 #heading([Diffraction/Interférences], supplement: [waves])
 
 La *diffraction* et les *interférences* sont deux principes intrinsèques aux ondes qui ne dépendent pas de leur nature.
@@ -1215,6 +1240,7 @@ Si les deux ondes sont opposition en phase, on a $cos(Delta phi) = -1$ d'où $I 
 
 #todo(text:[(Voir pour expliciter les expressions des trous d'Young)])
 
+#box(height: 1em)
 #heading([La lumière onde], supplement: [waves])
 
 == Généralités
@@ -1269,30 +1295,37 @@ Dans un milieu inhomogène, le chemin optique est $L_"AB" = integral_A^B n dd(l)
 
 #align(center, text([🔧 Mécanique], weight: 800, size: 24pt))
 
+#box(height: 1em)
 #heading([Cinématique du point], supplement: [meca])
 
 #todo()
 
+#box(height: 1em)
 #heading([Dynamique du point], supplement: [meca])
 
 #todo()
 
+#box(height: 1em)
 #heading([Énergétique du point], supplement: [meca])
 
 #todo()
 
+#box(height: 1em)
 #heading([Introduction à la dynamique des particules chargées], supplement: [meca])
 
 #todo()
 
+#box(height: 1em)
 #heading([Loi du moment cinématique], supplement: [meca])
 
 #todo()
 
+#box(height: 1em)
 #heading([Mouvement dans un champ de force newtonien], supplement: [meca])
 
 #todo()
 
+#box(height: 1em)
 #heading([Mécanique du solide], supplement: [meca])
 
 #todo()
@@ -1305,6 +1338,7 @@ Dans un milieu inhomogène, le chemin optique est $L_"AB" = integral_A^B n dd(l)
 
 #align(center, text([💧 Thermodynamique], weight: 800, size: 24pt))
 
+#box(height: 1em)
 #heading([Introduction à la thermodynamique], supplement: [thermo])
 
 == Généralités
@@ -1357,6 +1391,7 @@ A l'équilibre thermodynamique un système voit ses variables d'état liées par
 
 #theorem([Équation des gaz parfaits], [On a à l'équilibre thermodynamique : $P V = n R T$ avec $R = qty("8.31", "J/K/mol")$ la constante des gaz parfaits.])
 
+#box(height: 1em)
 #heading([Premier principe], supplement: [thermo])
 
 == Énergie interne, capacité thermique à volume constant
@@ -1465,6 +1500,7 @@ On pose $gamma = C_p/C_v$
   On a $C_p = gamma C_v = C_v + n R$ d'où $C_v (gamma - 1) = n R$ ainsi $C_v = (n R)/(gamma - 1)$ et $C_p = (n R)/(gamma - 1)$
 ])
 
+#box(height: 1em)
 #heading([Second principe], supplement: [thermo])
 
 == Entropie et second principe
@@ -1538,6 +1574,7 @@ Ainsi sur un diagramme de Watt, le courbe est plus marquée pour une transformat
   On a $S(T) = S(T_0) + C ln (T/T_0)$ d'où $Delta S = C ln (T/T_0)$
 ])
 
+#box(height: 1em)
 #heading([Flux thermiques], supplement: [thermo])
 
 == Flux thermique, puissance
@@ -1593,6 +1630,7 @@ $U = R I$
 
 Ainsi on peut représenter des problèmes thermodynamiques avec des circuits électriques
 
+#box(height: 1em)
 #heading([Machines thermiques], supplement: [thermo])
 
 == Description générale d'une machine thermique cyclique
@@ -1658,6 +1696,7 @@ $ eta_c = 1 - T_F/T_C$  avec $eta <= eta_c$])
 
 #todo(text: [(Efficacité de Carnot)])
 
+#box(height: 1em)
 #heading([Changement de phase du corps pur], supplement: [thermo])
 
 Une *phase* est une partie d'un système dont les variables intensives sont continues
@@ -1735,6 +1774,7 @@ D'après l'expression des variations, on en déduit que $S_"gaz" > S_"liq" > S_"
 
 #align(center, text([🧲 Magnétisme], weight: 800, size: 24pt))
 
+#box(height: 1em)
 #heading([Généralités sur le champ magnétique], supplement: [magne])
 
 == Généralités
@@ -1849,73 +1889,22 @@ Dans le cas d'un aimant on a :
 
 #counter(heading).update(0)
 
-#set heading(numbering: "📝 I.1.a")
+#set heading(numbering: "👩‍🔬 I.1.a")
 
-#align(center, text([📝 Annexe], weight: 800, size: 24pt))
+#align(center, text([👩‍🔬 Fiches TP], weight: 800, size: 24pt))
 
-#heading([Analyse dimensionnelle], supplement: [annex])
+#box(height: 1em)
+#heading([Régression linéaire], supplement: [tp])
 
-#todo()
-
-== Système SI
-
-== Résoudre une équation de dimension
-
-== Homogénéité
-
-#table(
-  columns: (100pt, 100pt, 100pt,100pt),
-  rows: (18pt),
-  align: center,
-  [*Unité*],
-  [*Unités SI*],
-  [*Dimension*],
-  [*Relation*],
-  [Volts ($unit("V")$)],
-  $$
-)
-
-#heading([Incertitudes], supplement: [annex])
-
-#todo()
-
-== Incertitude type A
-
-== Incertitude type B
-
-== Chiffres significatifs
-
-#heading([Équations différentielles], supplement: [annex]) <equa>
-
-#todo()
-
-== Équations linéaires d'ordre 1
-
-== Équations linéaires d'ordre 2
-
-== Résolution avec les complexes
-
-// Voir chapitre sur le RSF
-
-== Temps caractéristique
-
-// Tau/63%/Tangentes
-
-#heading([Fiches TP], supplement: [annex])
-
-#todo()
-
-== Régression linéaire
-
-=== Explication
+== Explication
 
 La régression linéaire consiste à établir une relation linéaire entre une variable dépendante $y$ et une ou plusieurs variables indépendantes $x_1, dots, x_n$.
 
 Pour cela, on utilise Python et les bibliothèques `numpy` et `matplotlib`.
 
-=== Comment faire?
+== Comment faire?
 
-==== Importer les bibliothèques
+=== Importer les bibliothèques
 
 Pour importer les bibliothèques, on utilise la commande `import`.
 
@@ -1924,7 +1913,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 ```
 
-==== Créer les données
+=== Créer les données
 
 On considère les listes $X$ et $Y$ suivantes (ces données sont fictives et sont normalement issues d'une expérience réelle) :
 
@@ -1933,7 +1922,7 @@ X = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 Y = [1, 2.4, 3.6, 4.8, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5]
 ```
 
-==== Tracer le nuage de points
+=== Tracer le nuage de points
 
 En physique on ne relie jamais des points expérimentaux par des segments, mais on trace un nuage de points. Pour cela, on utilise la commande `plt.plot` avec `o` comme forme.
 
@@ -1945,7 +1934,7 @@ plt.ylabel("Y (unité)")
 plt.show()
 ```
 
-==== Réaliser la régression linéaire
+=== Réaliser la régression linéaire
 
 Pour réaliser la régression linéaire, on utilise la commande `np.polyfit` qui prend en argument les listes $X$ et $Y$ ainsi que le degré du polynôme (ici 1 car on veut une droite).
 
@@ -1953,7 +1942,7 @@ Pour réaliser la régression linéaire, on utilise la commande `np.polyfit` qui
 a, b = np.polyfit(X, Y, 1)
 ```
 
-==== Tracer la droite de régression
+=== Tracer la droite de régression
 
 Pour tracer la droite de régression, on utilise la commande `plt.plot` avec `--` comme forme.
 
@@ -1981,17 +1970,58 @@ print("b = ", b)
 
 Il est bien sûr aussi possible de les récupérer de manière géométrique avec une règle.
 
-== Instruments optique
+#box(height: 1em)
+#heading([Instruments d'optique], supplement: [tp])
 
-== Auto-collimation
+== Viseur
 
-== Euler
+Le viseur est un appareil optique composé de deux lentilles convergentes appelées objectif et oculaire, avec une réticule entre les deux.
 
-=== Présentation
+L'intérêt du viseur est que tout objet que l'on voit net à travers le viseur est à une même distance, d'où on peut estimer la distance avec un objet.
+
+== Lunette Astronomique
+
+La lunette astronomique est un appareil optique composé de deux lentilles convergentes appelées objectif et oculaire. On a le foyer image de l'objectif qui est le foyer objet de l'oculaire.
+
+#figure(image("tp/lunette_astro.png", width: 70%))
+
+Ainsi la lunette permet d'observer une image à l'infini, en la grandissant avec un grandissement $G$, et de renvoyer une image réelle à l'infini.
+
+== Collimateur
+
+Le collimateur est un appareil optique composé d'une source lumineuse et d'une lentille convergente. Il permet de rendre parallèle un faisceau lumineux.
+
+Pour cela, on place la source lumineuse au foyer principal objet de la lentille convergente.
+
+#box(height: 1em)
+#heading([Auto-collimation], supplement: [tp])
+
+== Principe
+
+On a une source qui éclaire, les faisceaux lumineux passent par une lentille convergente et se réfléchissent sur un miroir plan. On place un écran dans le plan de l'objet (c'est à dire le plan de la source lumineuse).
+
+== Réalisation
+
+=== Montage
+
+On effectue donc le montage expliqué précédemment.
+
+L'intérêt de l'auto-collimation est de déplacer la lentille pour observer différents phénomènes.
+
+=== Règle des $4f$
+
+Comme vu dans le chapitre d'optique géométrique, on a la règle des $4f$ qui donne une condition pour observer une image.
+
+Si cette condition est respectée, on dispose de 2 positions pour observer une image nette.
+
+#box(height: 1em)
+#heading([Euler], supplement: [tp])
+
+== Présentation
 
 La méthode d'Euler est une méthode de résolution numérique d'équations différentielles. Elle est basée sur le principe de la tangente à la courbe représentative de la solution de l'équation différentielle.
 
-=== Principe algorithmique
+== Principe algorithmique
 
 On considère une équation différentielle de la forme $y' = f(x, y)$, avec $f$ une fonction continue. On cherche à déterminer une fonction $y$ telle que $y' = f(x, y)$.
 
@@ -2001,7 +2031,7 @@ On cherche à déterminer $y_k$ tel que $y_k$ = $y(t_k)$. Puisque l'on connaît 
 
 $ y_(k+1) = y_k + f(t_k, y_k) * Delta t $
 
-=== Exemple d'application
+== Exemple d'application
 
 On considère la fonction `euler` suivante :
 
@@ -2051,7 +2081,7 @@ plt.show()
 
 Il sera donc possible de visualiser l'allure de la solution de l'équation différentielle.
 
-=== Bonnes pratiques
+== Bonnes pratiques
 
 Il faut toujours vérifier que le pas de résolution est suffisamment petit pour que la solution obtenue soit proche de la solution réelle.
 
@@ -2061,145 +2091,248 @@ Mais si le pas de résolution est trop petit, le temps de calcul sera très long
 
 Il faut donc trouver un compromis entre la précision de la solution et le temps de calcul.
 
-== Multimètre
+#box(height: 1em)
+#heading([Multimètre], supplement: [tp])
 
-=== Présentation
+== Présentation
 
 Le multimètre est un appareil de mesure qui permet de mesurer des grandeurs électriques telles que la tension, l'intensité ou la résistance. On appelle voltmètre la partie du multimètre qui permet de mesurer la tension, ampèremètre la partie qui permet de mesurer l'intensité et ohmmètre la partie qui permet de mesurer la résistance.
 
-=== Voltmètre
+== Voltmètre
 
 Pour mesurer la tension aux bornes d'un dipôle, il faut brancher le voltmètre en dérivation du dipôle.
 
 Il faut brancher le $+$ sur la borne $Omega$ et le $-$ sur la borne $C O M$.
 
-#todo(text:[(Ajouter un schema)])
-// #figure(
-//   cetz.canvas(length: 1cm, debug: false, {
-//     import cetz.draw: line
-//     import "@local/circuitypst:0.0.1": node, to
-
-//     to("R", (-2,0), (2,0), label: "R")
-
-//     line((-1,0), (-1,1.5))
-//     line((1,0), (1,1.5))
-
-//     to("voltmeter", (-1,1.5), (1,1.5), label: "")
-//   }),
-//   caption: [Mesure avec un voltmètre]
-// )
+#figure(
+  image("tp/voltmeter.png", width: 30%)
+)
 
 Pour avoir une mesure correcte, il faut que le voltmètre ait une résistance interne très grande devant la résistance du dipôle. (Le voltmètre est modélisé par un interrupteur ouvert.)
 
 Il est aussi possible d'ajuster le _RANGE_ du voltmètre pour avoir une mesure avec différents ordres de grandeur.
 
-=== Ampèremètre
+== Ampèremètre
 
 Pour mesurer l'intensité qui traverse un dipôle, il faut brancher l'ampèremètre en série avec le dipôle.
 
 Il faut brancher le $+$ sur la borne $m A$ (ou $mu A$) et le $-$ sur la borne $C O M$.
 
-#todo(text:[(Ajouter un schema)])
-// #figure(
-//   cetz.canvas(length: 1cm, debug: false, {
-//     import cetz.draw: line
-//     import "@local/circuitypst:0.0.1": node, to
-
-//     to("amperemeter", (-2,0), (0,0), label: "")
-//     to("R", (0,0), (2,0), label: "R")
-//   }),
-//   caption: [Mesure avec un ampèremètre]
-// )
+#figure(
+  image("tp/amperemeter.png", width: 30%)
+)
 
 Pour avoir une mesure correcte, il faut que l'ampèremètre ait une résistance interne très faible devant la résistance du dipôle. (L'ampèremètre est modélisé par un fil.)
 
 Il est aussi possible d'ajuster le _RANGE_ de l'ampèremètre pour avoir une mesure avec différents ordres de grandeur.
 
-#emoji.warning *Il est très important de faire attention aux valeurs maximales que peut mesurer l'ampèremètre. Si le courant est trop fort, l'ampèremètre peut être endommagé.*
+#emoji.warning Il est très important de faire attention aux valeurs maximales que peut mesurer l'ampèremètre. Si le courant est trop fort, l'ampèremètre peut être endommagé.
 
-=== Ohmmètre
+== Ohmmètre
 
 Pour mesurer la résistance d'un dipôle, il faut brancher l'ohmmètre en série avec le dipôle. Il faut que le dipôle ne soit pas alimenté.
 
 Il faut brancher le $+$ sur la borne $Omega$ et le $-$ sur la borne $C O M$.
 
-#todo(text:[(Ajouter un schema)])
-// #figure(
-//   cetz.canvas(length: 1cm, debug: false, {
-//     import cetz.draw: line
-//     import "@local/circuitypst:0.0.1": node, to
-
-//     to("ohmmeter", (-2,0), (2,0), label: "")
-
-//     line((-2,0), (-2,1.5))
-//     line((2,0), (2,1.5))
-
-//     to("R", (-2,1.5), (2,1.5), label: "R")
-//   }),
-//   caption: [Mesure avec un ohmmètre]
-// )
+#figure(
+  image("tp/ohmmeter.png", width: 30%)
+)
 
 Il est aussi possible d'ajuster le _RANGE_ de l'ohmmètre pour avoir une mesure avec différents ordres de grandeur.
 
-#emoji.warning *Il est primordial de ne pas alimenter le dipôle pour utiliser l'ohmmètre.*
+#emoji.warning Il est primordial de ne pas alimenter le dipôle pour utiliser l'ohmmètre.
 
-== Pont de Wheatstone
+#box(height: 1em)
+#heading([Pont de Wheatstone], supplement: [tp])
 
-=== Présentation
+== Présentation
 
 Le pont de Wheatstone est un montage électrique utilisé pour mesurer une résistance inconnue. Il est composé de quatre résistances, dont une inconnue, et d'une source de tension. Il est utilisé dans de nombreux domaines, notamment en physique pour mesurer la résistance d'un conducteur, ou en médecine pour mesurer la résistance de la peau.
 
-=== Principe
+== Principe
 
 Le principe du pont de Wheatstone est de mesurer la valeur de la résistance inconnue en équilibrant le pont. Pour cela, on utilise un voltmètre pour arriver à l'équilibre. On peut alors déterminer la valeur de la résistance inconnue à partir des valeurs des autres résistances.
 
-=== Montage
+== Montage
 
 Le montage du pont de Wheatstone est le suivant :
 
-#todo(text:[(Ajouter un schema)])
-// #figure(
-//   cetz.canvas(length: 1cm, debug: false, {
-//     import cetz.draw: line
-//     import "@local/circuitypst:0.0.1": node, to
+#figure(
+  image("tp/wheatstone.png", width: 50%)
+)
 
-//     to("idealTension", (-3,0), (3,0), label: "")
-
-//     to("R", (-2,4), (0,4), label: $R_v$)
-//     to("R", (-2,1), (0,1), label: $X$)
-//     to("R", (0,4), (2,4), label: $R_1$)
-//     to("R", (0,1), (2,1), label: $R_2$)
-
-//     line((-2,4), (-2,1))
-//     line((2,4), (2,1))
-
-//     to("R", (0,4), (0,2.5), label: "R")
-//     to("voltmeter", (0,2.5), (0,1))
-
-//     line((-3,0), (-3,2.5))
-//     line((3,0), (3,2.5))
-
-//     line((-3,2.5), (-2,2.5), label: $U$)
-//     line((2,2.5), (3,2.5), label: $U$)
-//   }),
-//   caption: [Pont de Wheatstone]
-// )
-
-=== Équilibre du pont de Wheatstone
+== Équilibre du pont de Wheatstone
 
 Pour que le pont de Wheatstone soit équilibré, il faut que la tension aux bornes du voltmètre soit nulle. On a alors :
 
 $ frac(R_v,X) = frac(R_1,R_2) $
 
-=== Mesure de la résistance inconnue
+== Mesure de la résistance inconnue
 
 On peut alors déterminer la valeur de la résistance inconnue à partir des valeurs des autres résistances :
 
 $ X = frac(R_2 R_v, R_1) $
 
-== Oscilloscope
+#box(height: 1em)
+#heading([Oscilloscope], supplement: [tp])
 
-== Monte-Carlo
+== Présentation
+
+L'oscilloscope est un appareil de mesure qui permet de visualiser des signaux électriques. Il est composé d'un écran sur lequel on peut voir le signal, de boutons pour régler les paramètres de mesure et de sondes pour connecter l'oscilloscope au circuit à mesurer.
+
+== Montage
+
+=== Schématisation
+
+L'oscilloscope se schématise donc par $arrow.t_1$, $arrow.t_2$ et une masse, chaque flèche représentant une voie de mesure.
+
+Ici sur le schéma, la voie 1 mesure $E$ et la voie 2 mesure $U$ aux bornes du condensateur.
+
+=== Spécificité
+
+Le condensateur étant relié à la Terra, il est important de faire attention aux branchements notamment celui de la masse. C'est pour cette raison qu'on respectera le code couleurs des fils.
+
+== Utilisation
+
+=== Allumage et branchements
+
+Quand on allume l'oscilloscope, les boutons vont clignoter. Il faut alors attendre que l'oscilloscope soit prêt, quand le bouton STOP est en vert.
+
+Il est ensuite possible de braancher 2 voies et de les allumer ou non avec les boutons portant leur numéro.
+
+=== Réglage horizontal
+
+Il est possible d'ajouter un retard à l'oscilloscope en tournat le petit bouton "horizontal"
+
+L'échelle est quand à elle changeable via le grand bouton "horizontal"
+
+=== Réglage vertical
+
+L'échelle verticale (soit celle de l'amplitude des signaux) est réglable avec le bouton au dessus de celui pour activer/désactiver une voie.
+
+De même il est possible de translater une voie avec le bouton en dessous de chaque voie.
+
+=== Seuil
+
+Il y a une molette seuil permettant de changer la valeur seuil, c'est à dire la valeur pour stabiliser l'oscilloscope.
+
+=== Curseurs
+
+Le bouton CURSOR permet d'ajouter des curseurs sur les axes $X$ et $Y$ afin de faire des mesures précises, c'est notamment utile pour trouver une période ou un amplitude
+
+=== Meas
+
+La fonction MEAS permet de traiter directement dans l'oscilloscope, elle permet de trouver un déphasage, une amplitude ou une période sans avoir à s'embêter avec des curseurs.
+
+Cette méthode est plus simple et plus précise.
+
+=== Type d'acquisition
+
+En TP on utilise normalement le mode d'acquision "normal" mais si l'oscilloscope a un comportement étrange il est possible d'utiliser la fonction de moyennage qui permet de lisser le signal.
+
+A noter aussi que si l'oscilloscope est vraiment trop étrange, il est possible de le réinitialiser ou de le brancher sur une source externe (en utilisant un GBF par exemple).
+
+#box(height: 1em)
+#heading([Monte-Carlo], supplement: [tp])
+
+== Présentation
+
+En pratique en faisant des manipulations on a des incertitudes sur les mesures. La méthode Monte-Carlo permet de propager les distributions d'incertitudes sur les mesures pour obtenir une incertitude sur une grandeur finale.
+
+== Procédé
+
+=== Étape 1
+
+On détermine au moins une valeur et son incertitude pour chaque grandeur mesurée (plus il y a de valeurs, plus la méthode est précise).
+
+Ainsi pour chaque valeur on va postuler la distribution de probabilité de la valeur mesurée.
+
+=== Étape 2
+
+On génère un grand nombre de valeurs pour chaque grandeur mesurée en utilisant la distribution de probabilité postulée. On calcule alors la valeur de la grandeur finale pour chaque jeu de valeurs.
+
+=== Étape 3
+
+La valeur finale s'obtient donc avec la valeur moyenne des valeurs obtenues et l'incertitude s'obtient avec la largeur de la distribution obtenue.
+
+== Et sur des régressions linéaires?
+
+Pour une régression linéaire, on peut utiliser la méthode Monte-Carlo pour propager les incertitudes sur les valeurs mesurées et obtenir une incertitude sur les coefficients de la droite de régression.
+
+=== Étape 1
+
+Dans un premier temps, on détermine les valeurs et les incertitudes pour chaque grandeur mesurée.
+
+On réalise ensuite une régression linéaire pour obtenir les coefficients de la droite de régression.
+
+=== Étape 2
+
+Par la méthode Monte-Carlo, on génère un grand nombre de valeurs pour chaque grandeur mesurée en utilisant la distribution de probabilité postulée.
+
+De même, on génère un grand nombre de droites de régression en utilisant les valeurs générées pour chaque grandeur mesurée.
+
+Enfin on calcule la valeur moyenne des coefficients de la droite de régression et l'incertitude sur ces coefficients.
+
+C'est gagné!
+
+#pagebreak()
+
+#counter(heading).update(0)
+
+#set heading(numbering: "📝 I.1.a")
+
+#align(center, text([📝 Annexe], weight: 800, size: 24pt))
+
+#box(height: 1em)
+#heading([Analyse dimensionnelle], supplement: [annex])
+
+#todo()
+
+== Système SI
+
+== Résoudre une équation de dimension
+
+== Homogénéité
+
+#table(
+  columns: (100pt, 100pt, 100pt,100pt),
+  rows: (18pt),
+  align: center,
+  [*Unité*],
+  [*Unités SI*],
+  [*Dimension*],
+  [*Relation*],
+  [Volts ($unit("V")$)],
+  $$
+)
+
+#box(height: 1em)
+#heading([Incertitudes], supplement: [annex])
+
+#todo()
+
+== Incertitude type A
+
+== Incertitude type B
+
+== Chiffres significatifs
+
+#box(height: 1em)
+#heading([Équations différentielles], supplement: [annex]) <equa>
+
+#todo()
+
+== Équations linéaires d'ordre 1
+
+== Équations linéaires d'ordre 2
+
+== Résolution avec les complexes
+
+// Voir chapitre sur le RSF
+
+== Temps caractéristique
+
+// Tau/63%/Tangentes
 
 #box(height: 10pt)
 
