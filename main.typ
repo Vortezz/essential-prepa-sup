@@ -136,7 +136,7 @@
       top: 4pt,
       bottom: 4pt,
     ),
-    align(left, [#text("Preuve :", weight: "bold", gray) \ #text(t, gray)])
+    align(left, [#text("Preuve :", weight: "bold", luma(56.7%)) \ #text(t, luma(56.7%))])
   ),
 )
 
@@ -1298,7 +1298,81 @@ Dans un milieu inhomogène, le chemin optique est $L_"AB" = integral_A^B n dd(l)
 #box(height: 1em)
 #heading([Cinématique du point], supplement: [meca])
 
-#todo()
+== Généralités
+
+Un *solide indéformable* est un système matériel $Sigma$ tel que $forall M_1, M_2 in Sigma$, $norm(arrow(M_1 M_2))$ est constant dans le temps.
+
+Un *point matériel* est un solide indéformable donc on néglige la taille et les mouvements de rotation sur lui même.
+
+Pour un point il faut 3 infos sur sa position, et pour un solide il faut 3 infos en plus : celles sur sa rotation.
+
+Pour décrire l'état mécanique d'un système il faut connaître 3 vitesses pour un point, et pour un solide il faut en plus connaître 3 vitesse angulaires.
+
+La *cinématique* est l'étude des mouvements sans se préoccuper des causes.
+
+== Observateur, repère, référentiel
+
+On a besoin de 3 informations spatiales et 1 information temporelle pour décrire un mouvement.
+
+Un *repère* est composé d'une origine, de 3 axes et d'une unité de longueur (souvent le mètre).
+
+Le *mètre* est défini par la distance parcourue par la lumière dans le vide en $1/299792458 unit("s")$
+
+L'observateur est lui muni d'une unité de temps, souvent la seconde.
+
+La *seconde* est définie par la durée de 919263177 périodes de la radiation correspondant à la transition entre les deux niveaux hyperfins de l'état fondamental de l'atome de césium 133.
+
+#theorem([Référentiel],[
+  Un *référentiel* est un repère d'espace et de temps
+])
+
+On se place dans le contexte de la relativité galiléenne, le temps est absolu et l'espace est absolu (pas vrai en général).
+
+== Position, vitesse, accélération
+
+#theorem([Position],[
+  Soit $O$ l'origine et $M$ un point matériel, ainsi *vecteur position* est $arrow(O M)$
+])
+
+#theorem([Vitesse],[
+  La *vitesse* est la dérivée de la position par rapport au temps, $arrow(v) = ddt(arrow(O M))$
+])
+
+#theorem([Accélération],[
+  L'*accélération* est la dérivée de la vitesse par rapport au temps, $arrow(a) = ddt(arrow(v)) = dv(arrow(O M),t,2)$
+])
+
+=== Coordonnées cartésiennes
+
+#figure(image("meca/coord_carte.svg", width: 30%))
+
+#theorem([Coordonnées cartésiennes],[
+  On a : $ arrow(O M) = x arrow(e_x) + y arrow(e_y) + z arrow(e_z) $
+
+  $ dd(arrow(O M)) = dd(x) arrow(e_x) + dd(y) arrow(e_y) + dd(z) arrow(e_z) $
+
+  $ arrow(v) = dot(x) arrow(e_x) + dot(y) arrow(e_y) + dot(z) arrow(e_z) $
+
+  $ arrow(a) = dot.double(x) arrow(e_x) + dot.double(y) arrow(e_y) + dot.double(z) arrow(e_z) $
+])
+
+=== Coordonnées cylindriques
+
+#figure(image("meca/coord_cylin.svg", width: 30%))
+
+=== Coordonnées sphériques
+
+#figure(image("meca/coord_spher.svg", width: 30%))
+
+=== Base de Frenet
+
+== Description de quelques mouvements
+
+=== Mouvement uniforme 1D
+
+=== Mouvement circulaire uniforme
+
+=== Mouvement uniformément accéléré
 
 #box(height: 1em)
 #heading([Dynamique du point], supplement: [meca])
@@ -1390,6 +1464,10 @@ A l'équilibre thermodynamique un système voit ses variables d'état liées par
 #theorem([Gaz parfait], [On parle d'un gaz parfait pour un gaz composé de particules ponctuelles sans intéraction entre elles.])
 
 #theorem([Équation des gaz parfaits], [On a à l'équilibre thermodynamique : $P V = n R T$ avec $R = qty("8.31", "J/K/mol")$ la constante des gaz parfaits.])
+
+#demo([
+  #todo()
+])
 
 #box(height: 1em)
 #heading([Premier principe], supplement: [thermo])
@@ -1885,6 +1963,83 @@ Dans le cas d'un aimant on a :
 
 #figure(image("magnet/magnet.png", width: 50%))
 
+== Action mécanique d'un champ magnétique sur un système physique
+
+On a l'expérience des rails de Laplace :
+
+#figure(image("magnet/laplace.png", width: 30%))
+
+#theorem([Force de Laplace],[
+  Un barreau rectiligne conducteur de longueur $l$ parcouru par une intensité $I$ dans un champ magnétique $arrow(B)$ subit une force $ arrow(F_L) = I l arrow(u) and arrow(B) $ avec $arrow(u)$ un vecteur unitaire orienté dans le sens du courant.
+])
+
+#demo([
+  On se place dans un cas simple, les électrons ont tous la même vitesse $arrow(v)$ et sont distribués de manière homogène.
+
+  On a $n^*$ le nombre d'électrons par unité de volume.
+
+  On a $I = (delta Q)/dd(t)$ avec $delta Q = delta N e$ la charge traversant la section pendant $dd(t)$, et $delta N$ le nombre d'électrons traversant la section pendant $dd(t)$.
+
+  D'où $delta N = n^* S v dd(t)$ soit $I = n^* S v e$
+
+  On a $arrow(F_L) = N times arrow(F)_"Lorentz"$ avec $N$ le nombre d'électrons et $arrow(F)_"Lorentz" = - e arrow(v) and arrow(B) = (-e)(-v arrow(e_x)) and arrow(B) = e v arrow(e_x) and arrow(B)$.
+
+  D'où $arrow(F_L) = N e v arrow(e_x) and arrow(B) = n^* l S e v arrow(e_x) and arrow(B) = I l arrow(u) and arrow(B)$
+])
+
+Dans un circuit filiforme non rectiligne, $arrow(F_L) = integral I arrow(dd(l)) and arrow(B)$
+
+Dans le cas du schéma au dessus, les forces sur les rails de Laplace sont opposées et se compensent.
+
+La force s'applique au baricentre du barreau.
+
+On considère maintenant le schéma suivant :
+
+#figure(image("magnet/squared_spire.png", width: 30%))
+#figure(image("magnet/squared_spire_top.png", width: 30%))
+
+#theorem([Force et moment dans une spire carrée],[
+  Dans une spire carrée, on a $arrow(F_L) = 0$ et $arrow(M_0) = arrow(mu) and arrow(B)$
+])
+
+#demo([
+  Pour la force :
+
+  On a $arrow(F_L) = arrow(F_L^(M N)) + arrow(F_L^(N P)) + arrow(F_L^(P Q)) + arrow(F_L^(Q M))$
+
+  On a $arrow(F_L^(M N)) = I arrow(M N) and arrow(B)$ et $arrow(F_L^(P Q)) = I arrow(P Q) and arrow(B) = - I arrow(M N) and arrow(B)$ d'où $arrow(F_L^(M N)) + arrow(F_L^(P Q)) = 0$
+
+  De même pour $arrow(F_L^(N P)) + arrow(F_L^(Q M)) = 0$ d'où $arrow(F_L) = 0$
+])
+
+#demo([
+  Pour le moment :
+
+  On se place dans le second schéma, on a $arrow(M_0)(arrow(F_L)) = arrow(M_0)(arrow(F_L^(M N))) + arrow(M_0)(arrow(F_L^(N P))) + arrow(M_0)(arrow(F_L^(P Q))) + arrow(M_0)(arrow(F_L^(Q M)))$
+
+  On a $arrow(M_0)(arrow(F_L^(M N))) = arrow(O C) and (I arrow(M N) and arrow(B)) = I (-a/2 arrow(e_r)) and (-a arrow(e_z) and (-B arrow(e_y))) = -I a^2/2 B arrow(e_r) and arrow(e_z)$
+
+  On a $arrow(M_0)(arrow(F_L^(P Q))) = arrow(O E) and (I arrow(P Q) and arrow(B)) = - arrow(O C) and (I arrow(M N) and arrow(B)) = -I a^2/2 B arrow(e_r) and arrow(e_z)$
+
+  On a $arrow(M_0)(arrow(F_L^(N P))) = arrow(O D) and (I arrow(N P) and arrow(B)) = I (-a/2 arrow(e_z)) and (-a arrow(e_r) and (-B arrow(e_y))) = a/2 arrow(e_z) and I a B cos(theta) arrow(e_z) = 0$
+
+  De même pour $arrow(M_0)(arrow(F_L^(Q M))) = 0$
+
+  D'où $arrow(M_0)(arrow(F_L)) = -I a^2 B arrow(e_r) and arrow(e_z) = - I a^2 B sin(theta) arrow(e_z) = - mu B sin(theta) arrow(e_z)$
+
+  Par ailleurs $arrow(mu) and arrow(B) = (- mu arrow(e_theta)) and (- B arrow(e_y)) = - mu B sin(theta) arrow(e_z)$
+])
+
+== Approche énergétique : Puissance des forces de Laplace
+
+#theorem([Puissance des forces de Laplace],[
+  La puissance des forces de Laplace est $P = I L B dot(x)$
+])
+
+#demo([
+  On a $arrow(F_L) = I arrow(M N) and arrow(B) = I L B arrow(e_x)$ d'où $P = arrow(F_L) dot arrow(v) = I L B dot(x)$
+])
+
 #pagebreak()
 
 #counter(heading).update(0)
@@ -1954,7 +2109,7 @@ plt.plot(X, Y, "o")
 
 # Tracé de la droite de régression
 list_x = np.linspace(min(X), max(X), 100) # 100 valeurs entre min(X) et max(X)
-plt.plot(list_x, a * np.array(X) + b, "--")
+plt.plot(list_x, a * np.array(list_x) + b, "--")
 plt.xlabel("X (unité)")
 plt.ylabel("Y (unité)")
 
