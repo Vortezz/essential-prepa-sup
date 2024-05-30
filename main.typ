@@ -145,6 +145,13 @@
 #let dt = $dd(t)$
 #let ddt(a) = $dv(#a, t)$
 
+#let ex = $arrow(e_x)$
+#let ey = $arrow(e_y)$
+#let ez = $arrow(e_z)$
+#let er = $arrow(e_r)$
+#let et = $arrow(e_theta)$
+#let ep = $arrow(e_phi)$
+
 #let graph(funcs: (), size: (10,4), domain: (0, 10), tickx: none, ticky: none, lines: (), x_axis: $x$, y_axis: $y$, width: 100%) = box(width: width, 
   align(center, 
     canvas({
@@ -1347,7 +1354,7 @@ On se place dans le contexte de la relativité galiléenne, le temps est absolu 
 #figure(image("meca/coord_carte.svg", width: 30%))
 
 #theorem([Coordonnées cartésiennes],[
-  On a : $ arrow(O M) = x arrow(e_x) + y arrow(e_y) + z arrow(e_z) $
+  On a : $ arrow(O M) = x ex + y ey + z ez $
 
   $ dd(arrow(O M)) = dd(x) arrow(e_x) + dd(y) arrow(e_y) + dd(z) arrow(e_z) $
 
@@ -1360,24 +1367,212 @@ On se place dans le contexte de la relativité galiléenne, le temps est absolu 
 
 #figure(image("meca/coord_cylin.svg", width: 30%))
 
+#theorem([Coordonnées cylindriques],[
+  On a : $ arrow(O M) = arrow(O m) + arrow(O M) = r er+ z ez $
+
+  $ dd(arrow(O M)) = dd(r) er + r dd(theta) et + dd(z) ez $
+
+  $ arrow(v) = dot(r) er + r dot(theta) et + dot(z) ez $
+
+  $ arrow(a) = (dot.double(r) - r dot(theta)^2) er + (2 dot(r) dot(theta) + r dot.double(theta)) et + dot.double(z) ez $
+])
+
+#demo([
+  On a $er = cos(theta) ex + sin(theta) ey$ d'où $ddt(er) = ddt(cos(theta(t)) ex) + ddt(sin(theta(t)) ey) = -sin(theta(t)) dot(theta) ex + cos(theta(t)) dot(theta) ey = dot(theta) et$
+
+  D'où $ddt(er) = dot(theta) et$ et $ddt(et) = - dot(theta) er$
+
+  Ainsi on a $arrow(v) = ddt(arrow(O M)) = dot(r) er + r dot(theta) et + dot(z) ez$
+
+  De plus on a $arrow(a) = ddt((dot(r) er + r dot(theta) et) + dot(z) ez)$
+
+  Avec $ddt(dot(r) er) = dot.double(r) er + dot(r) dot(theta) et$ et $ddt(r dot(theta) et) = dot(r) dot(theta) et + r dot.double(theta) et - r dot(theta)^2 er$
+
+  D'où $arrow(a) = (dot.double(r) - r dot(theta)^2) er + (2 dot(r) dot(theta) + r dot.double(theta)) et + dot.double(z) ez$
+])
+
+La composante $r er$ est la composante radiale et $z ez$ est la composante axiale.
+
 === Coordonnées sphériques
 
 #figure(image("meca/coord_spher.svg", width: 30%))
 
+On appelle $phi$ la longitude et $theta$ la colatitude
+
+#theorem([Coordonnées sphériques],[
+  On a : $ arrow(O M) = r er + theta et + phi ep $
+
+  $ dd(arrow(O M)) = dd(r) er + r dd(theta) et + r sin(theta) d(phi) ep $
+
+  $ arrow(v) = dot(r) er + r dot(theta) et + r sin(theta) dot(phi) ep $
+
+  La formule de l'accélération n'est pas à connaître
+])
+
 === Base de Frenet
+
+On a la *base de Frenet* pour les abscisses curvilignes.
+
+On considère le *cercle osculateur*, c'est à dire le cercle qui approxime le mieux la courbe en un point.
+
+#theorem([Base de Frenet],[
+  Avec $arrow(tau)$ le *vecteur unitaire tangent* et $arrow(n)$ le *vecteur unitaire normal* au cercle osculateur, on a :
+
+  $ arrow(a) = v^2/r arrow(n) + ddt(v) arrow(tau) $
+])
 
 == Description de quelques mouvements
 
 === Mouvement uniforme 1D
 
+On est à vitesse constante, ainsi $arrow(v) = ddt(x) ex$ d'où en intégrant on a $x = norm(arrow(v)) t + x_0$
+
 === Mouvement circulaire uniforme
 
+Dans un mouvement circulaire uniforme on a $r$ fixé, donc avec $arrow(v) = cancel(dot(r) er) + r dot(theta) et$ d'où $norm(arrow(v)) = r dot(theta)$ donc $theta(t) = omega t + theta_0$
+
 === Mouvement uniformément accéléré
+
+#todo(text: [(Voir si vraiment nécessaire)])
 
 #box(height: 1em)
 #heading([Dynamique du point], supplement: [meca])
 
-#todo()
+En dynamique on s'intéresse aux causes des mouvements contrairement à la cinématique.
+
+== Masse, centre de masse, quantité de mouvement
+
+L'*inertie* est la résistance d'un corps à une variation de son état de mouvement.
+
+La *masse* en physique est une mesure de l'inertie d'un corps, elle s'exprime en kilogramme ($unit("kg")$), est extensive et additive.
+
+#theorem([Quantité de mouvement],[
+  La *quantité de mouvement* est le produit de la masse par la vitesse, $arrow(P) = m arrow(v)$
+])
+
+La vitesse d'un système de points est la vitesse du centre de masse.
+
+Une *force* décrit une intéraction pour modifier l'état de mouvement (c'est à dire la quantité de mouvement) d'un point matériel. On note $arrow(F)_(a -> b)$ l'action de $a$ sur $b$. Une force est une grandeur vectorielle, s'exprime en Newton ($unit("N")$), est extensive et additive.
+
+== Les lois de Newton
+
+=== 1ère loi de Newton
+
+Un *système isolé* est un système qui n'échange pas de quantité de mouvement avec l'extérieur.
+
+Un *système pseudo-isolé* est un système qui échange de la quantité de mouvement avec l'extérieur mais dont la somme des forces extérieures est nulle (la résultante des forces extérieures est nulle).
+
+#theorem([Principe d'intertie],[
+  Il existe une classe de référentiels dits d'*inertie* ou *galiléens* dans lesquels un système isolé ou pseudo-isolé est à l'équilibre ou en mouvement rectiligne uniforme.
+])
+
+2 référentiels galiléens sont en translation rectiligne uniforme l'un par rapport à l'autre.
+
+On a les référentiels de référence suivants :
+
+- *Héliocentrique* : Le point fixe est le centre de masse du soleil, et les 3 axes pointent vers des étoiles fixes. Il est supposé galiléen.
+
+- *De Copernic* : Le point fixe est le centre de masse du système solaire, et les 3 axes pointent vers des étoiles fixes. Il est supposé galiléen.
+
+- *Géocentrique* : Le point fixe est le centre de la Terre, et les 3 axes pointent vers des étoiles fixes. Il est supposé galiléen sur des $t << 1$ an.
+
+- *Terrestre* : Le point fixe est accroché à la surface terrestre et les trois axes sont fixes à la surface terrestre. Il est supposé galiléen sur des $t << 1$ j.
+
+=== 2ème loi de Newton
+
+#theorem([Principe fondamental de la dynamique (PFD)],[
+  Dans un référentiel galiléen, un point matériel vérifie $ddt(arrow(P)) = sum arrow(F)$, ainsi la résultante des forces est égale à la dérivée de la quantité de mouvement.
+
+  A $m$ constante, on a $m arrow(a) = sum arrow(F)$ et dans un système isolé ou pseudo-isolé, $m arrow(a) = 0$
+])
+
+=== 3ème loi de Newton
+
+#theorem([Principe des actions réciproques],[On a $arrow(F)_(A -> B) = - arrow(F)_(B -> A)$])
+
+== Méthode de résolution des exercices
+
+Pour résoudre un exercice on suit les étapes suivantes :
+
+1. On fait un grand schéma avec le répère et la/les base(s)
+
+2. On définit le système étudié, le référentiel d'étude et on précise le caractère galiléen.
+
+3. On fait un *bilan des actions mécaniques externes* (BAME) et on le fait apparaître sur le schéma
+
+4. On fait l'exercice
+
+== Forces à connaître
+
+=== Poids
+
+On considère un corps de masse $m$ plongé dans un champ gravitationnel $arrow(g)$
+
+#theorem([Poids],[
+  On a $arrow(P) = m arrow(g)$ le *poids* s'appliquant sur le corps
+])
+
+=== Poussée d'Archimède
+
+On considère un corps plongé dans un fluide de masse volumique $rho_f$ et un champ de pesanteur $arrow(g)$
+
+#theorem([Poussée d'Archimède],[
+  On a $arrow(Pi) = -rho_f V arrow(g)$ avec $V$ le volume déplacé valide si et seulement si le fluide est à l'équilibre en l'absence du corps
+])
+
+Il ne faut pas hésiter à la négliger si $rho_"corps" >> rho_f$
+
+=== Réaction d'un support
+
+La réaction du support est une force au contact, avec $arrow(R_t)$ la composante tangentielle (toujours vers l'extérieur) et $arrow(R_n)$ la composante normale (HP), nulle en l'absence de frottements solides.
+
+On n'a pas de formule pour $arrow(R_n)$
+
+=== Tension d'un fil inextensible
+
+On a $arrow(T)$ dirigé vers le fil, avec le point d'application au contact système/fil, si le fil n'est pas tendu on a $arrow(T) = 0$
+
+On n'a pas de formule pour $arrow(T)$
+
+On peut retrouver l'équation différentielle d'un pendule avec cette force
+
+=== Force de rappel élastique (loi de Hooke)
+
+Un ressort applique une force qui s'oppose à la déformation
+
+#theorem([Force de rappel élastique],[
+  On a $arrow(F) = k(l - l_0) arrow(u)$ avec $k$ la *constante de raideur* du ressort et $l_0$ sa *longueur à vide*, et $arrow(u)$ est un vecteur unitaire à déterminer avec précision (pour garantir l'opposition à la déformation).
+])
+
+La constante de raideur s'exprime en $unit("N/m")$, plus $k$ est grand plus il est compliqué déformer le ressort.
+
+=== Force de frottement
+
+On a 2 types de frottements
+
+#theorem([Frottements fluides linéaires],[
+  On a $arrow(F_f) = - alpha arrow(v)$ qui s'opposent à la vitesse
+])
+
+Il existe aussi les frottements quadratiques (HP)
+
+== Intéractions à connaître
+
+=== Intéraction gravitationnelle
+
+On considère 2 points massifs
+
+#theorem([Force d'intéraction gravitationnelle],[
+  On a $arrow(F) = cal(G) (m_1 m_2)/d arrow(u)$ avec $cal(G) = qty("6.7e-11","m^3/kg/s^2")$ la constante de pesanteur
+])
+
+=== Intéraction coulombienne
+
+On considère 2 particules chargées
+
+#theorem([Force d'intéraction coulombienne],[
+  On a $arrow(F) = 1/(4 pi epsilon_0) (q_1 q_2)/d^2 arrow(u)$ avec $epsilon_0 = qty("8.9e-11","F/m^1")$
+])
 
 #box(height: 1em)
 #heading([Énergétique du point], supplement: [meca])
