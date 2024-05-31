@@ -1563,7 +1563,7 @@ Il existe aussi les frottements quadratiques (HP)
 On considère 2 points massifs
 
 #theorem([Force d'intéraction gravitationnelle],[
-  On a $arrow(F) = cal(G) (m_1 m_2)/d arrow(u)$ avec $cal(G) = qty("6.7e-11","m^3/kg/s^2")$ la constante de pesanteur
+  On a $arrow(F) = cal(G) (m_1 m_2)/d^2 arrow(u)$ avec $cal(G) = qty("6.7e-11","m^3/kg/s^2")$ la constante de pesanteur
 ])
 
 === Intéraction coulombienne
@@ -1577,7 +1577,132 @@ On considère 2 particules chargées
 #box(height: 1em)
 #heading([Énergétique du point], supplement: [meca])
 
-#todo()
+== Travail et puissance d'une force
+
+#theorem([Travail élémentaire],[
+  Soit $M$ un point matériel se déplaçant de $dd(O M)$ en $dd(t)$, on a $delta W = arrow(F) dot dd(arrow(O M))$
+])
+
+Si $delta W > 0$, on dit que $arrow(F)$ est *motrice*, si $delta W < 0$, on dit que $arrow(F)$ est *résistante* et si $delta W = 0$, $arrow(F)$ ne *travaille pas*.
+
+Si $A$ est un état initial et $B$ un état final on a $W_(A -> B) = integral_"chemin" delta W$
+
+On note que si $arrow(F)$ est constante on a $W = arrow(F) dot arrow(A B)$
+
+On a pour le poids $W_p = - m g h$
+
+#demo([
+  On a $delta W = arrow(F) dot dd(arrow(O M)) = (- m g ez) dot (dd(x) ex + dd(y) ey dd(z) ez) = -m g ez$
+
+  D'où $W = integral_a^b delta W = -m g(z_b-z_a)$
+])
+
+#theorem([Puissance d'une force],[
+  On a la puissance d'une force, $P = arrow(F) dot arrow(v)$ d'où $delta W = P dd(t)$
+])
+
+#demo([
+  On a $delta W = arrow(F) dot dd(arrow(O M)) = arrow(F) dot ddt(arrow(O M)) dd(t) = P dd(t)$
+])
+
+== Théorème de l'énergie cinétique
+
+#theorem([Énergie cinétique],[
+  On a l'*énergie cinétique*, $cal(E)_c = 1/2 m v^2$
+])
+
+#theorem([Théorème énergie cinétique],[
+  Dans un référentiel galiléen on a :
+  $ Delta cal(E)_c = sum W_arrow(F)_"ext" $
+])
+
+#demo([
+  Par PFD on a $m ddt(arrow(v)) = sum arrow(F)_"ext"$ d'où $m ddt(arrow(v)) dot arrow(v) = sum arrow(F)_"ext" dot arrow(v)$, ainsi on a $ddt((1/2 m v^2)) = sum P_"ext"$ donc on a $dd((1/2 m v^2)) = sum P_"ext" dd(t)$ donc en intégrant $Delta cal(E_c) = sum W_arrow(F)_"ext"$
+])
+
+== Force conservative, énergie potentielle
+
+Une force est dit *conservative* si son travail ne dépend pas du chemin parcouru
+
+On a $cal(E)_p$ l'*énergie potentielle*, et est définie à une constante près.
+
+#theorem([Énergies potentielles à connaître],[
+  Une force conservative admet une énergie potentielle :
+
+  - Pour le poids, $cal(E)_(p p) = m g h$ (appelée *énergie potentielle de pesanteur*)
+
+  - Pour le rappel élastique, $cal(E)_p = k/2 (l - l_0)^2$
+
+  - Pour la gravitation, $cal(E)_p = cal(G) (m_1 m_2)/d$
+
+  - Pour la force coulombienne, $cal(E)_p = (q_1 q_2)/(4 pi epsilon_0 d)$
+])
+
+#demo([
+  On a $delta W = arrow(F) dot dd(arrow(O M)) = (k(l - l_0) arrow(u)) dot dd(arrow(O M))$
+
+  D'où $arrow(u) dot (dd(arrow(O M)_r) + dd(arrow(O M)_t)) = arrow(u) dot arrow(u) dd(l) = dd(l)$
+
+  Donc on a $delta W = - k (l - l_0) dd(l) = - dd((k/2 (l-l_0)^2))$ d'où $cal(E)_p = k/2 (l - l_0)^2$
+])
+
+Les forces de frottement ne sont pas conservatives.
+
+#theorem([Relation $dd(cal(E)_p)$/$delta W$],[
+  On a $delta W = - dd(cal(E)_p)$
+])
+
+Un système est dit *conservatif* si toutes les forces sont conservatives
+
+#theorem([Relation $cal(E)_p$/$arrow(F)$],[
+
+  On a $arrow(F) = dv(cal(E)_p,x) ex$
+])
+
+== Théorème de l'énergie mécanique
+
+#theorem([Énergie mécanique],[
+  On a l'*énergie mécanique*, $cal(E)_m = cal(E)_c + cal(E)_p$
+])
+
+#theorem([Théorème énergie mécanique],[
+  Dans un référentiel galiléen on a :
+  $ Delta cal(E)_m = sum W_arrow(F)_"ext non conservatives" $
+  avec $arrow(F)$ les *forces non conservatives*
+])
+
+#demo([
+  On a $Delta cal(E)_c = sum W_arrow(F)_"ext" = sum W_arrow(F)_"ext non conservatives" + sum W_arrow(F)_"ext conservatives"$
+
+  Or $W_arrow(F)_"ext conservative" = integral delta W = integral -dd(cal(E)_p) = - Delta cal(E_p)$
+
+  D'où $Delta cal(E)_c = sum W_arrow(F)_"ext non conservatives" - Delta cal(E_p)$ donc on a bien 
+  $Delta cal(E)_m = sum W_arrow(F)_"ext non conservatives"$
+])
+
+== Graphe d'énergie potentielle
+
+On se place dans des systèmes qui évoluent en 1D, on peut tracer la courbe suivante :
+
+#graph(funcs: ((x) => {
+  if (x > 17) {
+    return - 0.001 * x + 0.7 ;
+  }
+
+  return 0.5 * calc.cos(1/2 * x) + 1
+},), y_axis: $cal(E)_p$, lines: (1,), domain: (0,40))
+
+Un *point de rebroussement* est un point tel que $cal(E)_p (x) = cal(E)_m$, ainsi $cal(E)_c = 0$ d'où $v = 0$, et elle change de signe
+
+Les zones au dessus de la ligne rouge ($cal(E)_m$) sont dites *innaccessibles* car $cal(E)_p > cal(E)_m$ d'où $cal(E)_c < 0$ ce qui est impossible.
+
+On a un *puit de potentiel* si on est coincé entre 2 points de rebroussement, ainsi on est dans un *état lié* et $x$ ne tend pas vers $infinity$
+
+Si on a un seul point de rebroussement, on est en *état lié* et $x$ tend vers $infinity$
+
+On dit que $x_e$ est une *position d'équilibre* si $dv(cal(E)_p,x)(x_e) = 0$ et elle est *stable* si après une petite perturbation une force tend à la ramener à sa position d'équlibre (ou que la courbe est concave)
+
+On a un *potentiel attractif* si $dv(cal(E)_p,x) > 0$ et *répulsif* si $dv(cal(E)_p,x) < 0$
 
 #box(height: 1em)
 #heading([Introduction à la dynamique des particules chargées], supplement: [meca])
