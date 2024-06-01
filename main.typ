@@ -1710,10 +1710,72 @@ On a un *potentiel attractif* si $dv(cal(E)_p,x) > 0$ et *répulsif* si $dv(cal(
 == Approche vectorielle
 
 #theorem([Moment cinétique],[
-  #todo(text: todo(text: todo(text: todo(text: todo()))))
+  Soit un point matériel de masse $m$ avec une vitesse $arrow(v)$ en $M$, on a le *moment cinétique* :
+
+  $ arrow(L_A) = arrow(A M) and m arrow(v) $
+])
+
+Dans le cas d'un mouvement circulaire, on a $arrow(L_A) = m r^2 dot(theta) ez$
+
+#demo([
+  On a $arrow(A M) = r er$ et $arrow(v) = cancel(dot(r) er) + r dot(theta) et$
+
+  Ainsi on a $arrow(L_A) = r er and m r dot(theta) et = m r^2 dot(theta) ez$
+])
+
+Le moment cinétique est extensif et additif, de plus $[arrow(L_A)] = unit("m^2  kg /s")$
+
+On a ainsi $arrow(L_A) bot arrow(A M)$ et $arrow(L_A) bot arrow(v)$ d'où $arrow(L_A) = 0$ si $arrow(A M)$ et $arrow(v)$ sont colinéaires.
+
+#theorem([Moment d'une force], [
+  Le *moment d'une force* $arrow(F)$ en $C$ sur $A$ est :
+
+  $ arrow(M_A) = arrow(A C) and arrow(F) $
+])
+
+Le moment d'une force modélise la capacité de $arrow(F)$ à mettre en relation autour de $A$, et on a $[A] = unit("N m")$
+
+#theorem([Théorème du moment cinétique],[
+Dans un référentiel galiléen avec *$A$ fixe* dans le référentiel d'étude, on a $ ddt(arrow(L_A)) = sum arrow(M_A) (arrow(F)_"ext")$
+])
+
+#demo([
+  On a $ddt(arrow(L_A)) = ddt(arrow(L_O)) = ddt((arrow(O M) and m arrow(v))) = ddt(arrow(O M)) and m arrow(v) + arrow(O M) and m ddt(arrow(v))$
+
+  Donc $ddt(arrow(O M)) and m arrow(v) = arrow(v) and m arrow(v) = 0$ et $arrow(O M) and ddt((m arrow(v))) = arrow(O M) and sum arrow(F)_"ext"$
+
+  D'où $ddt(arrow(L_A)) = arrow(O M) and sum arrow(F)_"ext" = sum arrow(M_O) (arrow(F)_"ext")$
 ])
 
 == Approche scalaire
+
+Notons $A_u = (A, arrow(u))$ un axe orienté avec $arrow(u)$ un vecteur unitaire.
+
+#theorem([Moment cinétique par rapport à $A_u$],[
+  On a le *moment cinétique par rapport à $A_u$* : $ L_A_u = arrow(L_A) dot arrow(u) $
+])
+
+#theorem([Moment d'une force par rapport à $A_u$],[
+  On a le *moment d'une force par rapport à $A_u$* : $ M_A_u = arrow(M_A) dot arrow(u) $
+])
+
+Ainsi $M_A_u (arrow(F))$ ne dépend que de la composante de $arrow(F)$ dans le plan perpendiculaire à $A_u$, d'où la distance $d$ sur le schéma.
+
+On appelle *bras de levier* la distance entre $A$ et la droite d'action de $arrow(F)$
+
+#figure(image("meca/bras-de-levier.svg", width: 40%))
+
+#theorem([Moment de force par bras de levier],[
+  On a $M_A_u (arrow(F)) = plus.minus norm(arrow(F)) times "bras de levier"$, avec un $+$ si la force  entraine une rotation dans le sens, et un $-$ sinon.
+])
+
+Ainsi si la droite d'action passe par $A$, le bras de levier est nul donc il n'y a pas de mouvement.
+
+#theorem([Théorème du moment cinétique du moment scalaire],[
+Dans un référentiel galiléen avec *$A$ fixe* dans le référentiel d'étude, on a $ ddt(L_A_u) = sum M_A_u (arrow(F)_"ext") $
+])
+
+#demo([Immédiat par produit scalaire])
 
 #box(height: 1em)
 #heading([Mouvement dans un champ de force newtonien], supplement: [meca])
@@ -2174,7 +2236,7 @@ D'après l'expression des variations, on en déduit que $S_"gaz" > S_"liq" > S_"
 #align(center, text([🧲 Magnétisme], weight: 800, size: 24pt))
 
 #box(height: 1em)
-#heading([Introduction à la dynamique des particules chargées], supplement: [meca])
+#heading([Introduction à la dynamique des particules chargées], supplement: [magne])
 
 == Force de Lorentz
 
