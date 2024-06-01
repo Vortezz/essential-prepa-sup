@@ -1705,14 +1705,15 @@ On dit que $x_e$ est une *position d'équilibre* si $dv(cal(E)_p,x)(x_e) = 0$ et
 On a un *potentiel attractif* si $dv(cal(E)_p,x) > 0$ et *répulsif* si $dv(cal(E)_p,x) < 0$
 
 #box(height: 1em)
-#heading([Introduction à la dynamique des particules chargées], supplement: [meca])
-
-#todo()
-
-#box(height: 1em)
 #heading([Loi du moment cinématique], supplement: [meca])
 
-#todo()
+== Approche vectorielle
+
+#theorem([Moment cinétique],[
+  #todo(text: todo(text: todo(text: todo(text: todo()))))
+])
+
+== Approche scalaire
 
 #box(height: 1em)
 #heading([Mouvement dans un champ de force newtonien], supplement: [meca])
@@ -2171,6 +2172,63 @@ D'après l'expression des variations, on en déduit que $S_"gaz" > S_"liq" > S_"
 #set heading(numbering: "🧲 I.1.a")
 
 #align(center, text([🧲 Magnétisme], weight: 800, size: 24pt))
+
+#box(height: 1em)
+#heading([Introduction à la dynamique des particules chargées], supplement: [meca])
+
+== Force de Lorentz
+
+On considère des particules dans un champ magnétique et électrique
+
+#theorem([Force de Lorentz],[
+  On a la *force de Lorentz*, $arrow(F) = q arrow(E) + q arrow(v) and arrow(B)$ la force subie par un électron
+])
+
+== Origine électrique
+
+On note $arrow(E)$ un *champ électrique* en $unit("V/m")$ et une particule plongée dans un tel champ subit la composante électrique c'est à dire $arrow(F) = q arrow(E)$
+
+Pour créer un champ homogène on utilise un condensateur, $arrow(E)$ est homogène quand on n'est pas trop proche des bords (pas des bornes) du condensateur
+
+Le champ $arrow(E)$ est orienté vers l'armature de plus faible potentiel, $norm(arrow(E)) = U/d$ avec $d$ la distance entre les électrodes.
+
+La force de Lorentz électrique dérive d'un potentiel
+
+#theorem([Énergie potentielle de Lorentz électrique],[
+  On a $E_p = q V$
+])
+
+#demo([
+  On a $arrow(F) = q arrow(E) = q U/d ey = - dv(u,g)(- q U/d y + C) ey$
+
+  Ainsi $E_p = - q U/d y + C$ d'où $V(y) = E_p/q = - U/d y + C'$
+
+  Pour déterminer $C$ on peut placer une masse dans le circuit
+])
+
+L'*électron-volt* ($unit("eV")$) correspond à l'énergie d'un électron à un potentiel de $qty("1","V")$, ainsi $qty("1","eV") = qty("1.6e-19","J")$
+
+Dans un système conservatif on a $v = sqrt((2 abs(q) U)/m)$ si $v <= 0.1 c$
+
+#demo([
+  On a $0 = Delta cal(E)_m = Delta cal(E)_c + Delta cal(E)_p = Delta cal(E)_c + q(V_f - V_i)$ d'où $Delta cal(E)_c = q(V_i - V_f)$
+
+  En supposant $v_0 = 0$ et $V_i = 0$, on trouve $1/2 m v_f^2 = q U$ d'où $v = sqrt((2 abs(q) U)/m)$
+])
+
+== Origine magnétique
+
+Un *champ magnétique* est un champ vectoriel noté $arrow(B)$ en Tesla ($unit("T")$)
+
+La composante magnétique de la force de Lorentz est $arrow(F) = q arrow(v) and arrow(B)$
+
+La trajectoire dans $arrow(B)$ s'apparente à un cercle
+
+#demo([
+  #todo(text:[(Pas prioritaire mais à faire)])
+])
+
+La puissance est nulle, en effet $P = (q arrow(v) and arrow(B)) dot arrow(v) = 0$, de plus la force ne travaille pas donc $Delta cal(E)_c = 0$
 
 #box(height: 1em)
 #heading([Généralités sur le champ magnétique], supplement: [magne])
