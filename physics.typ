@@ -3235,6 +3235,8 @@ C'est gagné!
 
 #box(height: 10pt)
 
+#pagebreak()
+
 #{
   counter(heading).update(0)
   set heading(numbering: none)

@@ -3,6 +3,8 @@
 #import "@local/physica:0.9.3": *
 #import "@local/cetz:0.2.2": *
 
+// http://cdn.sci-phy.org/mp2i/poly_cours.pdf page 43
+
 #let project(title: "", authors: (), date: none, body) = {
   set document(author: authors.map(a => a.name), title: "Essentiel de physique")
   
@@ -65,7 +67,8 @@
         right, 
         block(
           radius: 4pt, 
-          fill: if it.lang == "python" or it.lang == "ml" { rgb("#fffcdf") } 
+          fill: if it.lang == "ocaml" or it.lang == "ml" { rgb("#fffcdf") } 
+                else if it.lang == "python" or it.lang == "py" { rgb("#fffcdf") }
                 else if it.lang == "c" { rgb("#e8f1fd") } 
                 else { luma(246) }, 
           width: 100%-3pt, 
@@ -218,6 +221,144 @@
 #box(height: 1em)
 #heading([Introduction au C], supplement: [intro],)
 
+== Variables
+
+Pour définir une variable en C on a la syntaxe suivante : `type nom`
+
+```c
+int mango = 0;
+```
+
+Il est possible de définir plusieurs variables en même temps :
+
+```c
+int banana = apple = 12;
+```
+
+== Opérateurs
+
+On a les opérations arithmétiques suivantes : 
+
+#align(center, table(
+  columns: (100pt, 140pt),
+  align: center,
+  [*Opération*],
+  [*En C*],
+  [Addition],
+  [`a + b`],
+  [Soustraction],
+  [`a - b`],
+  [Multiplication],
+  [`a * b`],
+  [Division],
+  [`a / b`],
+  [Modulo],
+  [`a % b`]
+))
+
+On peut utiliser `+=`, `-=`, `*=`, `/=` et `%=` pour faire des opérations arithmétiques et des assignations
+
+De plus on peut utiliser `++` et `--` pour incrémenter/décrémenter
+
+Les comparaisons se font avec `>`, `>=`, `<=`, `<` et `==`.
+
+On a des opérateurs binaires `&&` (et logique), `||` (ou logique) et `!` (négation de l'expression suivante)
+
+#warning([
+  Le `&&` est prioritaire sur le `||`
+])
+
+== Structures de contrôle
+
+Pour exécuter de manière conditionnelle, on utilise `if (cond) {...} else if (...) {} ... {} else {}`
+
+Ainsi le code suivant est valide :
+
+```c
+if (x == 1) {
+  // Do code
+} else if (x > 12) {
+  // Do code bis
+} else {
+  // Do code ter
+}
+```
+
+#warning([
+  En C un $0$ est considéré comme `false` et toute autre valeur numérique `true`
+])
+
+Pour faire une boucle on peut utiliser un `while (cond) {}` qui exécute le code tant que la condition est valide
+
+On peut utiliser `do {} while (cond)` qui exécute une fois puis tant que la condition est vérifiée
+
+Il est aussi possible d'utiliser `for (...) {}`, de la manière suivante :
+
+```c
+// De 0 à n - 1
+for (int i = 0; i < n; i++) {
+
+}
+
+// De 0 à n - 1 tant que cond
+for (int i = 0; i < n && cond; i++) {
+
+}
+```
+
+A noter qu'en C il est possible de modifier la valeur de `i` et donc de sortir plus tôt de la boucle
+
+Il est possible de sortir d'une boucle avec `break`, ou de passer à l'itération suivante avec `continue`
+
+== Fonctions
+
+Pour définir une fonction on écrit :
+
+```c
+int my_func(int a, int b) {
+  // Do code
+  return 1;
+}
+```
+
+Si on ne prend pas d'arguments on écrit `int my_func(void) {}` et si on ne veut rien renvoyer on utilise `void my_func(...) {}`
+
+Ainsi pour appeller une fonction on fait :
+
+```c
+int resp = my_func(12, 14);
+```
+
+On peut déclarer une fonction avant de donner son code mais juste sa signature avec :
+
+```c
+int my_func(int);
+```
+
+== Tableaux en C
+
+Le type d'un tableau en C est `type[]` ou `* type`
+
+Pour initialiser un tableau on a les manières suivantes :
+
+```c
+int[4] test = {0, 1, 2, 3}; // Initialise un tableau de taille 4 avec 0,1,2,3
+int[] test = {0, 1, 2, 3}; // Initialise un tableau avec 0,1,2,3 (avec 4 éléments)
+int[4] test = {0}; // Initialise un tableau de taille 4 avec 0,0,0,0
+```
+
+Il n'est pas obligé de donner la taille d'un tableau elle sera déterminée au moment de l'exécution
+
+#warning([
+  Si on dépasse du tableau C ne prévient pas mais s'autorise à faire n'importe quoi
+])
+
+Pour affecter dans une case de tableau on fait :
+
+```c
+test[1] = test[2] // On met dans la case 1 la valeur de la case 2
+```
+
 #box(height: 1em)
 #heading([Introduction au OCaml], supplement: [intro],)
 
@@ -250,8 +391,32 @@
 #align(center, text([🖋 Informatique théorique], weight: 800, size: 24pt))
 
 #box(height: 1em)
+#heading([Bases], supplement: [theory],)
+
+== Fonctions
+
+On dit qu'une fonction a des *effets de bord* si son exécution a des conséquences sur d'autres choses que ses variables locales
+
+Une fonction est *déterministe* si le résultat est toujours le même avec les mêmes arguments
+
+Une fonction est dite *pure* lorsqu'elle est déterministe et sans effets de bord
+
+== Algorithmes de tri
+
+#box(height: 1em)
 #heading([Récursion], supplement: [theory],)
 
 #box(height: 1em)
 #heading([Stratégies algorithmiques], supplement: [theory],)
 
+#pagebreak()
+
+#{
+  counter(heading).update(0)
+  set heading(numbering: none)
+  heading([Table des matières])
+  box(height: 0pt)
+  show heading: none
+  columns(2, outline(title: [Table des matières], indent: 10pt, fill: [], depth: 4))
+  pagebreak(weak: true)
+}
