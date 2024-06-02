@@ -126,6 +126,27 @@
       ),
     );
 
+#let warning(t) = box(
+    radius: 4pt, 
+    fill: orange,
+    width: 100%,
+    align(
+      right, 
+        block(
+          radius: 4pt, 
+          fill: rgb("#faeec0"),
+          width: 100%-3pt, 
+          inset: 1em,
+          stroke: stroke(cap: "round", thickness: 0.5pt, paint: orange),
+          grid(
+            columns: (28pt, 100% - 24pt),
+            align(left + horizon, image("./warning.svg", width: 20pt)),
+            align(left, [#text([Attention :], weight: "bold") \ #t])
+            ),
+          )
+      ),
+    );
+
 #let demo(t) = box(
   stroke: (
     left: 5pt + gray,
@@ -151,6 +172,8 @@
 #let er = $arrow(e_r)$
 #let et = $arrow(e_theta)$
 #let ep = $arrow(e_phi)$
+
+#let ext = $"ext"$
 
 #let graph(funcs: (), size: (10,4), domain: (0, 10), tickx: none, ticky: none, lines: (), x_axis: $x$, y_axis: $y$, width: 100%) = box(width: width, 
   align(center, 
@@ -804,7 +827,7 @@ On définit le *décrément logarithmique* $delta = T/tau$, avec $T$ la *pseudo-
 
 La durée du transitoire est de quelques $tau$.
 
-#emoji.warning En régime pseudo-périodique il n'est pas possible de déterminer graphiquement $tau$ comme dans les autres régimes.
+#warning([En régime pseudo-périodique il n'est pas possible de déterminer graphiquement $tau$ comme dans les autres régimes.])
 
 #box(height: 1em)
 #heading([Circuits en régime sinusoidal forcé], supplement: [elec])
@@ -860,7 +883,7 @@ Pour mesurer le déphasage, on mesure l'écart de temps entre 2 passages au mêm
 
 Pour parler d'une représentation complexe en physique on utilise $underline(s) = a + i b$, et le conjugué de $underline(s)$ est noté $underline(s)^* = overline(underline(s)) = a - i b$
 
-#emoji.warning Dans le contexte spécifique de l'électricité et pour éviter des confusions avec l'intensité $i$, on note $j$ le nombre imaginaire tel que $j^2 = -1$ (définition différente des mathématiques)
+#warning([Dans le contexte spécifique de l'électricité et pour éviter des confusions avec l'intensité $i$, on note $j$ le nombre imaginaire tel que $j^2 = -1$ (définition différente des mathématiques)])
 
 En posant $u = U_0 cos(omega t + phi)$, on a $underline(u) = U_0 e^(j (omega t + phi))$ d'où $underline(u) = U_0 e^(j phi) e^(j omega t)$ avec $U = U_0 e^(j phi)$ *l'amplitude complexe* et $U = abs(underline(u)(t))$
 
@@ -1020,7 +1043,7 @@ On peut ensuite mettre $underline(H)$ sous forme canonique, ainsi $underline(H) 
 Pour étudier un filtre :
 - On regarde d'abord son comportement BF/HF avec les dipôles équivalents pour les bobines et condensateurs. Si on a $u = cases(0 "en BF", e "en HF")$ on a un *passe-haut* sinon si $u = cases(e "en BF", 0 "en HF")$ on a un *passe-bas*.
 
-#emoji.warning *On est en HF si $omega >> omega_0 <==> 2 pi f >> 2 pi f_0 <==> f >> f_0$*
+#warning([*On est en HF si $omega >> omega_0 <==> 2 pi f >> 2 pi f_0 <==> f >> f_0$*])
 
 - On regarde ensuite le gain $abs(underline(H))$ en BF et HF en négligeant $omega/omega_0$ ou $omega_0/omega$ selon le cas.
 
@@ -1780,12 +1803,299 @@ Dans un référentiel galiléen avec *$A$ fixe* dans le référentiel d'étude, 
 #box(height: 1em)
 #heading([Mouvement dans un champ de force newtonien], supplement: [meca])
 
-#todo()
+Une *force centrale* est une force qui pointe vers/depuis un point fixe du référentiel d'étude.
+
+== Statuer sur le caractère central
+
+On considère un astéroïde ($a$) de masse $m$ et un astre ($A$) de masse $M$, par principe des actions réciproques, on a $norm(arrow(F)_(a -> A)) = norm(arrow(F)_(A -> a))$
+
+Pour savoir qui impose une force centrale sur qui, on regarde le rapport $m/M$
+
+== Propriétés de mouvement dans un champ de force centrale
+
+#theorem([Conservation de $arrow(L_0) (M)$],[
+  Dans le cas des forces centrales, $arrow(L_0) (M)$ se conserve.
+])
+
+#demo([
+  En effet, on a d'après le TMC, $ddt(arrow(L_0)) = sum arrow(M_O) arrow(F)_"ext" = arrow(M)_O (arrow(F)) = arrow(O M) and arrow(F)$.
+
+  Or $arrow(O M)$ et $arrow(F)$ sont colinéaires d'où $ddt(arrow(L_0)) = 0$ donc $arrow(L_0)$ se conserve
+])
+
+Une première conséquence de ce résultat est que $M$ évolue dans le plan orthogonal à $arrow(L_O)$
+
+#demo([
+  On a $P bot arrow(L_O)$ et $O in P$ ainsi on a $arrow(L_O) (M) = arrow(O M) and m arrow(v)$
+
+  On a $arrow(O M) bot arrow(L_O)$ d'où $M in P$
+])
+
+Une autre conséquence est la *loi des aires*, l'aire balayée pendant $arrow(O M)$ est proportionnelle à $Delta t$
+
+#demo([
+  On a $ddt(A)$ l'aire balayée par unité de temps avec une vitresse oréolaire.
+
+  On a $arrow(M(t) M(t + dd(t))) = dd(arrow(O M)) = ddt(arrow(O M)) dd(t) = arrow(v) dt$
+
+  On a $A = norm(arrow(O M) and arrow(v) dt)$ d'où $ddt(A) = 1/2 norm(arrow(L_O) (M))/m$ donc c'est constant
+])
+
+#theorem([Constante des aires],[
+  Pour réduire la dimension du problème on pose $cal(C) = L_O_z/m = r^2 dot(theta)$ la *constante des aires*. 
+])
+
+Le satellite ne change pas de sens de rotation
+
+#demo([
+  En effet on a $arrow(L_O) (M) = m r^2 dot(theta) ez$, avec $r^2 >0$, $m>0$ d'où $dot(theta) > 0$
+])
+
+== Approche énergétique, cas d'une force conservatrice
+
+On a $cal(C) > 0$ et $dot(theta) > 0$, de plus le système est conservatif d'où la conservation de $cal(E)_m$
+
+On a $cal(E)_m = 1/2 m dot(r)^2 + 1/2 m cal(C)^2/r^2 - cal(G) (M m)/r$ avec $cal(E)_p = 1/2 m cal(C)^2/r^2 - cal(G) (M m)/r$
+
+D'où on a :
+
+#graph(funcs: ((x) => {
+  return 2/(2 *calc.pow(x,2)) - 7/x
+},), domain: (0.1, 3), x_axis: $r$, y_axis: $cal(E)_p$)
+
+Ainsi selon le rayon du satellite on a une trajectioire libre ou liée.
+
+Lorsque l'astéroide est au plus proche de l'astre (ou au plus loin) on a $dot(r) = 0$
+
+On parle de *périastre* quand il est au plus proche de l'astre, *périhélie* quand il est au plus près du Soleil, et *périgée* quand il est plus proche de la Terre
+
+De même on parle de *apoastre* quand il est au plus loin de l'astre, *aphélie* quand il est au plus loin du Soleil, et *apogée* quand il est plus loin de la Terre
+
+== Lois de Kepler
+
+#theorem([3 lois de Kepler],[
+  Kepler a énoncé les trois lois suivantes :
+
+  1. Les planètes du *système solaire* décrivent des *orbites elliptiques* dont le soleil occupe l'un des foyers
+
+  2. *Loi des aires* (voir plus tôt)
+
+  3. *Loi des périodes*, le rapport $T^2/a^3$ est indépendant de la planète considérée dans le système solaire, avec $a$ le demi-axe de l'ellipse
+])
+
+#todo(text: [(Savoir retrouver $T^2/a^3$, vitesse et Em)])
+
+== Jour solaire vs jour sidéral
+
+Un *jour solaire* est un intervalle de temps entre 2 passage au zénith du Soleil, on a $T_s = qty("24", "h") = qty("86400", "s")$
+
+Un *jour sidéral* est la durée pour que la Terre fasse un tour complet dans le référentiel géocentrique.
+
+#figure(image("meca/sideral.png", width: 20%))
+
+On a $alpha = (2 pi)/(num("365.25") "jours")$ 
 
 #box(height: 1em)
 #heading([Mécanique du solide], supplement: [meca])
 
-#todo()
+== Généralités
+
+Le *référentiel propre* ($cal(R_p)$) est le référentiel dans lequel le solide est immobile
+
+#figure(image("meca/ref_propre.jpg", width: 40%))
+
+Ainsi on a 2 repères : le référentiel d'étude ($cal(R)$) et le référentiel lié (ou propre)
+
+Le repère propre n'est à priori pas galiléen
+
+== Mouvements de translation
+
+=== Aspect cinématique
+
+#theorem([Solide en translation],[
+  Un solide est dit en translation dans $cal(R)$ si les axes du repère lié sont d'orientation fixe dans $cal(R)$
+])
+
+Une conséquence est que $arrow(u)_e_x$ et $arrow(u)_e_y$ n'ont pas de dépendance temporelle, et qu'on n'a pas besoin d'angle pour décrire le mouvement : la dynamique du point s'applique
+
+
+#theorem([Rapport $arrow(M_1 M_2)$],[
+Pour tout $M_1, M_2 in Sigma^2$, le rapport $arrow(M_1 M_2)$ est constant
+])
+
+#demo([
+  Notons $arrow(M_1 M_2) = x arrow(u)_e_x + y arrow(u)_e_y + z arrow(u)_e_z$
+])
+
+#theorem([Vitesse dans $cal(R)$],[
+  Tous les points du solide ont la même vitesse dans $cal(R)$
+])
+
+#demo([
+  On $ddt(arrow(M_1 M_2)) = 0$ d'après la conséquence précédente, d'où $arrow(M_1 M_2) = arrow(M_1 O) + arrow(O M_2) = -arrow(O M_1) + arrow(O M_2)$ avec $O$ l'origine du référentiel d'étude
+
+  Et $ddt(arrow(M_1 M_2)) = -ddt(arrow(O M_1)) + ddt(arrow(O M_2)) = -arrow(v_1) + arrow(v_2)$ d'où $arrow(v_1) = arrow(v_2)$
+])
+
+=== Grandeurs cinétiques
+
+#theorem([Barycentre],[
+  On a $G$ le *barycentre* du solide tel que : $ m_"tot" arrow(O G) = integral.triple_(M in "solide") arrow(O M) dd(m) $
+])
+
+#theorem([Grandeurs cinétiques],[
+  On a dans le cas d'un solide en translation :
+
+  - $arrow(p) = m_"tot" arrow(v)$
+
+  - $arrow(L_O) = arrow(O G) and m_"tot" arrow(v)$
+
+  - $cal(E)_c = 1/2 m_"tot" v^2$
+])
+
+#demo([
+  Ces démonstrations sont non exigibles, on les rappelle car elles permettent de se remémorer les formules
+
+  - On a $arrow(p) = integral.triple dd(arrow(p) (M)) = integral.triple dd(m) arrow(v) (M) =_(arrow(v) "cst") arrow(v) integral.triple dd(m) = m_"tot" arrow(v)$
+
+  - On a $arrow(L_O) = integral.triple dd(arrow(L_O) (M)) = integral.triple arrow(O M) and dd(m) arrow(v) (M) =_(arrow(v) "cst")  = [integral.triple arrow(O M) dd(m)] and arrow(v) =_"barycentre" arrow(O G) and m_"tot" arrow(v)$
+
+  - On a $cal(E)_c = integral.triple dd(cal(E)_c) (M) = v^2 integral.triple 1/2 dd(m) = 1/2 m_"tot" v^2$
+])
+
+=== Loi de la quantité de mouvement
+
+Une loi importante n'est pas mise en défaut par un solide en translation
+
+#theorem([Loi de la quantité de mouvement],[
+  Dans un référentiel galiléen, pour à solide soumis à des forces extérieures à $m$ fixée on a $ddt(arrow(p_"ext")) = sum arrow(F)_ext$ d'où :
+
+  $ m ddt(arrow(v)) = sum arrow(F)_ext $
+])
+
+== Mouvement de rotation par rapport à un axe fixe
+
+=== Aspect cinématique
+
+#theorem([Solide en rotation par rapport à un axe fixe],[
+  Un solide est dit en rotation par rapport à un axe fixe si il existe un axe ($Delta$) fixe dans le référentiel d'étude et le référentiel propre
+])
+
+#theorem([Distribution des vitesses],[
+  Dans un solide en rotation la vitesse varie linéairement avec la distance au projeté de l'axe de rotation
+])
+
+#demo([
+  On repère le point $M$ en coordonnées cylindriques, avec $omega$ sa vitesse de rotation, et $H$ son projeté sur l'axe.
+
+  On a $arrow(O M) = arrow(O H) + arrow(H M) = z ez + r er$ ($arrow(O H)$ étant sur $ez$ et $arrow(H M)$ sur $er$ à une distance $r$ fixée) et $arrow(v) = ddt(arrow(O M)) = cancel(dot(z) ez) + cancel(dot(r) er) + r dot(theta) et$
+
+  D'où $arrow(v) = r omega et$
+])
+
+#warning([La loi de quantité de mouvement n'a plus de sens ici, $ddt(arrow(p)) = sum arrow(F)_ext arrow.r.double.not m ddt(arrow(v)) = sum arrow(F)_ext$])
+
+Il ne faut aussi pas confondre mouvement circulaire, rotation et translation circulaire
+
+Dans l'exemple d'une grande roue, les cabines sont en *translation circulaire*, tandis que la roue est en *rotation* autour d'une axe fixe
+
+=== Moment d'inertie
+
+#theorem([Moment cinétique d'un solide en rotation],[Soit $Delta$ un axe fixe orienté par $ez$, on a le *moment cinétique* $L_Delta = J_Delta omega$ avec $J_Delta$ le *moment d'inertie*])
+
+#theorem([Moment d'inertie],[Soit $Delta$ un axe fixe orienté par $ez$, on a le *moment d'inertie* $J_Delta = integral.triple r^2 dd(m)$ en $unit("m^2 kg")$
+])
+
+Le moment d'inertie est additif et *quantifie l'inertie à la mise en rotation*
+
+On a les moments d'inertie suivants :
+
+#align(center, table(
+  columns: (140pt, 100pt),
+  rows: (20pt, 20pt, 20pt, 20pt, 20pt, 20pt),
+  align: center,
+  [*Forme*],
+  $J_Delta$,
+  [Tige],
+  $1/3 m r^2$,
+  [Cerceau],
+  $m r^2$,
+  [Disque homogène (HP)],
+  $1/2 m r^2$,
+  [Boule homogène (HP)],
+  $2/5 m r^2$,
+  [Coquille (HP)], 
+  $2/3 m r^2$
+))
+
+#demo([
+  Cas d'une tige, on a $J_Delta = integral_0^r m/r x^2 dd(x)= m/r integral_0^r x^2 dd(x) = m/r r^3/3 = 1/3 m r^2$
+])
+
+#theorem([Énergie cinétique],[
+  Dans le cas d'un solide en rotation, on a $cal(E)_c = 1/2 J_Delta dot(theta)^2$
+])
+
+#demo([
+  On a $dd(cal(E)_c) = 1/2 dd(m) v^2 (M) = 1/2 dd(m) r^2 omega^2$
+
+  D'où $cal(E)_c = integral.triple dd(cal(E)_c) = integral.triple 1/2 dd(m) r^2 omega^2 = 1/2 (integral.triple dd(m) r^2) omega^2 = 1/2 J_Delta omega^2$
+])
+
+=== Actions mécanique et condition d'équilibre
+
+Une *action mécanique* est une contrainte appliquée par un système, c'est à dire les forces, les moments de force et les couples
+
+#theorem([Couple],[
+  Un couple est constitué de deux forces de même module, de sens opposé et de droites d'action non confondues
+])
+
+Un couple ne modifie pas la quantité de mouvement
+
+#demo([
+  On a $ddt(arrow(p)) = arrow(F_1) + arrow(F_2) = 0$
+])
+
+#theorem([Moment d'un couple],[Un couple crée un moment noté $arrow(Gamma)$ avec $arrow(Gamma) = plus.minus F d ez$ avec $d$ la distance entre les droites d'action])
+
+#demo([
+  On a $arrow(M_O)_"tot" = arrow(M_O) (arrow(F_1)) + arrow(M_O) (arrow(F_2)) = arrow(O P_1) and arrow(F_1) + arrow(O P_2) and - arrow(F_1) = (arrow(O P_1) - arrow(O P_2)) and arrow(F_1) = arrow(P_2 P_1) and arrow(F_1)$
+])
+
+A noter que $arrow(Gamma)$ est aussi appelé couple et s'exprime en $unit("N m")$
+
+#theorem([Condition d'équilibre d'un solide],[
+  Le solide est à l'équilibre si $sum arrow(F)_ext = 0$ (translation solide) et $sum arrow(M_O) (arrow(F)_ext) = 0$ (rotation)
+])
+
+=== Théorème du moment cinétique pour un solide
+
+#theorem([Théorème du moment cinétique pour un solide],[
+  Soit $Delta$ un axe fixe, ainsi on a avec $arrow(F)_ext$ les forces extérieures connues et $arrow(Gamma)_ext$ les couples qui ne sont pas des moments des forces extérieures :
+
+  $ J_Delta dot.double(theta) = sum M_Delta (arrow(F)_ext) +  sum Gamma_ext $
+])
+
+#demo([
+  Par le TMC on a $ddt(L_Delta) = sum M_Delta (arrow(F)_ext)$ avec $ddt(L_Delta) = ddt(J_Delta dot(theta)) = J_Delta dot.double(theta)$ ce qui conclut en séparant les termes selon leur connaissance ou non
+])
+
+== Énergétique du solide
+
+Dans un solide indéformable il n'y a pas de travail interne
+
+#warning([Cette affirmation entre en défaut lorsque l'on travaille avec un solide articulé])
+
+#theorem([Théorème de la puissance cinétique pour un solide en rotation], [
+  On a $P = M_Delta (arrow(F)) dot(theta)$ d'où on a :
+  $ ddt(cal(E)_c) = sum P_ext $
+])
+
+#demo([
+  On part du TMC solide, on a $ddt(J_Delta dot(theta)) = sum M_Delta (arrow(F)_ext)$ d'où en multipliant par $dot(theta)$, on a $ddt(1/2 J_Delta dot(theta)^2) = sum P_ext$
+])
+
+Il est toujours possible d'utiliser les théorèmes d'énergétique de la dynamique du point mais il faut faire attention au domaine d'application
 
 #pagebreak()
 
@@ -2383,7 +2693,7 @@ Le moment magnétique quantifie à quel point l'aimant est "fort"
 
 En champ lointant, $arrow(mu)$ traduit l'"intensité" de cette source de champ magnétique et même si un aimant ne présente pas de courant électrique, un aimant possède un moment magnétique.
 
-#emoji.warning On a $arrow(Gamma)$ connu mais pas les forces donc on ne peut pas appliquer un PFD
+#warning([On a $arrow(Gamma)$ connu mais pas les forces donc on ne peut pas appliquer un PFD])
 
 == Créer un champ magnétique
 
@@ -2721,7 +3031,7 @@ Pour avoir une mesure correcte, il faut que l'ampèremètre ait une résistance 
 
 Il est aussi possible d'ajuster le _RANGE_ de l'ampèremètre pour avoir une mesure avec différents ordres de grandeur.
 
-#emoji.warning Il est très important de faire attention aux valeurs maximales que peut mesurer l'ampèremètre. Si le courant est trop fort, l'ampèremètre peut être endommagé.
+#warning([Il est très important de faire attention aux valeurs maximales que peut mesurer l'ampèremètre. Si le courant est trop fort, l'ampèremètre peut être endommagé.])
 
 == Ohmmètre
 
@@ -2735,7 +3045,7 @@ Il faut brancher le $+$ sur la borne $Omega$ et le $-$ sur la borne $C O M$.
 
 Il est aussi possible d'ajuster le _RANGE_ de l'ohmmètre pour avoir une mesure avec différents ordres de grandeur.
 
-#emoji.warning Il est primordial de ne pas alimenter le dipôle pour utiliser l'ohmmètre.
+#warning([Il est primordial de ne pas alimenter le dipôle pour utiliser l'ohmmètre.])
 
 #box(height: 1em)
 #heading([Pont de Wheatstone], supplement: [tp])
