@@ -3,10 +3,7 @@
 #import "@local/physica:0.9.3": *
 #import "@local/cetz:0.2.2": *
 
-// TODO : Remplacer les unités jusqu'à température avec unit et qty
-
 #let project(title: "", authors: (), date: none, body) = {
-  // Set the document's basic properties.
   set document(author: authors.map(a => a.name), title: "Essentiel de physique")
   
   set page(numbering: "1", number-align: center, footer: locate(loc => 
@@ -24,14 +21,12 @@
   ))
   set text(font: "Cantarell", lang: "en")
 
-  // Title row.
   align(center + horizon)[
     #block(text(weight: 800, 30pt, "🧪 Essentiel de physique"))
     #v(1em, weak: true)
     #date
   ]
 
-  // Author information.
   pad(
     top: 0.5em,
     bottom: 0.5em,
@@ -46,9 +41,8 @@
     ),
   )
 
-  align(center,image("logo.png", width: 50%))
+  align(center,image("physics/logo.png", width: 50%))
 
-  // Main body.
   set par(justify: false)
 
   body
@@ -82,7 +76,7 @@
             stack(
               place(
                 dx: 100%-12pt,
-                image("languages/" + it.lang + ".svg", width: 12pt)
+                image("global/languages/" + it.lang + ".svg", width: 12pt)
               ),
               it
             ),
@@ -140,7 +134,7 @@
           stroke: stroke(cap: "round", thickness: 0.5pt, paint: orange),
           grid(
             columns: (28pt, 100% - 24pt),
-            align(left + horizon, image("./warning.svg", width: 20pt)),
+            align(left + horizon, image("global/warning.svg", width: 20pt)),
             align(left, [#text([Attention :], weight: "bold") \ #t])
             ),
           )
@@ -264,7 +258,7 @@ On a $n_"vide" = 1$, $n_"air" - n_"vide" = num("3e-4")$ et $n_"eau" = 1.3$
   On a $lambda = c/f$ avec $f$ la fréquence temporelle et $lambda$ la longueur d'onde. Dans un THI on a donc $lambda = c/(n f)$
 ])
 
-#figure(image("optical/spectrum.png", width: 70%))
+#figure(image("physics/optical/spectrum.png", width: 70%))
 
 On a $lambda_"violet" = qty("400", "nm")$ et $lambda_"rouge" = qty("800", "nm")$. Si $lambda < qty("400", "nm")$ on est dans le domaine des *ultraviolets* et si $lambda > qty("800", "nm")$ on est dans le domaine des *infrarouges*.
 
@@ -274,15 +268,15 @@ La puissance lumineuse moyenne par unité de surface est appelée *éclairement*
 
 Une onde lumineuse possède une décomposition spectrale. On utilise principalement un spectromètre à réseau pour déterminer cette décomposition.
 
-#figure(image("optical/laser_spectrum.png", width: 50%))
+#figure(image("physics/optical/laser_spectrum.png", width: 50%))
 
 On a dans le cas du laser une seule raie spectrale, on parle alors de lumière *monochromatique*.
 
-#figure(image("optical/spectral_spectrum.jpg", width: 50%))
+#figure(image("physics/optical/spectral_spectrum.jpg", width: 50%))
 
 On a dans le cas d'une lampe spectrale plusieurs raies, c'est un spectre des éléments qui composent la valeur dans l'ampoule. Chaque pic correspond à un 1 photon d'énergie donnée
 
-#figure(image("optical/sun_spectrum.png", width: 50%))
+#figure(image("physics/optical/sun_spectrum.png", width: 50%))
 
 On a dans le cas du soleil un spectre continu (corps noir) avec des "trous" liés aux absoptions sélectives des espèces chimiques présentes dans l'atmosphère.
 
@@ -307,7 +301,7 @@ Dans la suite on se place dans cette approximation
 
 == Lois de Snell-Descartes
 
-#figure(image("optical/snell_descartes.jpg", width: 50%))
+#figure(image("physics/optical/snell_descartes.jpg", width: 50%))
 
 === Lois de l'optique géométrique
 
@@ -388,13 +382,13 @@ On définit le *grandissement*, $gamma = overline(A' B')/overline(A B)$ soit la 
 
 Une lentille est dite *convergente* si elle est à bords fins.
 
-#figure(image("optical/lentille_cv.jpg", width: 60%))
+#figure(image("physics/optical/lentille_cv.jpg", width: 60%))
 
 === Lentille divergente
 
 Une lentille est dite *divergente* si elle est à bords épais.
 
-#figure(image("optical/lentille_dv.jpg", width: 60%))
+#figure(image("physics/optical/lentille_dv.jpg", width: 60%))
 
 == Constructions 
 
@@ -421,7 +415,7 @@ Une lentille est dite *divergente* si elle est à bords épais.
 ])
 
 #demo([Cette preuve est hors programme théoriquement.
-#figure(image("optical/conjug.png"))
+#figure(image("physics/optical/conjug.png"))
 
 #todo(text:[(Si pas la flemme)])
 ])
@@ -512,7 +506,7 @@ Si ce critère est vérifié, tous les points du circuit "voient" le changement 
 
 Un *résistor* est une dipôle qui conduit $+$ ou $-$ bien l'électricité.
 
-#figure(image("elec/resistance.png", width: 20%))
+#figure(image("physics/elec/resistance.png", width: 20%))
 
 Une résistance est schématisée ainsi en convention récepteur
 
@@ -548,7 +542,7 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
 
 == Associations des résistors
 
-#figure(image("elec/serial_res.png", width: 30%))
+#figure(image("physics/elec/serial_res.png", width: 30%))
 
 #theorem([Association série de résistors],[
   Soit $R_1$ et $R_2$ deux résistances en série, on a $R_e = R_1 + R_2$ la résistance équivalente
@@ -558,7 +552,7 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
   On a $U_1 = R_1 I$ et $U_2 = R_2 I$ ainsi $U = U_1 + U_2 = R_1 I + R_2 I = (R_1 + R_2) I$ ainsi $R_e = R_1 + R_2$
 ])
 
-#figure(image("elec/parallel_res.png", width: 25%))
+#figure(image("physics/elec/parallel_res.png", width: 25%))
 
 #theorem([Association parallèle de résistors],[
   Soit $R_1$ et $R_2$ deux résistances en parallèle, on a $1/R_e = 1/R_1 + 1/R_2$ la résistance équivalente
@@ -570,7 +564,7 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
 
 == Ponts diviseurs
 
-#figure(image("elec/serial_res.png", width: 30%))
+#figure(image("physics/elec/serial_res.png", width: 30%))
 
 #theorem([Pont diviseur tension],[Soit $R_1$ et $R_2$ deux résistances en séries, $U = R_1/(R_1 + R_2) I$])
 
@@ -578,7 +572,7 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
   On a $U_1 = R_1 I$ et $U = (R_1 + R_2) I$ d'où $U_1/U = (R_1 I)/((R_1+R_2) I)$
 ])
 
-#figure(image("elec/parallel_res.png", width: 25%))
+#figure(image("physics/elec/parallel_res.png", width: 25%))
 
 #theorem([Pont diviseur courant],[Soit $R_1$ et $R_2$ deux résistances en parallèle, $I_1 = R_2/(R_1 + R_2) I$])
 
@@ -590,13 +584,13 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
 
 === Générateur de tension
 
-#figure(image("elec/tension.png", width: 10%))
+#figure(image("physics/elec/tension.png", width: 10%))
 
 Un *générateur de tension* est un dipole qui impose une tension entre ses bornes. La tension imposée par un générateur est aussi appelée sa *force électromagnétique* (f.e.m)
 
 $U$ est donc indépendante, c'est une dipôle actif.
 
-#figure(image("elec/thevenin.png", width: 20%))
+#figure(image("physics/elec/thevenin.png", width: 20%))
 
 #todo()
 // TODO : REDO THE PICTURE
@@ -609,7 +603,7 @@ Un générateur réel est un générateur de Thévenin, on a :
 
 === Générateurs de courant (HP)
 
-#figure(image("elec/courant.png", width: 10%))
+#figure(image("physics/elec/courant.png", width: 10%))
 
 Il existe des *générateurs de courant* qui fixent une intensité dans le circuit.
 
@@ -622,7 +616,7 @@ Il existe des *générateurs de courant* qui fixent une intensité dans le circu
 
 Le *condensateur* est un dipôle linéaire composé de deux armatures séparées par un milieu isolant (_diélectrique_).
 
-#figure(image("elec/condensator.jpg", width: 10%))
+#figure(image("physics/elec/condensator.jpg", width: 10%))
 
 On a $Q$ la charge algébrique par l'armature de gauche et $-Q$ par celle de droite : le condensateur est globalement neutre.
 
@@ -658,7 +652,7 @@ On a $Q = C U$ avec $C$ la *capacité du condensateur* en Farad ($unit("F")$)
 
 === Associations
 
-#figure(image("elec/serial_capa.png", width: 30%))
+#figure(image("physics/elec/serial_capa.png", width: 30%))
 
 #theorem([Association série de condensateurs],[
   Soit $C_1$ et $C_2$ deux condensateurs en parallèle, on a $1/C_e = 1/C_1 + 1/C_2$ le condensateur équivalent
@@ -670,7 +664,7 @@ On a $Q = C U$ avec $C$ la *capacité du condensateur* en Farad ($unit("F")$)
   Ainsi on a $ddt(U) = ddt(U_1) + ddt(U_2)$ soit $i/C_e = i/C_1 + i/C_2$ d'où la relation cherchée.
 ])
 
-#figure(image("elec/parallel_capa.png", width: 25%))
+#figure(image("physics/elec/parallel_capa.png", width: 25%))
 
 #theorem([Association parallèle de condensateurs],[
   Soit $C_1$ et $C_2$ deux condensateurs en série, on a $C_e = C_1 + C_2$ le condensateur équivalent
@@ -694,7 +688,7 @@ On peut étudier la charge d'un condensateur (ou sa décharge) avec une équatio
 
 La *bobine* est un dipôle linéaire composé d'un enroulement de fils sur lui même
 
-#figure(image("elec/inductor.png", width: 20%))
+#figure(image("physics/elec/inductor.png", width: 20%))
 
 On associe à une bobine une *inductance* $L$ en Henry ($unit("H")$), dépendant du nombre de fils et la quantités de spires (tours)
 
@@ -724,7 +718,7 @@ On associe à une bobine une *inductance* $L$ en Henry ($unit("H")$), dépendant
 
 === Associations
 
-#figure(image("elec/serial_indu.png", width: 30%))
+#figure(image("physics/elec/serial_indu.png", width: 30%))
 
 #theorem([Association série de bobines],[
   Soit $L_1$ et $L_2$ deux bobines en série, on a $L_e = L_1 + L_2$ la bobine équivalente
@@ -734,7 +728,7 @@ On associe à une bobine une *inductance* $L$ en Henry ($unit("H")$), dépendant
   On a $U = U_1 + U_2 = L_1 ddt(i) + L_2 ddt(i) = (L_1 + L_2) ddt(i)$
 ])
 
-#figure(image("elec/parallel_indu.png", width: 25%))
+#figure(image("physics/elec/parallel_indu.png", width: 25%))
 
 #theorem([Association parallèle de bobines],[
   Soit $L_1$ et $L_2$ deux bobines en parallèle, on a $1/L_e = 1/L_1 + 1/L_2$ la résistance équivalente
@@ -753,7 +747,7 @@ Les oscillateurs sont présentés dans un cas électrique, mais on les retrouve 
 
 == Oscillateur harmonique
 
-#figure(image("elec/lc.png", width: 30%))
+#figure(image("physics/elec/lc.png", width: 30%))
 
 On considère un circuit LC, on trouve $L C dv(U,t,2) + U = E$ d'où en posant $omega_0 = 1/(L C)$ on retrouve :
 
@@ -774,7 +768,7 @@ Ainsi l'oscillateur possède un comportement oscillant avec $2 pi f = omega_0$
 
 === Généralités
 
-#figure(image("elec/rlc.png", width: 30%))
+#figure(image("physics/elec/rlc.png", width: 30%))
 
 On considère maintenant un circuit RLC, ainsi on trouve l'équation différentielle suivante $E/(L C) = dv(U, t, 2) + R /L ddt(U) + 1/(L C) U$, en posant $omega_0 = 1/(L C)$ et $Q = 1/R sqrt(L/C)$ on a :
 
@@ -834,7 +828,7 @@ La durée du transitoire est de quelques $tau$.
 
 == Régime transitoire
 
-#figure(image("elec/rlc.png", width: 30%))
+#figure(image("physics/elec/rlc.png", width: 30%))
 
 Le circuit est en régime sinusoïdal forcé si le *générateur basse fréquence* (GBF) délivre une tension sinusoïdale. Ainsi on a l'apparition d'un déphasage aux temps longs, et l'amplitude du GBF n'est pas forcément la même que celle de $U$.
 
@@ -951,16 +945,16 @@ On considère le circuit suivant, qu'on peut remplacer avec des impédances :
 
 #grid(
     columns: 2,
-    figure(image("elec/rc.png", width: 50%)),
-    figure(image("elec/rc_c.png", width: 50%)),
+    figure(image("physics/elec/rc.png", width: 50%)),
+    figure(image("physics/elec/rc_c.png", width: 50%)),
 )
 
 Ainsi en basse et haute fréquence on a :
 
 #grid(
     columns: 2,
-    figure(image("elec/rc_bf.png", width: 50%)),
-    figure(image("elec/rc_hf.png", width: 50%)),
+    figure(image("physics/elec/rc_bf.png", width: 50%)),
+    figure(image("physics/elec/rc_hf.png", width: 50%)),
 )
 
 Par loi des mailles on a $underline(z_R) = R$ et $underline(z_C) = 1/(j omega C)$ d'où le dipole équivalent est $underline(z) = R + 1/(j omega C)$
@@ -1218,7 +1212,7 @@ La *diffraction* et les *interférences* sont deux principes intrinsèques aux o
 
 La *diffraction* se fait selon le schéma suivant :
 
-#figure(image("waves/diffraction.png", width: 50%))
+#figure(image("physics/waves/diffraction.png", width: 50%))
 
 #theorem([Critère de diffraction],[
   On a le *critère de diffraction* $lambda/a$ (addimensionné) :
@@ -1239,7 +1233,7 @@ Les *interférences* se font selon le schéma suivant :
 
 Les zones noires sont appelées *inteférences destructives* et les zones blanches sont appelées *interférences constructives*.
 
-#figure(image("waves/interferences.png", width: 30%))
+#figure(image("physics/waves/interferences.png", width: 30%))
 
 L'*intensité* d'une onde est la puissance surfacique.
 
@@ -1374,7 +1368,7 @@ On se place dans le contexte de la relativité galiléenne, le temps est absolu 
 
 === Coordonnées cartésiennes
 
-#figure(image("meca/coord_carte.svg", width: 30%))
+#figure(image("physics/meca/coord_carte.svg", width: 30%))
 
 #theorem([Coordonnées cartésiennes],[
   On a : $ arrow(O M) = x ex + y ey + z ez $
@@ -1388,7 +1382,7 @@ On se place dans le contexte de la relativité galiléenne, le temps est absolu 
 
 === Coordonnées cylindriques
 
-#figure(image("meca/coord_cylin.svg", width: 30%))
+#figure(image("physics/meca/coord_cylin.svg", width: 30%))
 
 #theorem([Coordonnées cylindriques],[
   On a : $ arrow(O M) = arrow(O m) + arrow(O M) = r er+ z ez $
@@ -1418,7 +1412,7 @@ La composante $r er$ est la composante radiale et $z ez$ est la composante axial
 
 === Coordonnées sphériques
 
-#figure(image("meca/coord_spher.svg", width: 30%))
+#figure(image("physics/meca/coord_spher.svg", width: 30%))
 
 On appelle $phi$ la longitude et $theta$ la colatitude
 
@@ -1786,7 +1780,7 @@ Ainsi $M_A_u (arrow(F))$ ne dépend que de la composante de $arrow(F)$ dans le p
 
 On appelle *bras de levier* la distance entre $A$ et la droite d'action de $arrow(F)$
 
-#figure(image("meca/bras-de-levier.svg", width: 40%))
+#figure(image("physics/meca/bras-de-levier.svg", width: 40%))
 
 #theorem([Moment de force par bras de levier],[
   On a $M_A_u (arrow(F)) = plus.minus norm(arrow(F)) times "bras de levier"$, avec un $+$ si la force  entraine une rotation dans le sens, et un $-$ sinon.
@@ -1891,7 +1885,7 @@ Un *jour solaire* est un intervalle de temps entre 2 passage au zénith du Solei
 
 Un *jour sidéral* est la durée pour que la Terre fasse un tour complet dans le référentiel géocentrique.
 
-#figure(image("meca/sideral.png", width: 20%))
+#figure(image("physics/meca/sideral.png", width: 20%))
 
 On a $alpha = (2 pi)/(num("365.25") "jours")$ 
 
@@ -1902,7 +1896,7 @@ On a $alpha = (2 pi)/(num("365.25") "jours")$
 
 Le *référentiel propre* ($cal(R_p)$) est le référentiel dans lequel le solide est immobile
 
-#figure(image("meca/ref_propre.jpg", width: 40%))
+#figure(image("physics/meca/ref_propre.jpg", width: 40%))
 
 Ainsi on a 2 repères : le référentiel d'étude ($cal(R)$) et le référentiel lié (ou propre)
 
@@ -2408,7 +2402,7 @@ Ainsi on peut représenter des problèmes thermodynamiques avec des circuits él
 
 On parle d'un système *cyclique* si il décrit un cycle
 
-#figure(image("thermo/cycle.svg", height: 100pt))
+#figure(image("physics/thermo/cycle.svg", height: 100pt))
 
 On représente ainsi une machine cyclique, avec $T_1, ..., T_n$ les thermostats. Le système est en convention récepteur sur le schéma.
 
@@ -2429,7 +2423,7 @@ On représente ainsi une machine cyclique, avec $T_1, ..., T_n$ les thermostats.
 ]
 
 
-#figure(image("thermo/raveau.png", height: 130pt))
+#figure(image("physics/thermo/raveau.png", height: 130pt))
 
 Pour étudier un moteur on peut utiliser le diagramme de Raveau avec les zones suivantes :
 
@@ -2473,7 +2467,7 @@ $ eta_c = 1 - T_F/T_C$  avec $eta <= eta_c$])
 Une *phase* est une partie d'un système dont les variables intensives sont continues
 
 #figure(
-  image("thermo/states.jpg", width: 40%)
+  image("physics/thermo/states.jpg", width: 40%)
 )
 
 == Échauffement isobare d'un corps pur
@@ -2489,7 +2483,7 @@ Dans le cas des corps purs, on a $P_"vap" = f(T_"ébul")$
 == Diagramme ($P$, $T$), Clapeyron
 
 #figure(
-  image("thermo/clapeyron.jpg", width: 30%)
+  image("physics/thermo/clapeyron.jpg", width: 30%)
 )
 
 $T$ représente le *point triple*, c'est à dire le point où on a équilibre vapeur solide liquide
@@ -2501,7 +2495,7 @@ En regardant le diagramme de Clapeyron on a des informations sur l'état du syst
 == Diagramme ($P$, $v$), isotherme d'Andrews
 
 #figure(
-  image("thermo/andrews.svg", width: 50%),
+  image("physics/thermo/andrews.svg", width: 50%),
   caption: [Un isotherme d'Andrews]
 )
 
@@ -2631,7 +2625,7 @@ Propriété HP : Les lignes de champ sont orthogonales aux lignes iso-champ.
 == Dépendance courant électrique et lignes de champ
 
 #theorem([Champ magnétique créé par un circuit],[
-  Un circuit parcouru par un courant constant (ou lentement variable) crée un champ magnétique constant (ou lentement variable) $arrow(B)(p o s, I)$ proportionnel à $I$
+  Un circuit parcouru par un courant constant (ou lentement variable) crée un champ magnétique constant (ou lentement variable) $arrow(B)("pos", I)$ proportionnel à $I$
 ])
 
 Pour trouver le sens des lignes de champ on utilise la règle de la main droite : on oriente son pouce dans le sens du courant et les lignes de champ vont dans le sens de repliement des mains.
@@ -2711,13 +2705,13 @@ Dans un solénoïde infini, le champ est continu par morceaux sauf si on s'appro
 
 Dans le cas d'un aimant on a :
 
-#figure(image("magnet/magnet.png", width: 50%))
+#figure(image("physics/magnet/magnet.png", width: 50%))
 
 == Action mécanique d'un champ magnétique sur un système physique
 
 On a l'expérience des rails de Laplace :
 
-#figure(image("magnet/laplace.png", width: 30%))
+#figure(image("physics/magnet/laplace.png", width: 30%))
 
 #theorem([Force de Laplace],[
   Un barreau rectiligne conducteur de longueur $l$ parcouru par une intensité $I$ dans un champ magnétique $arrow(B)$ subit une force $ arrow(F_L) = I l arrow(u) and arrow(B) $ avec $arrow(u)$ un vecteur unitaire orienté dans le sens du courant.
@@ -2745,8 +2739,8 @@ La force s'applique au baricentre du barreau.
 
 On considère maintenant le schéma suivant :
 
-#figure(image("magnet/squared_spire.png", width: 30%))
-#figure(image("magnet/squared_spire_top.png", width: 30%))
+#figure(image("physics/magnet/squared_spire.png", width: 30%))
+#figure(image("physics/magnet/squared_spire_top.png", width: 30%))
 
 #theorem([Force et moment dans une spire carrée],[
   Dans une spire carrée, on a $arrow(F_L) = 0$ et $arrow(M_0) = arrow(mu) and arrow(B)$
@@ -2888,7 +2882,7 @@ L'intérêt du viseur est que tout objet que l'on voit net à travers le viseur 
 
 La lunette astronomique est un appareil optique composé de deux lentilles convergentes appelées objectif et oculaire. On a le foyer image de l'objectif qui est le foyer objet de l'oculaire.
 
-#figure(image("tp/lunette_astro.png", width: 70%))
+#figure(image("physics/tp/lunette_astro.png", width: 70%))
 
 Ainsi la lunette permet d'observer une image à l'infini, en la grandissant avec un grandissement $G$, et de renvoyer une image réelle à l'infini.
 
@@ -3010,7 +3004,7 @@ Pour mesurer la tension aux bornes d'un dipôle, il faut brancher le voltmètre 
 Il faut brancher le $+$ sur la borne $Omega$ et le $-$ sur la borne $C O M$.
 
 #figure(
-  image("tp/voltmeter.png", width: 30%)
+  image("physics/tp/voltmeter.png", width: 30%)
 )
 
 Pour avoir une mesure correcte, il faut que le voltmètre ait une résistance interne très grande devant la résistance du dipôle. (Le voltmètre est modélisé par un interrupteur ouvert.)
@@ -3024,7 +3018,7 @@ Pour mesurer l'intensité qui traverse un dipôle, il faut brancher l'ampèremè
 Il faut brancher le $+$ sur la borne $m A$ (ou $mu A$) et le $-$ sur la borne $C O M$.
 
 #figure(
-  image("tp/amperemeter.png", width: 30%)
+  image("physics/tp/amperemeter.png", width: 30%)
 )
 
 Pour avoir une mesure correcte, il faut que l'ampèremètre ait une résistance interne très faible devant la résistance du dipôle. (L'ampèremètre est modélisé par un fil.)
@@ -3040,7 +3034,7 @@ Pour mesurer la résistance d'un dipôle, il faut brancher l'ohmmètre en série
 Il faut brancher le $+$ sur la borne $Omega$ et le $-$ sur la borne $C O M$.
 
 #figure(
-  image("tp/ohmmeter.png", width: 30%)
+  image("physics/tp/ohmmeter.png", width: 30%)
 )
 
 Il est aussi possible d'ajuster le _RANGE_ de l'ohmmètre pour avoir une mesure avec différents ordres de grandeur.
@@ -3063,7 +3057,7 @@ Le principe du pont de Wheatstone est de mesurer la valeur de la résistance inc
 Le montage du pont de Wheatstone est le suivant :
 
 #figure(
-  image("tp/wheatstone.png", width: 50%)
+  image("physics/tp/wheatstone.png", width: 50%)
 )
 
 == Équilibre du pont de Wheatstone
