@@ -2761,9 +2761,9 @@ On considère maintenant le schéma suivant :
 
   On se place dans le second schéma, on a $arrow(M_0)(arrow(F_L)) = arrow(M_0)(arrow(F_L^(M N))) + arrow(M_0)(arrow(F_L^(N P))) + arrow(M_0)(arrow(F_L^(P Q))) + arrow(M_0)(arrow(F_L^(Q M)))$
 
-  On a $arrow(M_0)(arrow(F_L^(M N))) = arrow(O C) and (I arrow(M N) and arrow(B)) = I (-a/2 arrow(e_r)) and (-a arrow(e_z) and (-B arrow(e_y))) = -I a^2/2 B arrow(e_r) and arrow(e_z)$
+  On a $arrow(M_0)(arrow(F_L^(M N))) = arrow(O C) and (I arrow(M N) and arrow(B)) = I (-a/2 arrow(e_r)) and (-a arrow(e_z) and (-B arrow(e_y))) = I a^2/2 B arrow(e_r) and arrow(e_x) = - I a^2/2 B sin(theta) ez$ 
 
-  On a $arrow(M_0)(arrow(F_L^(P Q))) = arrow(O E) and (I arrow(P Q) and arrow(B)) = - arrow(O C) and (I arrow(M N) and arrow(B)) = -I a^2/2 B arrow(e_r) and arrow(e_z)$
+  On a $arrow(M_0)(arrow(F_L^(P Q))) = arrow(O E) and (I arrow(P Q) and arrow(B)) = - arrow(O C) and (I arrow(M N) and arrow(B)) = - I a^2/2 B sin(theta) ez$
 
   On a $arrow(M_0)(arrow(F_L^(N P))) = arrow(O D) and (I arrow(N P) and arrow(B)) = I (-a/2 arrow(e_z)) and (-a arrow(e_r) and (-B arrow(e_y))) = a/2 arrow(e_z) and I a B cos(theta) arrow(e_z) = 0$
 

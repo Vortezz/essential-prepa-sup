@@ -70,6 +70,7 @@
           fill: if it.lang == "ocaml" or it.lang == "ml" { rgb("#fffcdf") } 
                 else if it.lang == "python" or it.lang == "py" { rgb("#fffcdf") }
                 else if it.lang == "c" { rgb("#e8f1fd") } 
+                else if it.lang == "sql" { rgb("#fcf7e8") } 
                 else { luma(246) }, 
           width: 100%-3pt, 
           inset: 1em,
@@ -78,7 +79,8 @@
             left, 
             stack(
               place(
-                dx: 100%-12pt,
+                dx: 100%-9pt,
+                dy: -3pt,
                 image("global/languages/" + it.lang + ".svg", width: 12pt)
               ),
               it
@@ -408,6 +410,206 @@ Une fonction est dite *pure* lorsqu'elle est déterministe et sans effets de bor
 
 #box(height: 1em)
 #heading([Stratégies algorithmiques], supplement: [theory],)
+
+#box(height: 1em)
+#heading([SQL], supplement: [theory],)
+
+== Généralités
+
+En SQL on stocke des entités avec des attributs et à chaque attribut on lui associe un type
+
+On peut définir des relations entre les différentes entités
+
+On stocke ces entités dans des tables : dans chaque table on stocke une entité
+
+Il est possible de garder une case vide en plaçant un `NULL` dans la case
+
+== Requêtes
+
+Pour récupérer des données (projections) dans une table on a :
+
+```sql
+# Seulement les colonnes spécifiées
+SELECT col1, ..., coln FROM table
+
+# Toutes les colonnes
+SELECT * FROM table
+
+# Toutes les colonnes mais sans doublon
+SELECT DISTINCT * FROM table
+```
+
+Ainsi on récupère toutes les lignes de la table avec ces projections
+
+On peut aussi faire une sélection sur un critère :
+
+```sql
+SELECT * FROM table WHERE bool
+```
+
+Les opérations booléennes sont les suivantes :
+
+- `col > a`/`col < a`/`col = a` pour faire des comparaisons
+- `col IN (a, b, c)` pour savoir si la cellule est dans un ensemble de valeur
+- `col IS NULL`/`IS NOT NULL` pour savoir si la cellule est nulle ou non
+- `col LIKE '% Text %'` pour regarder si `Text` est dans la chaine de caractère de la cellule
+
+On peut combiner les critères avec `AND`/`OR`/`NOT`
+
+Il est possible de sélectionner un attribut non projeté
+
+Pour ordonner les résultats on ordonne en utilisant
+
+```sql
+# Triés par valeur croissante
+SELECT * FROM table ORDER BY col
+
+# Triés par valeur décroissante
+SELECT * FROM table ORDER BY col DESC
+```
+
+Pour limiter le nombre de valeurs on utilise
+
+```sql
+# On prend au maximum 3 éléments
+SELECT * FROM table LIMIT 3
+
+# On prend au maximum 3 éléments mais sans les 2 premiers
+SELECT * FROM table LIMIT 3 OFFSET 2
+```
+== Fonctions
+
+On peut compter le nombre d'entités qui vont être renvoyées
+
+```sql
+# Nombre d'éléments dans la table
+SELECT COUNT(*) FROM table
+```
+
+On peut compter sur une colonne spécifique avec `COUNT(col1, ..., col2)`, les cases ne sont pas comptées si `NULL`, 
+
+Il est aussi possible de compter le nombre de valeur distinctes pour une colonne :
+
+```sql
+SELECT COUNT(DISTINCT col) FROM table
+```
+
+On peut utiliser `MAX`, `MIN`, `SUM` et `AVG` pour avoir du préprocessing, il est aussi possible d'avoir la moyenne en faisant `SUM(col)/COUNT(*)`
+
+#warning([On ne peut mélanger une colonne et une fonction dans la projection])
+
+Il est possible de grouper les valeurs
+
+```sql
+# Renvoie des groupes des valeurs de col
+SELECT col FROM table GROUP BY col
+```
+
+#warning([Il n'est pas possible d'utiliser `GROUP BY` sur des colonnes non groupées])
+
+Par contre les fonctions agissent sur chaque groupe, ainsi il est possible d'écrire 
+
+```sql
+# Renvoie des groupes des valeurs de col avec le nombre d'occurence de cette valeur dans la table
+SELECT col, COUNT(*) FROM table GROUP BY col
+```
+
+Pour sélectionner des groupes on peut utiliser :
+
+```sql
+# Renvoie des groupes des valeurs de col si la valeur minimale du groupe dans la colonne col2 est supérieure à x avec la valeur minimale de col2 de ce groupe dans la table
+SELECT col1, MIN(col2) FROM table GROUP BY col1 HAVING MIN(col2) > x
+```
+
+Les opérations sont executées dans cet ordre :
+
+- `WHERE`
+- `GROUP BY`
+- `HAVING`
+- `ORDER BY`
+- `LIMIT`/`OFFSET`
+- `SELECT` à la fin bien qu'on le mette en tête de la requête
+
+Ainsi une clause valide est
+
+```sql
+SELECT * WHERE cond GROUP BY col HAVING cond2 ORDER BY col2 LIMIT 3 OFFSET 2
+```
+
+== Sous requêtes
+
+Il est possible d'écrire une sous requête :
+
+```sql
+# Ici on sélectionne seulement les éléments donc la valeur col est supérieure à la valeur moyenne de col
+SELECT * FROM table WHERE col > (SELECT AVG(col) FROM table)
+```
+
+Il est donc aussi possible d'utiliser cette syntaxe avec des `IN`
+
+```sql
+# Ici on va sélectionner seulement les lignes dont la valeur de col correspond à la condition cond
+SELECT * FROM table WHERE col IN (SELECT DISTINCT col FROM * WHERE cond)
+```
+
+Le `col AS nameBis` permet de renommer une colonne
+
+Si on reçoit un tableau, on peut sélectionner dans les réponses
+
+```sql
+# Ainsi on renvoie la moyenne d'une colonne col2 telle que ses éléments vérifient la condition
+SELECT AVG(colName) FROM (SELECT col1, col2 AS colName FROM table WHERE cond)
+```
+
+== Combiner les tables
+
+Il est possible de combiner des tables
+
+```sql
+# Sélectionne dans le produit cartésien des deux tables
+SELECT * FROM table1, table2
+```
+
+Mais en faisant ça on va avoir plein de lignes qui n'ont pas de sens, ainsi si on veut garder seulement les lignes qui nous intéressent
+
+```sql
+# Sélectionne dans le produit cartésien des deux tables seulement les éléments donc la col1 de la table 1 est le même que celui de la col 2 de la table 2
+SELECT * FROM table1, table2 WHERE table1.col1 = table2.col2
+```
+
+Mais pour éviter ça on peut aussi de manière équivalente écrire :
+
+```sql
+# On sélectionne les éléments de la table1 en ajoutant la table2 si la condition est vérifiée, le ON est donc un WHERE
+SELECT * FROM table1 JOIN table2 ON table1.col1 = table2.col2
+```
+
+Le produit cartésien n'est donc qu'une manière de jointure
+
+On peut aussi utiliser le `LEFT JOIN` qui permet de garder un élément de la première table même si il n'a pas d'équivalent dans la seconde table
+
+```sql
+# On sélectionne les éléments de la table1 en concaténant les éléments dont la condition est vérifiée, et rien si il n'y a pas d'équivalent
+SELECT * FROM table1 LEFT JOIN table2 ON table1.col1 = table2.col2
+```
+
+On peut faire l'union de deux requêtes
+
+```sql
+# On a les éléments qui vérifient la cond1 ou cond2
+SELECT * FROM table WHERE cond1 UNION SELECT * FROM table WHERE cond2
+```
+
+#warning([Pour utiliser l'union il faut juste que les types sont compatibles mais pas les noms de colonne])
+
+On peut aussi faire l'intersection de deux requêtes
+
+```sql
+# On a les éléments qui vérifient la cond1 et cond2
+SELECT * FROM table WHERE cond1 INTERSECT SELECT * FROM table WHERE cond2
+```
+
+On peut faire des différences ensemblistes avec `MINUS` ou `EXCEPT`
 
 #pagebreak()
 
