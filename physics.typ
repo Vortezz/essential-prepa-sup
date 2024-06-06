@@ -2784,6 +2784,83 @@ On considère maintenant le schéma suivant :
   On a $arrow(F_L) = I arrow(M N) and arrow(B) = I L B arrow(e_x)$ d'où $P = arrow(F_L) dot arrow(v) = I L B dot(x)$
 ])
 
+#box(height: 1em)
+#heading([Lois de l'induction : le cas des circuits fixes], supplement: [magne])
+
+== Les phénomènes d'induction
+
+On considère des circuits *filiformes* *rigides* *fixes* :
+
+- *filiforme* : On ne considère que le contour
+- *rigides* : Ne se déforment pas
+
+#theorem([Flux],[
+  Dans un champ magnétique $arrow(B)$ avec $S$ la surface on a :
+  $ Phi_B = integral.double_"surface délimitée \n par le contour" arrow(B) dot dd(arrow(S)) $
+  avec $dd(arrow(S))$ orienté selon $arrow(u)$
+])
+
+Le flux est additif (par linéarité des intégrales)
+
+On a $[Phi_B] = unit("T m^2")$, et dans le cas d'une spire de rayon $a$ on a $Phi_B = arrow(B) dot arrow(u) pi a^2$
+
+#theorem([Flux total],[
+  Dans un champ magnétique $arrow(B)$ on a :
+  $ Phi_"tot" = sum_"chaque spire" Phi_"1 spire" $
+])
+
+On considère un aimant qu'on approche d'une bobine, avec $arrow(u)$ et $arrow(B)$ de direction opposée.
+
+Si l'aimant est loin ou immobile, $Phi = 0$ et il n'y a pas de courant
+
+Quand on rapproche l'aimant, $Phi$ diminue et $i>0$ et $u>0$
+
+Quand on éloigne l'aimant, $Phi$ augmente et $i<0$ et $u<0$
+
+Ainsi une diminution du flux induit un courant positif
+
+Ces observations sont toujours valable lorsque la bobine bouge et non l'aimant
+
+On remarque que le champ magnétique induit est toujours dans le sens inverse à la variation de champ magnétique extérieur
+
+#theorem([Loi de Lenz],[
+  On a la *loi de Lenz* qui est un principe de modération : Un phénomène d'induction s'oppose par ses conséquences aux causes qui l'ont engendré
+])
+
+== Loi de Faraday
+
+On place dans le cadre de l'ARQS
+
+#theorem([Loi de Faraday],[
+  Si $Phi_B$ varie il apparaît alors dans le circuit une force électromotrice induite du même sens que la convention d'orientation du circuit.
+
+  On a :
+
+  $ e = - ddt(Phi_B) $
+])
+
+== Auto induction et couplage inductif
+
+#theorem([Flux propre et coefficient d'auto inductance],[
+  Un circuit parcouru par un courant $i$ crée un champ magnétique. Le flux correspondant dans le circuit est appelé *flux propre* et $Phi_P = L i$, avec $L$ le coefficient d'*auto inductance* ou *inductance* (en Henry)
+])
+
+On a $e = - ddt(Phi_B) = - ddt(L i) = - L ddt(i)$ (en convention générateur) donc on retrouve une formule du chapitre d'électricité, de même que la continuité de $i$ peut se retrouver avec la loi de Lenz : le système limite $i$ lors de son apparition
+
+Ainsi l'énergie stockée dans une bobine est stockée sous forme d'énergie magnétique
+
+Dans le cas d'un circuit avec faible enroulement on néglige les auto-inductances
+
+Puisque le flux est additif on trouve $e = -ddt(Phi_"tot") = -ddt(Phi_"propre")-ddt(Phi_ext)$
+
+Ainsi deux circuits proches l'un de l'autres peuvent présenter un couplage magnétique
+
+#theorem([Inductance mutuelle],[
+  On a $Phi_(1 -> 2) = M i_1$ et $Phi_(2 -> 1) = M i_2$, avec $M$ l'*inductance mutuelle* en Henry
+])
+
+En électricité on notera une impédance mutuelle par un #todo(text: [(Faire un schéma et la puissance reçue avec le schema)])
+
 #pagebreak()
 
 #counter(heading).update(0)
