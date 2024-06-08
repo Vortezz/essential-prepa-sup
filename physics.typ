@@ -1385,7 +1385,7 @@ On se place dans le contexte de la relativité galiléenne, le temps est absolu 
 #figure(image("physics/meca/coord_cylin.svg", width: 30%))
 
 #theorem([Coordonnées cylindriques],[
-  On a : $ arrow(O M) = arrow(O m) + arrow(O M) = r er+ z ez $
+  On a : $ arrow(O M) = arrow(O m) + arrow(m M) = r er+ z ez $
 
   $ dd(arrow(O M)) = dd(r) er + r dd(theta) et + dd(z) ez $
 
@@ -1541,7 +1541,7 @@ Il ne faut pas hésiter à la négliger si $rho_"corps" >> rho_f$
 
 === Réaction d'un support
 
-La réaction du support est une force au contact, avec $arrow(R_t)$ la composante tangentielle (toujours vers l'extérieur) et $arrow(R_n)$ la composante normale (HP), nulle en l'absence de frottements solides.
+La réaction du support est une force au contact, avec $arrow(R_n)$ la composante normale (toujours vers l'extérieur) et $arrow(R_t)$ la composante tangentielle (Spé), nulle en l'absence de frottements solides.
 
 On n'a pas de formule pour $arrow(R_n)$
 
@@ -1588,7 +1588,7 @@ On considère 2 points massifs
 On considère 2 particules chargées
 
 #theorem([Force d'intéraction coulombienne],[
-  On a $arrow(F) = 1/(4 pi epsilon_0) (q_1 q_2)/d^2 arrow(u)$ avec $epsilon_0 = qty("8.9e-11","F/m^1")$
+  On a $arrow(F) = 1/(4 pi epsilon_0) (q_1 q_2)/d^2 arrow(u)$ avec $epsilon_0 = qty("8.9e-11","F/m^1")$ la permitivité diélectrique du vide
 ])
 
 #box(height: 1em)
@@ -1715,11 +1715,11 @@ Les zones au dessus de la ligne rouge ($cal(E)_m$) sont dites *innaccessibles* c
 
 On a un *puit de potentiel* si on est coincé entre 2 points de rebroussement, ainsi on est dans un *état lié* et $x$ ne tend pas vers $infinity$
 
-Si on a un seul point de rebroussement, on est en *état lié* et $x$ tend vers $infinity$
+Si on a un seul point de rebroussement, on est en *état libre* et $x$ tend vers $infinity$
 
 On dit que $x_e$ est une *position d'équilibre* si $dv(cal(E)_p,x)(x_e) = 0$ et elle est *stable* si après une petite perturbation une force tend à la ramener à sa position d'équlibre (ou que la courbe est concave)
 
-On a un *potentiel attractif* si $dv(cal(E)_p,x) > 0$ et *répulsif* si $dv(cal(E)_p,x) < 0$
+On a un *potentiel attractif* si $dv(cal(E)_p,x,2) > 0$ et *répulsif* si $dv(cal(E)_p,x,2) < 0$
 
 #box(height: 1em)
 #heading([Loi du moment cinématique], supplement: [meca])
@@ -1962,7 +1962,7 @@ Pour tout $M_1, M_2 in Sigma^2$, le rapport $arrow(M_1 M_2)$ est constant
 Une loi importante n'est pas mise en défaut par un solide en translation
 
 #theorem([Loi de la quantité de mouvement],[
-  Dans un référentiel galiléen, pour à solide soumis à des forces extérieures à $m$ fixée on a $ddt(arrow(p_"ext")) = sum arrow(F)_ext$ d'où :
+  Dans un référentiel galiléen, pour un solide soumis à des forces extérieures à $m$ fixée on a $ddt(arrow(p_"ext")) = sum arrow(F)_ext$ d'où :
 
   $ m ddt(arrow(v)) = sum arrow(F)_ext $
 ])
@@ -2023,6 +2023,8 @@ On a les moments d'inertie suivants :
 ))
 
 #demo([
+  #todo(text: [(Refaire plus proprement avec la masse linéique $mu$)])
+
   Cas d'une tige, on a $J_Delta = integral_0^r m/r x^2 dd(x)= m/r integral_0^r x^2 dd(x) = m/r r^3/3 = 1/3 m r^2$
 ])
 
@@ -2082,7 +2084,7 @@ Dans un solide indéformable il n'y a pas de travail interne
 
 #theorem([Théorème de la puissance cinétique pour un solide en rotation], [
   On a $P = M_Delta (arrow(F)) dot(theta)$ d'où on a :
-  $ ddt(cal(E)_c) = sum P_ext $
+  $ ddt(cal(E)_c) = sum P_ext = sum M_Delta (arrow(F_ext)) dot(theta) $
 ])
 
 #demo([
@@ -2797,7 +2799,7 @@ On considère des circuits *filiformes* *rigides* *fixes* :
 #theorem([Flux],[
   Dans un champ magnétique $arrow(B)$ avec $S$ la surface on a :
   $ Phi_B = integral.double_"surface délimitée \n par le contour" arrow(B) dot dd(arrow(S)) $
-  avec $dd(arrow(S))$ orienté selon $arrow(u)$
+  avec $dd(arrow(S))$ orienté selon le sens du courant (règle de la main droite)
 ])
 
 Le flux est additif (par linéarité des intégrales)
