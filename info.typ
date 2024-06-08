@@ -384,6 +384,18 @@ test[1] = test[2] // On met dans la case 1 la valeur de la case 2
 #box(height: 1em)
 #heading([Graphes], supplement: [struct],)
 
+== Recherche de plus cours chemin
+
+=== Graphes avec poids négatifs
+
+// DO Floyd Marchall et Djikstra rapidement
+
+Dans un graphe on dit que l'arc $u triangle v$ est en *tension* si $delta(v) > delta(u) + w(u,v)$
+
+L'approche de Ford est donc d'éliminer les arcs en tension
+
+Tant qu'il existe des arcs en tension, on traite tous les arcs de $E$ et on traite ceux en tension, on a donc une complexité $O(n times p)$
+
 #pagebreak()
 
 #counter(heading).update(0)
@@ -558,7 +570,7 @@ Si on reçoit un tableau, on peut sélectionner dans les réponses
 
 ```sql
 # Ainsi on renvoie la moyenne d'une colonne col2 telle que ses éléments vérifient la condition
-SELECT AVG(colName) FROM (SELECT col1, col2 AS colName FROM table WHERE cond)
+SELECT AVG(resp.colName) FROM (SELECT col1, col2 AS colName FROM table WHERE cond) AS resp
 ```
 
 == Combiner les tables
@@ -610,6 +622,80 @@ SELECT * FROM table WHERE cond1 INTERSECT SELECT * FROM table WHERE cond2
 ```
 
 On peut faire des différences ensemblistes avec `MINUS` ou `EXCEPT`
+
+== Créer une BDD
+
+Pour créer une base de données on utilisera 
+
+```sql
+CREATE TABLE IF NOT EXISTS table (
+  col1 TYPE1,
+  col2 TYPE2,
+  col3 TYPE3
+)
+```
+
+Si on veut limiter le nombre de caractères, on peut le préciser entre parenthèses, par exemple `VARCHAR(6)` pour avoir des chaînes d'au plus 6 caractères
+
+On peut définir une *clé primaire* qui ne peut avoir 2 fois la même valeur, on indiquera `PRIMARY KEY` après le type :
+
+```sql
+CREATE TABLE IF NOT EXISTS table (
+  col1 TYPE1 PRIMARY KEY,
+  ...
+)
+```
+
+Les autres attibuts seront dépendant de la clé primaire : si on connaît la clé primaire on peut connaître les autres valeurs associées à la liste
+
+Si on a une clé primaire dans un GROUP BY autorise à projeter sur tous les éléments (pas comme précédemment)
+
+Il y a au plus une clé primaire par table, et une valeur `NULL` ne peut être une valeur pour cette case
+
+On peut définir un clé étrangère qui vont être des liens entre les différentes tables
+
+```sql
+CREATE TABLE IF NOT EXISTS table (
+  ...,
+  FOREIGN KEY (col) REFERENCES table(col)
+)
+```
+
+Il est aussi possible de modifier une table en utilisant `ALTER TABLE`
+
+Pour insérer dans une table on utilise :
+
+```sql
+INSERT INTO table (col1, col2, col3) VALUES (value1, value2, value3)
+```
+
+On peut modifier un élement :
+
+```sql
+UPDATE table SET col1 = value WHERE cond
+```
+
+On peut aussi supprimer un élement :
+
+```sql
+DELETE FROM table WHERE cond
+```
+
+== Type entités
+
+Les types entités sont liées par des types associations
+
+#todo(text:[(Cardinalité)])
+
+On précise les cardinalités :
+
+- $1,1$ en liaison avec une et une seule entité
+
+- $1,n$ en liaison avec au moins une autre entité
+
+- $0,1$ en liaison avec au plus une autre entité
+
+- $0,n$ en liaison avec un nombre quelconque d'entités
 
 #pagebreak()
 
