@@ -6,7 +6,7 @@
 // http://cdn.sci-phy.org/mp2i/poly_cours.pdf page 43
 
 #let project(title: "", authors: (), date: none, body) = {
-  set document(author: authors.map(a => a.name), title: "Essentiel de physique")
+  set document(author: authors.map(a => a.name), title: "Essentiel d'informatique")
   
   set page(numbering: "1", number-align: center, footer: locate(loc => 
       if (loc.page() > 1) {
@@ -191,7 +191,7 @@
 )
 
 #show: project.with(
-  title: "Essentiel Informatique",
+  title: "Essentiel d'informatique",
   authors: (
     (name: "Victor Sarrazin", phone: ""),
   ),

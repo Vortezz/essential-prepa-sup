@@ -186,7 +186,7 @@
 )
 
 #show: project.with(
-  title: "Essentiel Physique",
+  title: "Essentiel de physique",
   authors: (
     (name: "Victor Sarrazin", phone: ""),
   ),
