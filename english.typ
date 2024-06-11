@@ -160,6 +160,23 @@
   ),
 )
 
+#let example(t) = box(
+    radius: 4pt, 
+    fill: luma(56.7%),
+    width: 100%,
+    align(
+      right, 
+        block(
+          radius: 4pt, 
+          fill: luma(95%),
+          width: 100%-3pt, 
+          inset: 1em,
+          stroke: stroke(cap: "round", thickness: 0.5pt, paint: luma(56.7%)),
+          align(left, [#text([Exemple :], weight: "bold") \ #t])
+          ),
+      ),
+    );
+
 #let derivativePart(a, b, c) = $eval(pdv(#a, #b))_(#c)$
 #let derivative(a, b) = $(d #a)/(d #b)$
 #let dt = $dd(t)$
@@ -206,6 +223,8 @@
 
 #align(center, text([📋 Sommaire], weight: 800, size: 24pt))
 
+#outline(depth:1,indent: 10pt, fill: [], title: "Conjugaison :", target: heading.where(supplement: [conjug]))
+
 #outline(depth:1,indent: 10pt, fill: [], title: "Grammaire :", target: heading.where(supplement: [grammar]))
 
 #outline(depth:1,indent: 10pt, fill: [], title: "Épreuves :", target: heading.where(supplement: [tests]))
@@ -218,10 +237,10 @@
 
 #set heading(numbering: "📃 I.1.a")
 
-#align(center, text([📃 Grammaire], weight: 800, size: 24pt))
+#align(center, text([📃 Conjugaison], weight: 800, size: 24pt))
 
 #box(height: 1em)
-#heading([Conjugaison], supplement: [grammar],)
+#heading([Temps simples], supplement: [conjug],)
 
 == Present simple
 
@@ -236,8 +255,6 @@ On emploie le _present simple_ avec des adverbes qui marquent la routine :
 - _generally_ : généralement
 - _usually_ : habituellement
 
-=== Forme affimative
-
 La forme affirmative se forme avec *sujet + base verbale + complément*, et la base verbale correspond à l'infinitif mais sans la particule _to_
 
 A la troisième personne du singulier, on met un _-s_ ou un _-es_ derrière la base verbale si le verbe finit en _-o_, _-x_, _-s_ ou _-ch_
@@ -248,15 +265,11 @@ Si le verbe finit par un _-y_ on enlève ce _-y_ et on place un _-ies_ à la tro
 
 #example([*to cry* devient *he cries*])
 
-=== Forme négative
-
 La forme négative se forme avec *sujet + do/does + not + base verbale + complément*. Les particules _do not_ et _does not_ peuvent se contracter en _don't_ et _doesn't_
 
 A noter que c'est le _does_ qui prend la marque de la troisième personne et non la base verbale
 
 #example([*He does not cry*])
-
-=== Forme interrogative
 
 Une phrase interrogative avec le _present simple_ se forme avec *do/does + sujet + base verbale*, ainsi on intervertit le verbe et l'auxiliaire _do_
 
@@ -273,35 +286,27 @@ On utilise les marqueurs de temps suivant :
 - _a long time ago_ : il y a longtemps
 - _once upon a time_ : il était une fois
 
-=== Forme affirmative
-
 La forme affirmative du prétérit se forme de la manière suivante *sujet + base verbale -ed + complément*
 
 #example([She work#text[*ed*] hard])
 
 #warning([Beaucoup de verbes comme _to take_ sont irréguliers en anglais, ainsi il est important de les connaître (voir #todo())])
 
-=== Forme négative
-
 La forme négative du prétérit se forme avec *sujet + did not + base verbale + complément*. _Did not_ peut se contracter en _didn't_.
 
 #example([
-  He *dit not* answer the phone
+  He *did not* answer the phone
 ])
-
-=== Forme interrogative
 
 La forme interrogative se forme avec *did + sujet + base verbale + complément*
 
 #example([
-  *Did* you talk to her yesterday?
+  *Did* you talk with her yesterday?
 ])
 
 == Future simple
 
 Le _future simple_ exprime un élément factuel du futur
-
-=== Forme affirmative
 
 La forme affirmative du _future simple_ se forme avec *sujet + will + base verbale + complément*. Le _will_ peut être contracté en _'ll_.
 
@@ -309,13 +314,122 @@ La forme affirmative du _future simple_ se forme avec *sujet + will + base verba
   I *will* do that later _ou_ I*'ll* do that later
 ])
 
-=== Forme négative
+La forme négative du _future simple_ se forme avec *sujet + will + not + base verbale + complément*. Le _will not_ peut être contracté en _wont_.
 
-=== Forme interrogative
+#example([
+  I *will not* do that later _ou_ I *wont* do that later
+])
 
-== Present perfect
+La forme interrogative se forme avec *will + sujet + base verbale + complément*
 
-== Past perfect
+#example([
+  *Will* you walk tomorrow?
+])
+
+#box(height: 1em)
+#heading([Temps continuous], supplement: [conjug],)
+
+Les temps _continuous_ sont utilisés pour exprimer des actions au cours de déroulement au cours de l'énonciation
+
+Dans les temps continuous on utilisera l'auxiliaire _be_
+
+Le participe présent est la forme en *-ing* d'un verbe
+
+Si le verbe finit par un couple voyelle-consonne, on double la consonne puis ont ajoute _-ing_.
+
+#example([
+  *to swim* devient *swimming*
+])
+
+De manière générale les verbes d'états et de perception ne se mettent pas à la forme continue
+
+== Present continuous
+
+On utilise le _present continuous_ pour des actions en cours de déroulement dans le présent
+
+Sa forme affirmative se forme de la manière suivante *sujet + be* (au présent) *+ base verbale -ing + complément*
+
+#example([
+  I *am* walk#text([*ing*])
+])
+
+Sa forme négative se forme de la manière suivante *sujet + be* (au présent) *not + base verbale -ing + complément*
+
+#example([
+  I *am not* walk#text([*ing*])
+])
+
+Sa forme interrogative se forme de la manière suivante *be* (au présent) *sujet + base verbale -ing + complément*
+
+#example([
+  *Am* I walk#text([*ing*])?
+])
+
+== Past continuous
+
+On utilise le _past continuous_ pour des actions en cours de déroulement dans le passé
+
+Sa forme affirmative se forme de la manière suivante *sujet + be* (au passé) *+ base verbale -ing + complément*
+
+#example([
+  He *was* walk#text([*ing*])
+])
+
+Sa forme négative se forme de la manière suivante *sujet + be* (au passé) *not + base verbale -ing + complément*
+
+#example([
+  Here *was not* walk#text([*ing*])
+])
+
+Sa forme interrogative se forme de la manière suivante *be* (au passé) *+ sujet + base verbale -ing + complément*
+
+#example([
+  *Was* he walk#text([*ing*])?
+])
+
+== Future continuous
+
+On utilise le _future continuous_ pour des actions en cours de déroulement dans le futur
+
+Sa forme affirmative se forme de la manière suivante *sujet + will be + base verbale -ing + complément*
+
+#example([
+  He *will be* walk#text([*ing*])
+])
+
+Sa forme négative se forme de la manière suivante *sujet + will not be + base verbale -ing + complément*
+
+#example([
+  He *will not be* walk#text([*ing*])
+])
+
+Sa forme interrogative se forme de la manière suivante *will + sujet + be + base verbale -ing + complément*
+
+#example([
+  *Will* he *be* walk#text([*ing*])?
+])
+
+#box(height: 1em)
+#heading([Temps perfect], supplement: [conjug],)
+
+Les temps _perfect_ créent une connexion entre le moment de l'énonciation
+
+Ainsi la principale différence entre les temps _perfect  continuous_ et les temps _perfect simple_ sont que l'action est toujours au cours durant les 
+
+== Present perfect simple
+
+== Present perfect contineous
+
+== Past perfect simple
+
+== Past perfect contineous
+
+== Future perfect simple
+
+== Future perfect contineous
+
+#box(height: 1em)
+#heading([Autres temps], supplement: [conjug],)
 
 == Conditionnel
 
