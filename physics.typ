@@ -3287,13 +3287,77 @@ C'est gagné!
 #box(height: 1em)
 #heading([Incertitudes], supplement: [annex])
 
-#todo()
+En physique les mesures sont souvent associées à des incertitudes sur ces dernières. Il est important de les propager pour pouvoir vérifier nos résultats et les confronter à la réalité.
+
+On parle de *mesurande* pour la grandeur que l'on souhaite mesurer et de *mesurage* pour le processus de mesure.
+
+Les erreurs peuvent être dues à des erreurs aléatoires (bruit des mesures) ou des erreurs systématiques (une erreur de montage par exemple)
 
 == Incertitude type A
 
+Une incertitude de type A correspond à une multiplication de mesure dans les mêmes conditions, on note $x_1, dots, x_n$ ces mesures
+
+Ensuite on fait la moyenne $expval(x) = 1/N sum_(i=1)^n x_i$
+
+Mais cette moyenne varie d'un échantillon à un autre donc $expval(x)$ possède aussi une incertitude :
+
+#theorem([Incertitude d'une moyenne],[
+  On a $ u(expval(x)) = sigma/sqrt(N) $
+  l'incertitude sur cette moyenne avec $sigma = sqrt(1/(N - 1) sum (x_i - expval(x))^2)$ l'écart type expérimental 
+])
+
+Ainsi plus on réalise de mesures plus elle sera précise au final mais dans la pratique on ne réalise pas souvent des miliers de mesure donc on peut avoir recours à des méthodes de régression linéaires ou Monte Carlo
+
 == Incertitude type B
 
+Dans le cas des incertitudes de type B on détermine l'incertitude à partir des propriétés de l'outil qui servent à réaliser les mesures
+
+Pour une règle on prendra une demi graduation
+
+Pour une horloge qui bat la seconde on prendra $qty("0.5","s")$
+
+De manière plus générale pour avoir l'incertitude d'un outil il est intéressant de prendre la notice
+
+== Composer des incertitudes
+
+On est souvent amenés à avoir plusieurs incertitudes sur une valeur finale ainsi il est intéressant de pouvoir composer des incertitudes
+
+=== Somme d'incertitudes
+
+Supposons que $x = a + b$ (ou $x = a - b$)
+
+On a alors $u(x) = sqrt((u(a))^2 + (u(b))^2)$
+
+=== Produit d'incertitudes
+
+Supposons que $x = a b$ (ou $x = a/b$)
+
+On a alors $u(x)/x = sqrt((u(a)/a)^2 + (u(b)/b)^2)$ souvent réécrite$u(x)= x sqrt((u(a)/a)^2 + (u(b)/b)^2)$
+
+#warning([Il ne faut pas oublier le $x$ dans l'expression sinon on en perd tout son sens])
+
 == Chiffres significatifs
+
+On notera un résultat de mesure par $X = (x plus.minus Delta x)$ unité
+
+On fera notamment attention à garder un nombre cohérent de chiffres significatifs avec les données de l'énoncé : on ne garde que le même nombre de chiffres significatifs que la valeur qui en a le moins dans l'énoncé.
+
+De plus on n'arrondit jamais une incertitude à l'inférieur et on garde au maximum ou deux chiffres significatifs sur l'incertitude
+
+#warning([On ne met jamais plus de chiffres significatifs à l'incertitude qu'à la valeur : ça n'as pas de sens!])
+
+== Écart normalisé
+
+Pour regarder la compatibilité d'une valeur on va regarder les intervalles de confiance et considérér *l'écart normalisé* ou *z-score*
+
+#theorem([Expression de l'écart normalisé],
+[On a $ z = abs(x_1 - x_2)/(sqrt(u(x_1)^2 + u(x_2)^2)) $])
+
+Si $abs(z) > 1$ il y a $68%$ de chance que les valeurs soient incompatibles
+Si $abs(z) > 2$ il y a $95%$ de chance que les valeurs soient incompatibles
+Si $abs(z) > 3$ il y a $99%$ de chance que les valeurs soient incompatibles
+
+Ainsi on comparera souvent cette valeur à $2$ pour avoir un intervalle de confiance à $95%$
 
 #box(height: 1em)
 #heading([Équations différentielles], supplement: [annex]) <equa>
