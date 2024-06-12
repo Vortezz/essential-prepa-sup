@@ -146,6 +146,16 @@
       ),
     );
 
+#let algos = state("algos", ())
+
+#let algo(title, code) = {
+  context {
+    let value = here().position()
+    algos.update(s => s + ((title, code.lang, value),))
+  }
+  code
+}
+
 #let demo(t) = box(
   stroke: (
     left: 5pt + gray,
@@ -423,6 +433,57 @@ Une fonction est dite *pure* lorsqu'elle est déterministe et sans effets de bor
 #box(height: 1em)
 #heading([Stratégies algorithmiques], supplement: [theory],)
 
+== Algorithmes gloutons
+
+== Diviser pour régner
+
+Le *tri fusion* est un tri en $Theta (n log(n))$, on sépare les listes puis on les trie en interne et on fusionne les deux listes triées
+
+Pour l'implémenter en OCaml on fait :
+
+#algo([Tri fusion],
+```ml
+let rec partition = function
+  | h1::h2::t -> let l,r = partition t in h1::l, h2::r
+  | lst -> lst, [];;
+
+let rec merge l1 l2 = match l1,l2 with
+  | (h1::t1), (h2::t2) when h1 <= h2 -> h1::(merge t1 l2)
+  | (h1::t1), (h2::t2) -> h2::(merge l1 t2)
+  | l1, [] -> l1;; 
+
+let rec fusion_sort lst = match split lst with
+  | lst, [] -> lst
+  | l1, l2 -> merge (fusion_sort l1) (fusion_sort l2)
+```)
+
+Analysons l'algorithme du tri fusion, en regardant le nombre de comparaisons on retrouve une complexité en $Theta (n log(n))$ pour ces étapes
+
+Plus mathématiquement on a pour $n >= 2$, $u_floor(n/2) + u_ceil(n/2) + n/2 <= u_n <= u_floor(n/2) + u_ceil(n/2) + n$ d'où on a $u_n = u_floor(n/2) + u_ceil(n/2) + Theta (n)$
+
+#todo(text: [(Suites récurrentes d'ordre 1)])
+
+#theorem([Suites "diviser pour régner"],[
+  Soit $a_1, a_2$ deux réels positifs vérifiant $a_1 + a_2 >= 1$ et $(b_n)_(n in NN)$ une suite positive et croissante et $(u_n)_(n in NN)$ une suite vérifiant :
+
+  $ u_n = a_1 u_floor(n/2) + a_2 u_ceil(n/2) + b_n $
+
+  Ainsi en posant $alpha = log_2 (a_1 + a_2)$, on a :
+
+  - Si $(b_n) = Theta (n^alpha)$, alors $(u_n) = Theta(n^alpha log(n))$
+  - Si $(b_n) = Theta (n^beta)$ avec $beta$ < $alpha$, alors $(u_n) = Theta(n^alpha)$
+  - Si $(b_n) = Theta (n^beta)$ avec $beta$ > $alpha$, alors $(u_n) = Theta(n^beta)$
+])
+
+#warning([A savoir que si on retombe sur une relation de récurrence connue on peut donner directement la complexité])
+
+Pour l'implémenter en C on fait de la manière suivante :
+
+#todo(text: [(Réecrire)])
+
+#algo([Tri fusion],```c
+```)
+
 #box(height: 1em)
 #heading([SQL], supplement: [theory],)
 
@@ -697,14 +758,33 @@ On précise les cardinalités :
 
 - $0,n$ en liaison avec un nombre quelconque d'entités
 
+#counter(heading).update(0)
+#set heading(numbering: none)
+
+#pagebreak()
+
+#context {
+  heading([Liste d'algorithmes])
+  columns(2, 
+    for a in algos.final() {
+      link(a.at(2), 
+      box(
+        grid(columns: 5, 
+          align(left, a.at(0)), 
+          box(width: 4pt), 
+          image("global/languages/" + a.at(1) + ".svg", width: 10pt), 
+          box(width: 100%), 
+          align(right, [#a.at(2).page])), width: 100%))
+    } 
+  )
+}
+
 #pagebreak()
 
 #{
-  counter(heading).update(0)
-  set heading(numbering: none)
   heading([Table des matières])
   box(height: 0pt)
   show heading: none
-  columns(2, outline(title: [Table des matières], indent: 10pt, fill: [], depth: 4))
+  columns(2, outline(title: [Table des matières], indent: 10pt, fill: [], depth: 4,target: heading.where(bookmarked: auto)))
   pagebreak(weak: true)
 }

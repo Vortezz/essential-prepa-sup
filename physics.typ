@@ -3376,6 +3376,8 @@ Ainsi on comparera souvent cette valeur à $2$ pour avoir un intervalle de confi
 
 // Tau/63%/Tangentes
 
+== Autres équations
+
 #box(height: 10pt)
 
 #pagebreak()
