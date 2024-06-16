@@ -3330,24 +3330,76 @@ C'est gagné!
 #box(height: 1em)
 #heading([Analyse dimensionnelle], supplement: [annex])
 
-#todo()
-
 == Système SI
+
+La physique est dotée du système international d'unités qui permet de normaliser les unités utilisées en physique. On a ainsi les unités de base suivantes :
+
+#align(center,
+  table(
+    columns: (180pt, 100pt, 100pt),
+    rows: (18pt),
+    align: center,
+    [*Grandeur*],
+    [*Unités SI*],
+    [*Symbole*],
+    [Distance],
+    [Mètre ($unit("m")$)],
+    $L$,
+    [Masse],
+    [Kilogramme ($unit("kg")$)],
+    $M$,
+    [Temps],
+    [Seconde ($unit("s")$)],
+    $T$,
+    [Intensité électrique],
+    [Ampère ($unit("A")$)],
+    $I$,
+    [Température],
+    [Kelvin ($unit("K")$)],
+    $Theta$,
+    [Quantité de matière],
+    [Mole ($unit("mol")$)],
+    $N$,
+    [Intensité lumineuse],
+    [Candela ($unit("cd")$)],
+    $J$,
+  ),
+)
+
+Ainsi toute grandeur physique peut être décomposée en un produit de puissances de ces unités de base.
 
 == Résoudre une équation de dimension
 
+Avant d'écrire une équation, il est important de vérifier que les dimensions des deux membres de l'équation sont compatibles.
+
+On ne peut pas additionner des grandeurs de dimensions différentes.
+
+#warning([Il est important de vérifier les dimensions des grandeurs physiques pour éviter des erreurs de calcul, notamment à la fin du calcul pour vérifier l'homogénéité])
+
+Mais on peut aussi trouver la dimension d'une grandeur en réalisant une équation de dimension.
+
+Soit une grandeur $X$ dépendant potentiellement de $A$, $B$ et $C$.
+
+On a alors $[X] = A^a B^b C^c$, or on sait que $X$ dépend de $Y$ et $Z$ de dimensions $[Y] = A B C^y$ et $[Z] = A^z B C$ tel que $X = Y/Z$
+
+Ainsi en identifiant les dimensions on a $[X] = A^(1 - z) C^(y - 1)$
+
 == Homogénéité
 
-#table(
-  columns: (100pt, 100pt, 100pt,100pt),
-  rows: (18pt),
-  align: center,
-  [*Unité*],
-  [*Unités SI*],
-  [*Dimension*],
-  [*Relation*],
-  [Volts ($unit("V")$)],
-  $$
+#todo(text: [(Remplir le tableau suivant)])
+
+#align(center,
+  table(
+    columns: (100pt, 100pt, 100pt,100pt),
+    rows: (18pt),
+    align: center,
+    [*Unité*],
+    [*Unités SI*],
+    [*Dimension*],
+    [*Relation*],
+    [Volts ($unit("V")$)],
+    $$
+  ),
 )
 
 #box(height: 1em)
