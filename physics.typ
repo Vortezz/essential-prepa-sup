@@ -2715,7 +2715,7 @@ On a l'expérience des rails de Laplace :
 
 #figure(image("physics/magnet/laplace.png", width: 30%))
 
-#theorem([Force de Laplace],[
+#theorem([Forces de Laplace],[
   Un barreau rectiligne conducteur de longueur $l$ parcouru par une intensité $I$ dans un champ magnétique $arrow(B)$ subit une force $ arrow(F_L) = I l arrow(u) and arrow(B) $ avec $arrow(u)$ un vecteur unitaire orienté dans le sens du courant.
 ])
 
@@ -2862,6 +2862,72 @@ Ainsi deux circuits proches l'un de l'autres peuvent présenter un couplage magn
 ])
 
 En électricité on notera une impédance mutuelle par un #todo(text: [(Faire un schéma et la puissance reçue avec le schema)])
+
+== Influence totale
+
+#figure(image("physics/magnet/transformer.svg", width: 50%))
+
+On peut guider les lignes de champs en utilisant un guide magnétique
+
+#theorem([Expression de l'auto inductance],[
+  Pour deux bobines de même longueur $l$ avec $N_1$ et $N_2$ spires on a :
+
+  $ L_1 = mu_0 S N_1^2/l $
+])
+
+#demo([
+  On a $B_1 = mu_0 n_i i_1 = mu_0 N_1/l i_1$ et $Phi_"spire" = B_1 S$ d'où $Phi_"N,spire" = N_1 Phi_"spire" = mu_0 S N_1^2/l i_1$ donc on retrouve bien $L_1$
+])
+
+#theorem([Expression de la mutuelle],[
+  Pour deux bobines de même longueur $l$ avec $N_1$ et $N_2$ spires on a :
+
+  $ M = mu_0 S (N_1 N_2)/l $
+])
+
+#demo([
+  On a $Phi_(B_1 -> "bobine 2") = N_2 Phi_(B_1 -> "1 spire de 2")$ avec $Phi_(B_1 -> "1 spire de 2") = mu_0 S (N_1)/l i_1$
+
+  D'où on a $Phi_(B_1 -> "bobine 2") = mu_0 S (N_1 N_2)/l i_1$ d'où l'expression de $M$
+])
+
+On remarque aussi que $M^2 = L_1 L_2$
+
+La mutuelle change de signe si on pivote de $qty("90", "d")$
+
+Dans la matière en réalité, $mu_0$ n'est pas constant et dépend du matériau choisi
+
+Dans les faits on aura des pertes dans les matériaux avec $M_"réel" < M_"th"$
+
+Dans le cas de l'intéraction totale on a $abs(e_1/e_2) = N_1/N_2$ car $e_1 = plus.minus e_2$
+
+On utilise ce genre de dispositifs pour faire des transformateurs pour passer de basse tension à haute tension.
+
+
+#box(height: 1em)
+#heading([Lois de l'induction : le cas des circuits mobiles], supplement: [magne])
+
+== Force électromotrice d'un circuit en mouvement
+
+En considérant un conducteur se déplaçant à une vitesse $arrow(v_0)$, on a $e = - (delta Q)/dt$ avec $delta Q$ le *flux coupé* (HP)
+
+#theorem([Force électromotrice],[
+  On a $e = - ddt(Phi)$
+])
+
+== Rail de Laplace générateur
+
+En considérant un rail de Laplace, on analyse un système de la manière suivante :
+
+1. On fait une mise en équation mécanique
+2. On fait une mise en équation électrique
+3. On fait une équation différentielle et un bilan de puissance
+
+Ensuite on réalise un bilan de puissances :
+
+On multiplie par $dot(x)$ ou $i$ puis on obtient un bilan qui peut faire intervenir $R i^2$ la puissance dissipée par effet Joule, ou encore $ddt(cal(E)_c)$ comme termes
+
+Il peut aussi y avoir des termes en plus, comme la puissance fournie par l'opérateur
 
 #pagebreak()
 
