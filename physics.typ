@@ -3428,21 +3428,128 @@ Ainsi on comparera souvent cette valeur à $2$ pour avoir un intervalle de confi
 #box(height: 1em)
 #heading([Équations différentielles], supplement: [annex]) <equa>
 
-#todo()
+En physique on est souvent amené à résoudre des équations différentielles pour modéliser des phénomènes physiques. On peut les résoudre de manière analytique ou numérique.
+
+Une résolution numérique est réalisée avec la méthode d'Euler (voir les fiches TP).
 
 == Équations linéaires d'ordre 1
 
+#theorem([Équation différentielle linéaire d'ordre 1],[
+  La forme générale d'une équation différentielle linéaire d'ordre 1 est $ y' + 1/tau y = y_infinity/tau $ avec $y_infinity$ une constante
+])
+
+On dit que $tau$ est le *temps caractéristique* du système.
+
+#theorem([Forme générale de la solution],[
+  La solution générale de cette équation est $ y(t) = y_infinity + A exp^(-t/tau) $
+  avec $A$ obtenu par les conditions initiales
+])
+
 == Équations linéaires d'ordre 2
+
+Dans le cadre d'un *oscillateur harmonique* on a :
+
+#theorem([Équation différentielle linéaire d'ordre 2],[
+  La forme générale d'une équation différentielle linéaire d'ordre 2 est $ y'' + omega_0^2 y = omega_0^2 y_infinity $ avec $y_infinity$ une constante
+])
+
+#warning([On fera attention au $+$ sans quoi l'oscillateur n'est pas harmonique])
+
+On dit que $omega_0$ est la *pulsation propre* du système.
+
+#theorem([Forme générale de la solution],[
+  La solution générale de cette équation est $ y(t) = y_infinity + A cos(omega_0 t) + B sin(omega_0 t) $
+  avec $A$ et $B$ obtenus par les conditions initiales
+])
+
+Dans le cas d'un *oscillateur amorti* on a :
+
+#theorem([Équation différentielle linéaire d'ordre 2 amortie],[
+  La forme générale d'une équation différentielle linéaire d'ordre 2 est $ y'' + omega_0/Q y' + omega_0^2 y = omega_0^2 y_infinity $ avec $y_infinity$ une constante
+])
+
+On dit que $Q$ est le *facteur de qualité* du système et $omega_0$ la *pulsation propre* du système.
+
+Dans les systèmes avec beaucoup d'oscillations on a $Q$ le nombre d'oscillations avant l'arrêt.
+
+Selon la valeur de $Q$ on a différents régimes :
+
+- Si $Q < 1/2$ on a un *régime apériodique*
+
+- Si $Q = 1/2$ on a un *régime critique*
+
+- Si $Q > 1/2$ on a un *régime pseudo-périodique*
+
+Ces différents régimes sont en fait liés au discriminant du polynôme caractéristique de l'équation différentielle, on retrouve donc le cadre des mathématiques.
+
+=== Régime apériodique
+
+#theorem([Régime apériodique],[
+  Pour un régime apériodique on a $ y(t) = y_infinity + A e^(-t/tau_1) + B e^(-t/tau_2) $ avec $A$ et $B$ obtenus par les conditions initiales
+])
+
+On trouve $tau_1$ et $tau_2$ en résolvant le polynôme caractéristique de l'équation différentielle avec $tau_1 = -1/r_1$ et $tau_2 = -1/r_2$
+
+=== Régime critique
+
+#theorem([Régime critique],[
+  Pour un régime critique on a $ y(t) = y_infinity + (A + B t )e^(-t/tau) $ avec $A$ et $B$ obtenus par les conditions initiales
+])
+
+On trouve $tau$ en résolvant le polynôme caractéristique de l'équation différentielle avec $tau = -1/r$
+
+=== Régime pseudo-périodique
+
+#theorem([Régime pseudo-périodique],[
+  Pour un régime pseudo-périodique on a $ y(t) = y_infinity + (A cos(omega t) + B sin(omega t)) e^(-t/tau) $ avec $A$ et $B$ obtenus par les conditions initiales
+])
+
+On trouve $omega$ et $tau$ en résolvant le polynôme caractéristique de l'équation différentielle avec ses solutions $x = -1/tau plus.minus i omega$
+
+#warning([On ne peut plus trouver $tau$ le temps caractéristique avec les méthodes qui seront développées ensuite, mais avec le décrément logarithmique])
 
 == Résolution avec les complexes
 
-// Voir chapitre sur le RSF
+On peut résoudre une équation différentielle en se souvenant que $ddt(underline(i)) = j omega underline(i)$
+
+Ainsi on peut réécrire une équation différentielle sous forme complexe.
+
+On rappelle aussi que $cos(omega t) = e^(j omega t)$ et $sin(omega t) = - omega e^(j omega t)$
+
+Ainsi on peut obtenir l'expression de l'amplitude avec le module de la solution complexe et la phase avec l'argument de la solution complexe.
 
 == Temps caractéristique
 
-// Tau/63%/Tangentes
+Il existe plusieurs manières de trouver le temps caractéristique
+
+=== Méthode des tangentes
+
+#graph(funcs: (
+  x => 1 - calc.exp(-x),
+  x => if (x < 1) { return x } else {return 1},
+), domain: (0, 5), lines: (1, ))
+
+Le point d'intersection de la tangente en $0$ avec la valeur finale donne le temps caractéristique
+
+=== Méthode des 63%
+
+#graph(funcs: (
+  x => 1 - calc.exp(-x),
+), domain: (0, 5), lines: (0.63, ))
+
+Il est aussi possible de trouver le temps caractéristique en regardant le temps pour atteindre $63%$ de la valeur finale
+
+=== Décrément logarithmique
+
+Dans le cas d'un régime pseudo-périodique on peut aussi trouver le temps caractéristique avec le décrément logarithmique (voir chapitre sur le RSF)
 
 == Autres équations
+
+Si on a une équation qui ne rentre pas dans ce cadre :
+
+- On peut essayer de la linéariser pour la résoudre
+
+- On peut intégrer des deux côtés pour essayer de la résoudre
 
 #box(height: 10pt)
 
