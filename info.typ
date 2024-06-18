@@ -3,7 +3,7 @@
 #import "@local/physica:0.9.3": *
 #import "@local/cetz:0.2.2": *
 
-// http://cdn.sci-phy.org/mp2i/poly_cours.pdf page 43
+// http://cdn.sci-phy.org/mp2i/Cours-A4.pdf 66
 
 #let project(title: "", authors: (), date: none, body) = {
   set document(author: authors.map(a => a.name), title: "Essentiel d'informatique")
@@ -341,6 +341,10 @@ Ainsi pour appeller une fonction on fait :
 int resp = my_func(12, 14);
 ```
 
+#warning([
+  Les variables sont copiées lors de l'appel de fonction
+])
+
 On peut déclarer une fonction avant de donner son code mais juste sa signature avec :
 
 ```c
@@ -356,7 +360,7 @@ Pour initialiser un tableau on a les manières suivantes :
 ```c
 int[4] test = {0, 1, 2, 3}; // Initialise un tableau de taille 4 avec 0,1,2,3
 int[] test = {0, 1, 2, 3}; // Initialise un tableau avec 0,1,2,3 (avec 4 éléments)
-int[4] test = {0}; // Initialise un tableau de taille 4 avec 0,0,0,0
+int[4] test = {0, 1}; // Initialise un tableau de taille 4 avec 0,1,0,0 (les autres valeurs sont à 0)
 ```
 
 Il n'est pas obligé de donner la taille d'un tableau elle sera déterminée au moment de l'exécution
@@ -370,6 +374,97 @@ Pour affecter dans une case de tableau on fait :
 ```c
 test[1] = test[2] // On met dans la case 1 la valeur de la case 2
 ```
+
+Pour faire des tableaux de tableaux on fait :
+
+```c
+int[4][4] test = {{0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11}, {12, 13, 14, 15}}; // Initialise un tableau de taille 4x4 avec les valeurs
+int[4][4] test ={ {0} }; // Initialise un tableau de taille 4x4 avec des 0
+int [][4] test = { {0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11} }; // Initialise un tableau de taille 3x4 avec les valeurs
+```
+
+Comme pour les tableaux on peut initialiser partiellement un tableau de tableaux
+
+== Pointeurs
+
+Toute variable en C est une adresse mémoire, on peut donc récupérer cette adresse avec `&` :
+
+```c
+int a = 12;
+// b est l'adresse mémoire de a
+int * b = &a;
+```
+
+Il est possible de récupérer la valeur d'une adresse mémoire avec `*` (*déréférencement*) :	
+
+```c
+int a = 12;
+int * b = &a;
+// c est la valeur de a
+int c = *b;
+```
+
+On remarque donc que un pointeur a un type `type * var`
+
+Il est aussi possible de prendre l'adresse d'un pointeur, ainsi on aura un `type ** var` (généralisable...)
+
+Si on ne connaît pas l'adresse d'un pointeur on peut le déclarer avec `type * var = NULL`
+
+#warning([
+  Il ne faut SURTOUT PAS déréférencer un pointeur `NULL`, ou on aura une erreur de segmentation (segmentation fault)
+])
+
+Il est possible d'allouer de la mémoire avec `malloc` :
+
+```c
+int * a = malloc(sizeof(int));
+
+int * tab = malloc(4 * sizeof(int)); // Alloue un tableau de 4 éléments
+
+int * tab2 = malloc(4 * sizeof(*tab2)); // Alloue un tableau de 4 éléments
+```
+
+L'appel à `malloc` renvoie un pointeur, et un pointeur `NULL` si il n'y a pas assez de mémoire (il peut donc être judicieux de vérifier si le pointeur est `NULL` sur des grosses allocations)
+
+L'appel à `sizeof` renvoie la taille en octets de l'élément passé en argument, on peut passer un type ou une variable.
+
+Après utilisation de `malloc` il est important de libérer la mémoire avec `free` quand on a fini d'utiliser la mémoire :
+
+```c
+int * a = malloc(sizeof(int));
+
+// Do code
+
+free(a);
+```
+
+#warning([
+  Il est important de libérer la mémoire après utilisation pour éviter les fuites mémoires (memory leaks) ou on finit avec un bluescreen
+])
+
+Il est ainsi possible de créer un tableau avec un malloc en modifiant la taille du tableau :
+
+```c
+int * tab = malloc(4 * sizeof(int)); // Alloue un tableau de 4 éléments
+```
+
+On pourra donc utiliser `tab[0]`, `tab[1]`, `tab[2]` et `tab[3]`...
+
+Quand on passe un tableau à une fonction on passe un pointeur, ainsi on peut modifier le tableau dans la fonction
+
+#warning([
+  Ainsi une fonction NE PEUT renvoyer un tableau créé normalement, il faut ABSOLUMENT renvoyer un tableau qui a été alloué avec `malloc`
+])
+
+Les tableaux, et notamment les cases des tableaux étant des pointeurs, on peut récupérer l'adresse d'une case de tableau avec `&` :
+
+```c
+int tab[4] = {0, 1, 2, 3};
+
+int * a = &tab[2]; // a est l'adresse de la case 2
+```
+
+Il est intéressant de noter que `tab[2]` est équivalent à `*(tab + 2)` mais que l'arithmétique des pointeurs n'est pas au programme et qu'elle permet d'avoir des erreurs plus facilement
 
 #box(height: 1em)
 #heading([Introduction au OCaml], supplement: [intro],)
@@ -425,7 +520,202 @@ Une fonction est *déterministe* si le résultat est toujours le même avec les 
 
 Une fonction est dite *pure* lorsqu'elle est déterministe et sans effets de bord
 
+== Complexité
+
+On dit qu'un algorithme est en $O (f(n))$ *pire cas* si il existe une constante $k$ telle que pour tout $n$ assez grand, le nombre d'opérations est inférieur à $k f(n)$
+
+On dit qu'un algorithme est en $Omega(f(n))$ *meilleur cas* si il existe une constante $k$ telle que pour tout $n$ assez grand, le nombre d'opérations est supérieur à $k f(n)$
+
+On dit qu'un algorithme est en $Theta(f(n))$ *cas moyen* si il est en $O(f(n))$ et en $Omega(f(n))$
+
+On parle alors :
+
+- $O(1)$ pour une complexité *constante*
+
+- $O(log(n))$ pour une complexité *logarithmique*
+- $O(n)$ pour une complexité *linéaire*
+- $O(n log(n))$ pour une complexité *quasi-linéaire*
+- $O(n^2)$ pour une complexité *quadratique*
+- $O(k^n)$ pour une complexité *exponentielle*
+
 == Algorithmes de tri
+
+En informatique on a souvent besoin de trier des listes, on a plusieurs algorithmes pour cela
+
+#theorem([Tri stable],[
+  Un tri est dit *stable* si l'ordre des éléments égaux est conservé
+])
+
+=== Tri par sélection
+
+Le par sélection est l'algorithme le plus simple de tri, on prend le minimum et on le met en tête de liste.
+
+Ainsi on a un invariant de boucle : la liste est triée jusqu'à l'indice $i$
+
+Pour l'implémenter en C on fait :
+
+#algo([Tri par sélection],
+```c
+void selection_sort(int arr[], int n) {
+  for (int i = 0; i < n; i++) {
+    // Les i premiers éléments sont bien triés
+    int min_i = i;
+
+    for (int j = i+1; j<n; j++) {
+      if (arr[j] < arr(min_i)) {
+        min_i = j;
+      }
+    }
+
+    // On échange les éléments en i et min_i
+    int tmp = arr[i];
+    arr[i] = arr[min_i];
+    arr[min_i] = tmp;
+  }
+}
+```)
+
+Le tri par sélection est en $O(n^2)$, on a $n$ comparaisons pour le premier élément, $n-1$ pour le second, etc.
+
+Le tri par sélection a donc comme inconvéniant d'avoir une complexité quadratique et de ne pas être stable
+
+=== Tri bulle
+
+Le tri bulle est un algorithme de tri simple, on compare les éléments deux à deux et on les échange si ils ne sont pas dans le bon ordre, comme des bulles qui remontent à la surface
+
+On peut réaliser un tri pierre en descendant les éléments au lieu de les monter
+
+Pour l'implémenter en C on fait :
+
+#algo([Tri bulle],```c
+let bubble_sort(int arr[], int n) {
+  for (int i = 0; i < n; i++) {
+    // Les i premiers éléments sont bien passés
+    int k_last_perm = n-1;
+    int smallest = arr[n-1];
+
+    for (int j = n-1; j > i; j--) {
+      if (arr[j-1] <= smallest) {
+        // On change de bulle
+        arr[j] = smallest;
+        smallest = arr[j-1];
+      } else {
+        // On fait descendre la bulle
+        arr[j] = arr[j-1];
+        k_last_perm = j - 1;
+      }
+    }
+
+    arr[i] = smallest;
+    // On n'a pas besoin de regarder les éléments entre i+1 et k_last_perm car on n'a fait aucune modification
+    i = k_last_perm + 1;
+  }
+}
+```)
+
+Le tri bulle a une complexité en $O(n^2)$, on a $n$ comparaisons pour le premier élément, $n-1$ pour le second, etc, mais cette complexité est rarement atteinte. De plus le tri bulle est stable
+
+=== Tri par insertion
+
+Le tri par insertion est un algorithme de tri qui consiste à insérer un élément à sa place dans une liste triée (les éléments précédents sont déjà triés mais pas forcément à leur place définitive)
+
+Pour l'implémenter en C on fait :
+
+#algo([Tri par insertion],```c
+int insertion_sort(int arr[], int n) {
+  for (int i = 0; i < n; i++) {
+    // Les i premiers éléments sont bien triés
+    int j = i;
+    int elem = arr[i];
+
+    for (; j>0 && elem < arr[j-1]; j--) {
+      arr[j] = arr[j-1];
+    }
+
+    arr[j] = elem;
+  }
+}
+```)
+
+Le tri par insertion a une complexité en $O(n^2)$, on a $n$ comparaisons pour le premier élément, $n-1$ pour le second, etc, mais cette complexité est rarement atteinte. De plus le tri par insertion est stable
+
+=== Tri rapide
+
+Le tri rapide est un algorithme de tri qui consiste à choisir un pivot et à partitionner la liste en deux parties, les éléments plus petits que le pivot et les éléments plus grands que le pivot, on réitère sur les deux listes
+
+Pour l'implémenter en C on fait :
+
+#algo([Tri rapide],```c
+void quick_sort(int * arr, int n) {
+  if (n <= 1) { // Déjà trié
+    return;
+  }
+
+  int pivot = partition(arr, n);
+  quick_sort(arr, pivot);
+  quick_sort(&arr[pivot+1], n-pivot-1);
+}
+```)
+
+Tout l'intérêt du tri rapide est dans la fonction `partition` qui permet de partitionner la liste en deux parties
+
+#todo(text: [(Écrire la fonction partition)])
+
+== Algorithmes classiques
+
+=== Dichotomie
+
+La dichotomie est un algorithme de recherche efficace : on prend le milieu de la liste et on regarde si l'élément est plus grand ou plus petit, on réitère sur la moitié de la liste etc...
+
+Pour l'implémenter en C on fait de manière récursive :
+
+#algo([Dichotomie (Récursive)],```c
+let index(int * arr, int n, int elem) {
+  if (n == 0) {
+    return -1; // On ne peut pas trouver
+  }
+
+  int m = n/2;
+
+  if (arr[m] == elem) { // On a trouvé!
+    return m;
+  } else if (arr[m] > m) { // L'élément se situe peut être dans la partie gauche
+    return index(arr, m, elem);
+  } else { // L'élément se situe peut être dans la partie droite
+    int idx = index(&arr[m+1], n-m-1, elem);
+
+    if (idx != -1) {
+      idx += m+1;
+    }
+
+    return idx;
+  }
+}
+```)
+
+On peut aussi faire de manière itérative :
+
+#algo([Dichotomie (Impérative)],```c
+let index(int * arr, int n, int elem) {
+  int l = 0, r = n;
+
+  while (l < r) { // On recherche dans le tableau avec deux compteurs
+    int m = (l+r)/2;
+
+    if (arr[m] == val) { // On a trouvé!
+      return m;
+    } else if (arr[m] > m) { // L'élément se situe peut être dans la partie gauche
+      r = m;
+    } else { // L'élément se situe peut être dans la partie droite
+      l = m + 1;
+    }
+  }
+
+  return -1; // Pas trouvé!
+}
+```)
+
+L'avantage de la dichotomie est qu'elle a une complexité en $O(log(n))$ : elle permet donc une recherche efficace
 
 #box(height: 1em)
 #heading([Récursion], supplement: [theory],)
@@ -768,13 +1058,21 @@ On précise les cardinalités :
   columns(2, 
     for a in algos.final() {
       link(a.at(2), 
-      box(
-        grid(columns: 5, 
-          align(left, a.at(0)), 
-          box(width: 4pt), 
-          image("global/languages/" + a.at(1) + ".svg", width: 10pt), 
-          box(width: 100%), 
-          align(right, [#a.at(2).page])), width: 100%))
+        box(
+          grid(columns: 4, 
+            align(left, 
+              box(width: 100%, 
+                grid(columns: 3, 
+                  a.at(0), 
+                  box(width: 4pt), 
+                  image("global/languages/" + a.at(1) + ".svg", width: 10pt)
+                )
+              ) 
+            ), 
+            box(width: 0%), 
+            align(right, [#a.at(2).page])
+          ), 
+        width: 100%))
     } 
   )
 }
