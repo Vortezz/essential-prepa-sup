@@ -3,7 +3,7 @@
 #import "@local/physica:0.9.3": *
 #import "@local/cetz:0.2.2": *
 
-// http://cdn.sci-phy.org/mp2i/Cours-A4.pdf 66
+// http://cdn.sci-phy.org/mp2i/Cours-A4.pdf 92
 
 #let project(title: "", authors: (), date: none, body) = {
   set document(author: authors.map(a => a.name), title: "Essentiel d'informatique")
@@ -245,6 +245,8 @@ Il est possible de définir plusieurs variables en même temps :
 
 ```c
 int banana = apple = 12;
+int pear, orange = 14; // pear est non initialisée et orange vaut 14
+int potato = 12, tomato = 14; // potato vaut 12 et tomato vaut 14
 ```
 
 == Opérateurs
@@ -466,8 +468,329 @@ int * a = &tab[2]; // a est l'adresse de la case 2
 
 Il est intéressant de noter que `tab[2]` est équivalent à `*(tab + 2)` mais que l'arithmétique des pointeurs n'est pas au programme et qu'elle permet d'avoir des erreurs plus facilement
 
+Il est aussi possible de faire des tableaux de tableaux avec des pointeurs :
+
+```c
+int ** tab = malloc(4 * sizeof(int *)); // Alloue un tableau de 4 pointeurs
+```
+
+Enfin on peut aussi passer une fonction en argument d'une autre fonction :
+
+```c
+int my_func(int (*func)(int, int), int a, int b) {
+  return func(a, b);
+} // my_func prend une fonction en argument qui prend deux entiers et renvoie un entier
+```
+
+== Types construits
+
+#todo(text: [(Structures et unions)])
+
 #box(height: 1em)
 #heading([Introduction au OCaml], supplement: [intro],)
+
+== Expressions
+
+En OCaml on retrouve les types `int`, `float` (qui correspond au `double` du C) et `bool`.
+
+Pour les opérations arithmétiques *sur les entiers* on a :
+
+#align(center, table(
+  columns: (100pt, 140pt),
+  align: center,
+  [*Opération*],
+  [*En OCaml*],
+  [Addition],
+  [`a + b`],
+  [Soustraction],
+  [`a - b`],
+  [Multiplication],
+  [`a * b`],
+  [Division],
+  [`a / b`],
+  [Modulo],
+  [`a mod b`]
+))
+
+Pour les opérations arithmétiques *sur les flottants* on a :
+
+#align(center, table(
+  columns: (100pt, 140pt),
+  align: center,
+  [*Opération*],
+  [*En OCaml*],
+  [Addition],
+  [`a +. b`],
+  [Soustraction],
+  [`a -. b`],
+  [Multiplication],
+  [`a *. b`],
+  [Division],
+  [`a /. b`],
+  [Exponentiation],
+  [`a ** b`]
+))
+
+On notera que le modulo n'est pas défini pour les flottants et que l'exponentiation est définie pour les flottants
+
+On dispose aussi des fonctions mathématiques classiques, comme `sin`, `cos`, `tan`, `exp`, `log`, `sqrt`, `abs`, `acos`, `asin`, `atan`... avec `log` la fonction logarithme népérien
+
+Comme en C on a les opérateurs binaires `&&` (et logique), `||` (ou logique) et `not` (négation de l'expression suivante)
+
+Pour faire des comparaisons *sur des valeurs* on a `=` pour l'égalité, `<>` pour la différence, et `>`, `>=`, `<=`, `<` pour les comparaisons
+
+#warning([
+  En OCaml un `==` est une comparaison de référence (d'étiquette), il ne faut pas l'utiliser pour comparer des valeurs, et de même pour `!=`
+])
+
+== Typage fort
+
+On a pu remarquer notamment sur les entiers et float que le typage est fort : aucune conversion implicite n'est faite c'est à l'utilisateur de le faire
+
+Il n'est donc pas possible de faire `1 +. 2` mais il faut faire `1. +. 2.`
+
+Pour passer d'un type à un autre on utilise les fonctions `int_of_float`, `float_of_int`, `int_of_string`, `float_of_string`...
+
+== Définitions
+
+En OCaml le principe de variable n'existe pas réellement, on a des constantes, on ne peut pas modifier une variable à proprement parler
+
+Pour faire une *définition* on utilise `let` :
+
+```ocaml
+let a = 12;; (* Définit a comme étant 12 *)
+
+let b = 12 + a;; (* Définit b comme étant 24 *)
+```
+
+Il est possible de redéfinir une variable, mais on ne modifie pas la variable mais on en crée une nouvelle :
+
+```ocaml
+let a = 12;;
+
+let a = a + 1;; (* a est maintenant 13 *)
+```
+
+La mémoire est gérée différement qu'en C, par exemple avec le code suivant en C on a `b` qui est une copie de `a` :
+
+```c
+int a = 12;
+int b = a;
+```
+
+Alors qu'en OCaml `b` est une référence à `a`, si on modifie `a` on modifie `b` et inversement :
+
+```ocaml
+let a = 12;;
+let b = a;;
+```
+
+Il est possible de définir plusieurs variables en même temps :
+
+```ocaml
+let a = 12 and b = 14;; (* a est 12 et b est 14 *)
+```
+
+Il est aussi possible de faire des variables locales en utilisant `in` :
+
+```ocaml
+let a = 12 and b = 14 in
+    a + b;; (* a + b vaut 26, et a et b ne sont pas accessibles en dehors du bloc *)
+```
+
+Il est bien sûr possible d'imbriquer les `in` :
+
+```ocaml
+let a = 12 in
+    let b = 14 in
+        a + b;; (* a + b vaut 26, et a et b ne sont pas accessibles en dehors du bloc *)
+```
+
+== Fonctions
+
+Le OCaml est un langage fonctionnel, il est donc possible de définir des fonctions, de plusieurs manières différentes.
+
+La première manière est de définir une fonction d'une manière semblable à une variable :
+
+```ocaml
+let sum a b = a + b;; (* Définit une fonction sum qui prend deux arguments a et b et renvoie a + b *)
+```
+
+Il existe un mot clé `function` (qui ne peut prendre qu'un argument) pour définir une fonction anonyme, ainsi on peut faire :
+
+```ocaml
+let sum = function a -> function b -> a + b;; (* Définit une fonction sum qui prend deux arguments a et b et renvoie a + b *)
+```
+
+On remarque que pour passer plusieurs arguments avec `function` on utilise plusieurs `function`, ce qui peut être fastidieux
+
+Ainsi il existe le mot clé `fun` qui permet de définir une fonction de manière plus simple :
+
+```ocaml
+let sum = fun a b -> a + b;; (* Définit une fonction sum qui prend deux arguments a et b et renvoie a + b *)
+```
+
+Pour appeller une fonction on fait :
+
+```ocaml
+sum 12 14;; (* Renvoie 26 *)
+```
+
+Il faut faire attention au fait que chaque bloc est considéré comme un argument, ainsi on a les cas de figure suivants :
+
+```ocaml
+sum -12 12;; (* Erreur, on a -, 12 et 12 comme arguments *)
+sum (-12) 12;; (* Renvoie 0 *)
+```
+
+#warning([
+  Il est important de bien mettre des parenthèses pour les arguments négatifs, ou pour des appels intermédiaires
+])
+
+OCaml va déterminer tout seul la signature de la fonction, ainsi on peut faire :
+
+```ocaml
+let sum a b = a + b;; (* Définit une fonction sum qui prend deux arguments a et b et renvoie a + b *)
+(* sum : int -> int -> int *)
+```
+
+En analysant la signature de la fonction on peut voir que `sum` prend deux entiers et renvoie un entier
+
+Mais on peut aussi faire du polymorphisme, ainsi on peut faire :
+
+```ocaml
+let min a b = if a < b then a else b;; (* Définit une fonction min qui prend deux arguments a et b et renvoie le minimum *)
+(* min : 'a -> 'a -> 'a *)
+```
+
+Ainsi ici `min` prend deux arguments de même type et renvoie un argument du même type (il est aussi possible de faire du polymorphisme sur plusieurs types et d'avoir des `'b`, `'c`...)
+
+Il peut arriver qu'une fonction ait des effets de bord, ainsi elle peut renvoyer le type `unit` :
+
+```ocaml
+let nothing a = ();; (* Définit une fonction nothing qui prend un argument a et ne renvoie rien *)
+(* nothing : 'a -> unit *)
+```
+
+Il est aussi possible de ne pas prendre d'arguments :
+
+```ocaml
+let nothing = ();; (* Définit une fonction nothing qui ne prend pas d'arguments et ne renvoie rien *)
+(* nothing : unit *)
+```
+
+#warning([
+  Pour appeller une fonction qui ne prend pas d'arguments il faut mettre des parenthèses, sinon on aura une erreur (ici `nothing ()`)
+])
+
+Mais le mot clé `fonction` a un avantage : il permet de faire des *match* qui vont être des conditions sur les arguments :
+
+```ocaml
+let my_func a = function
+  | 0 -> 1 * a (* Si a est 0 on renvoie a *)
+  | 1 -> 2 * a (* Si a est 1 on renvoie 2a *)
+  | _ -> 3 * a;; (* Sinon on renvoie 3a *)
+(* my_func : int -> int -> int *)
+```
+
+Ainsi le mot clé fonction avec un match permet de prendre un argument mais sans le nommer
+
+Il est aussi possible de faire des motifs *gardés*, pour imposer une condition sur un motif avec `when` :
+
+```ocaml
+let my_func a = function
+  | 0 when a > 0 -> 1 * a (* Si a est 0 et a > 0 on renvoie a *)
+  | 0 -> -1 * a (* Si a est 0 et a <= 0 on renvoie -a *)
+  | 1 -> 2 * a (* Si a est 1 on renvoie 2a *)
+  | _ -> 3 * a;; (* Sinon on renvoie 3a *)
+(* my_func : int -> int -> int *)
+```
+
+Il faut noter que les motifs sont examinés dans l'ordre, ainsi si on a plusieurs motifs qui correspondent on prend le premier qui correspond
+
+Enfin il est possible de faire des fonctions récursives, pour cela on utilise le mot clé `rec` :
+
+```ocaml
+let rec fact = function
+  | 0 -> 1
+  | n -> n * fact (n - 1);;
+(* fact : int -> int *)
+```
+
+== Expressions plus complexes
+
+Si on veut faire des expressions plus complexes on peut utiliser `if ... else if ... else ...` :
+
+```ocaml
+let my_func a =
+  if a = 0 then
+    1 * a (* Si a est 0 on renvoie a *)
+  else if a = 1 then
+    2 * a (* Si a est 1 on renvoie 2a *)
+  else
+    3 * a;; (* Sinon on renvoie 3a *)
+(* my_func : int -> int *)
+```
+
+Si on veut faire des opérations plus complexes entre les `if ... else` on peut utiliser `begin ... end` ou `(...)` :
+
+```ocaml
+let my_func a =
+  if a = 0 then
+    begin
+      let b = 1 in
+      b * a (* Si a est 0 on renvoie a *)
+    end
+  else if a = 1 then
+    (let b = 2 in b * a) (* Si a est 1 on renvoie 2a *)
+  else
+    3 * a;; (* Sinon on renvoie 3a *)
+(* my_func : int -> int *)
+```
+
+Il est aussi possible de réaliser des filtrages sans le mot clé `function` :
+
+```ocaml
+let my_func a b =
+  match b with
+  | 0 -> 1 * a (* Si b est 0 on renvoie a *)
+  | 1 -> 2 * a (* Si b est 1 on renvoie 2a *)
+  | _ -> 3 * a;; (* Sinon on renvoie 3a *)
+(* my_func : int -> int *)
+```
+
+On peut construire des n-uplets avec `(..., ...)`, et en OCaml on peut les déconstruire avec `let (..., ...) = ...`
+
+A noter que les couples possèdent les fonctions `fst` et `snd` pour récupérer le premier et le second élément
+
+```ocaml
+let a = (12, 14);; (* a est un couple de 12 et 14 *)
+
+print_int (fst a);; (* Affiche 12 *)
+```
+
+Il est donc possible de donner un couple à `fonction` ou `match` :
+
+```ocaml
+let my_func a =
+  match a with
+  | (0, 0) -> 1 (* Si a est (0, 0) on renvoie 1 *)
+  | (1, 0) -> 2 (* Si a est (1, 0) on renvoie 2 *)
+  | _ -> 3;; (* Sinon on renvoie 3 *)
+(* my_func : int * int -> int *)
+```
+
+On remarque sur la signature qu'un n-uplet est défini par `type1 * type2 * ...` et qu'on peut donc définir des n-uplets de n'importe quel type (même avec des types différents)
+
+== Listes
+
+Il peut être utile de définir des listes, pour cela on utilise le module `List`
+
+== Tableaux
+
+== Types construits
+
+== Programmation impérative
 
 #pagebreak()
 
@@ -590,7 +913,7 @@ Pour l'implémenter en C on fait :
 #algo([Tri bulle],```c
 let bubble_sort(int arr[], int n) {
   for (int i = 0; i < n; i++) {
-    // Les i premiers éléments sont bien passés
+    // Les i premiers éléments sont bien placés
     int k_last_perm = n-1;
     int smallest = arr[n-1];
 
@@ -659,7 +982,24 @@ void quick_sort(int * arr, int n) {
 
 Tout l'intérêt du tri rapide est dans la fonction `partition` qui permet de partitionner la liste en deux parties
 
-#todo(text: [(Écrire la fonction partition)])
+On utilise la partition de Lomuto, qui consiste à garder le pivot en première position, puis les éléments plus petits que le pivot, puis les éléments plus grands que le pivot et enfin ceux qui ne sont pas encore triés
+
+#algo([Partition (Lomuto)],```c
+int partition(int arr[], int n) {
+  int pivot = arr[0];
+  int p = 1;
+
+  for (int i = 1; i<n; i++) {
+    if (arr[i] < pivot) {
+      arr_swap(arr, i, p); // On échange les éléments i et p
+      p++;
+    }
+  }
+
+  arr_swap(arr, 0, p-1); // On échange le pivot et le dernier élément plus petit que le pivot
+  return p-1;
+}
+```)
 
 == Algorithmes classiques
 
@@ -1047,6 +1387,77 @@ On précise les cardinalités :
 - $0,1$ en liaison avec au plus une autre entité
 
 - $0,n$ en liaison avec un nombre quelconque d'entités
+
+#box(height: 1em)
+#heading([Algorithmes des textes], supplement: [theory],)
+
+== Bases
+
+En C on représente les chaînes de caractère par des `char *` avec un `\0` à la fin de la chaîne (donc un `0` dans la dernière case)
+
+On peut utiliser `strlen` pour connaître la longueur d'une chaîne
+
+En OCaml on a le module `String` qui permet de manipuler les chaînes de caractères et les chaînes de caractères sont immuables
+
+On peut concaténer des chaînes avec `^` et on peut accéder à un caractère avec `.[i]`
+
+On peut aussi utiliser `String.length` pour connaître la longueur d'une chaîne (en $O(1)$)
+
+Pour lire tous les éléments d'une chaine en C on fera :
+
+```c
+for (int i = 0; str[i] != '\0'; i++) {
+  // Do code
+}
+```
+
+En C un `char` correspond à un entier entre $-128$ et $127$, ainsi on peut écrire `int a = (int) 'a'` (le cast n'est pas obligatoire) pour avoir $97$	
+
+A noter que `'` est un caractère et `"` est une chaîne de caractère
+
+#warning([On ne fera pas une boucle for avec `strlen` car on va recalculer la longueur de la chaîne à chaque itération])
+
+== Algorithmes
+
+Imaginons que l'on veuille trouver si une chaîne de caractères n'est constituée que de mots valides (en supposant que la fonction `is_word` existe) :
+
+#algo([Découpage en mots],```c
+void is_sentence(char * s) {
+  if (s[0] == '\0') {
+    return;
+  }
+
+  int n = strlen(s);
+  int * arr = malloc((n+1) * sizeof(*arr));
+  arr[0] = 0;
+
+  for (int i = 1; i <= n; i++) {
+    arr[i] = -1; // On initialise à false car le malloc ne le fait pas
+    char tmp = s[i];
+    s[i] = '\0';
+    for (int j = i-1; arr[i] != -1 && j >= 0; --j) {
+      if (arr[j] != -1 && is_word(&s[j])) {
+        arr[i] = j;
+      }
+    }
+    s[i] = tmp;
+  }
+  // Le tableau arr contient l'indice du début du mot précédent (ou -1 si il n'y en a pas)
+  free(arr);
+}
+```)
+
+Il est intéressant de mémoïser cette fonction pour éviter de recalculer plusieurs fois la même chose
+
+Pour déterminer si une chaîne de caractères est un mot, on a plusieurs approches, en considérant $N$ mots et $p$ la longueur de la chaîne :
+
+- Approche naïve : On compare pour chaque mot $O(N times p)$
+
+- Approche dicothomique : On trie les mots et on fait une recherche dichotomique $O(p times log(N))$
+
+- On utilise un _TRIE_, c'est à dire un arbre où chaque noeud est une lettre et chaque branche est un mot, on a une complexité en $O(p)$ (selon l'implémentation de chaque noeud et de son stockage), on privilégiera de stocker dans un dictionnaire les mots. Une autre solution est de stocker tous les mots dans un dictonnaire et de regarder si le mot est dedans
+
+== Recherche de motifs
 
 #counter(heading).update(0)
 #set heading(numbering: none)
