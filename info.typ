@@ -825,6 +825,8 @@ let my_func a =
 (* my_func : int -> int *)
 ```
 
+Il n'est pas obligé de mettre le `else ()` si on ne fait rien
+
 Il est aussi possible de réaliser des filtrages sans le mot clé `function` :
 
 ```ocaml
@@ -1021,8 +1023,6 @@ let lst2 = List.sort compare lst;; (* lst2 vaut [1; 2; 3] *)
 
 La fonction de comparaison doit renvoyer un entier négatif si le premier élément est plus petit, un entier positif si le premier élément est plus grand et 0 si les deux éléments sont égaux, et `compare` est une fonction prédéfinie qui fait cela en OCaml
 
-== Tableaux
-
 == Types construits
 
 On peut créer des types construits en OCaml, on a 2 différents types de types construits : les *types somme* (unions ou énumérations) et les *types produit* (structures)
@@ -1047,12 +1047,23 @@ let my_basket = Fruit 12;; (* Définit un panier avec 12 fruits *)
 Il est possible de définir des types produits, pour cela on utilise `type` :
 
 ```ocaml
-type point = { x : int; y : int };; (* Définit un type point qui a deux champs x et y *)
+type point = { x: int; y: int };; (* Définit un type point qui a deux champs x et y *)
 
 let origin = { x = 0; y = 0 };; (* Définit un point d'origine *)
 print_int origin.x;; (* Affiche 0 *)
 print_int origin.y;; (* Affiche 0 *)
 ```
+
+Les champs définis sont immuables, il n'est pas possible de les modifier si ils ne sont pas déclarés comme `mutable` :
+
+```ocaml
+type point = { mutable x: int; mutable y: int };; (* Définit un type point qui a deux champs x et y mutables *)
+
+let origin = { x = 0; y = 0 };; (* Définit un point d'origine *)
+origin.x <- 12;; (* Modifie la valeur de x *)
+```
+
+On note l'utilisation de `<-` pour modifier un champ
 
 Il est possible de définir des types récursifs, par exemple une liste :
 
@@ -1063,6 +1074,163 @@ let tree = Node (Leaf, Node (Leaf, Leaf));; (* Définit un arbre avec une feuill
 ```
 
 == Programmation impérative
+
+=== Blocs d'instructions
+
+On peut effectuer plusieurs opérations à la suite en OCaml, pour cela on utilise `;` :
+
+```ocaml
+print_int 12; print_string " "; print_int 14;; (* Affiche 12 14 *)
+```
+
+Si on définit une fonction avec plusieurs expressions on peut les séparer avec `;`, et la valeur de retour sera la dernière expression :
+
+```ocaml
+let my_func a =
+  print_int a;
+  print_string " ";
+  print_int (a + 1);
+  print_newline ();;
+(* int -> unit *)
+```
+
+Il est préférable que les expressions soient de type `unit` pour éviter des erreurs (on aura un avertissement si ce n'est pas le cas)
+
+Comme vu précédemment si on veut utiliser plusieurs instructions dans un `if ... then ... else ...` on doit utiliser `begin ... end` :
+
+```ocaml
+let my_func a =
+  if a = 0 then
+    begin
+      print_int 1;
+      print_newline ()
+    end
+  else
+    begin
+      print_int a;
+      print_newline ()
+    end;;
+(* int -> unit *)
+```
+
+De même, si on veut imbriquer des `match` on doit utiliser `begin ... end` :
+
+```ocaml
+let my_func a =
+  match a with
+  | 0 -> begin
+    print_int 1;
+    print_newline ()
+  end
+  | _ -> begin
+    print_int a;
+    print_newline ()
+  end;;
+(* int -> unit *)
+```
+
+Il ne faut pas oublier le caractère local des variables, ainsi si on définit une variable dans un bloc elle ne sera pas accessible en dehors de ce bloc
+
+=== Références
+
+En OCaml on ne peut modifier les définitions, ainsi on va utiliser des références pour modifier des valeurs.
+
+Pour définir une référence on utilise `ref` :
+
+```ocaml
+let a = ref 12;; (* Définit une référence à 12 *)
+```
+
+Pour accéder à la valeur d'une référence on utilise `!` :
+
+```ocaml
+print_int !a;; (* Affiche 12 *)
+```
+
+Pour modifier la valeur d'une référence on utilise `:=` :
+
+```ocaml
+a := 14;; (* Modifie la valeur de la référence à 14 *)
+```
+
+C'est avec les références que `==` et `!=` sont définis, ils comparent les références et non les valeurs
+
+Le type d'une référence est `'a ref`, ainsi on peut avoir des références de n'importe quel type
+
+=== Boucles
+
+Si on veut faire une boucle on peut utiliser `for` :
+
+```ocaml
+for i = 0 to 10 do
+  print_int i;
+  print_string " "
+done;; (* Affiche 0 1 2 3 4 5 6 7 8 9 10 *)
+```
+
+Le `for` est inclusif, ainsi `for i = 0 to 10` va de 0 à 10 inclus, et on ne peut pas modifier `i` dans la boucle (il est redéfini à chaque itération)
+
+Si on veut descendre on peut utiliser `downto` :
+
+```ocaml
+for i = 10 downto 0 do
+  print_int i;
+  print_string " "
+done;; (* Affiche 10 9 8 7 6 5 4 3 2 1 0 *)
+```
+
+Il est aussi possible de faire une boucle avec `while cond do ... done` :
+
+```ocaml
+let i = ref 0 in
+while !i <= 10 do
+  print_int !i;
+  print_string " ";
+  i := !i + 1
+done;; (* Affiche 0 1 2 3 4 5 6 7 8 9 10 *)
+```
+
+== Tableaux
+
+Les listes ne sont pas très adaptées avec une utilisation impérative, on va donc utiliser des tableaux.
+
+Pour définir un tableau on utilise `[||]` :
+
+```ocaml
+let tab = [|1; 2; 3|];; (* Définit un tableau avec 1, 2 et 3 *)
+```
+
+Il est aussi possible de définir un tableau avec `Array.make` (le premier argument est la taille du tableau, le deuxième est la valeur par défaut) :
+
+```ocaml
+let tab = Array.make 3 0;; (* Définit un tableau de 3 éléments initialisés à 0 *)
+```
+
+De même il est possible d'utiliser `Array.init` pour initialiser un tableau :
+
+```ocaml
+let tab = Array.init 3 (fun i -> i);; (* Définit un tableau de 3 éléments initialisés à 0, 1 et 2 *)
+```
+
+On peut obtenir la taille d'un tableau avec `Array.length` (en $O(1)$) :
+
+```ocaml
+let a = Array.length tab;; (* a vaut 3 *)
+```
+
+Pour accéder à un élément d'un tableau on utilise `arr.(idx)` :
+
+```ocaml
+let a = tab.(0);; (* a vaut 1 *)
+```
+
+Pour créer un tableau bidimensionnel on utilise `Array.make_matrix` :
+
+```ocaml
+let tab = Array.make_matrix 3 3 0;; (* Définit un tableau de 3x3 initialisé à 0 *)
+
+let a = tab.(0).(0);; (* a vaut 0 *)
+```
 
 #pagebreak()
 
@@ -1744,6 +1912,23 @@ Une recherche de motif est une recherche d'une chaîne de caractères dans une a
 On considère un motif de longueur $p$ et un texte de longueur $n$
 
 Une première approche naïve est de regarder pour chaque sous-chaîne de longueur $p$ si elle est égale au motif, on a une complexité en $O(n times p)$ (généralement $O(n)$ en pratique)
+
+#box(height: 1em)
+#heading([Formules propositionnelles], supplement: [theory],)
+
+#theorem([Formule propositionnelle],[
+  On a deux constantes, $tack.b$ qui est toujours vraie et $tack.t$ qui est toujours fausse
+
+  On peut les combiner avec des opérateurs logiques :
+
+  - $and$ : $a and b$ est vrai si $a$ et $b$ sont vrais
+  - $or$ : $a or b$ est vrai si $a$ ou $b$ est vrai
+  - $not$ : $not a$ est vrai si $a$ est faux
+])
+
+On définit la hauteur et la taille d'une formule propositionnelle comme la hauteur et la taille de l'arbre de la formule
+
+Ainsi $(cal(A) and tack.b) or ((cal(B) and tack.t) and cal(C))$ est de hauteur $2$ et de taille $5$.
 
 #counter(heading).update(0)
 #set heading(numbering: none)
