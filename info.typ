@@ -3,7 +3,7 @@
 #import "@local/physica:0.9.3": *
 #import "@local/cetz:0.2.2": *
 
-// http://cdn.sci-phy.org/mp2i/Cours-A4.pdf 92
+// http://cdn.sci-phy.org/mp2i/Cours-A4.pdf 95
 
 #let project(title: "", authors: (), date: none, body) = {
   set document(author: authors.map(a => a.name), title: "Essentiel d'informatique")
@@ -484,7 +484,84 @@ int my_func(int (*func)(int, int), int a, int b) {
 
 == Types construits
 
-#todo(text: [(Structures et unions)])
+Pour définir un alias on utilise `typedef` :
+
+```c
+typedef int my_type;
+
+my_type a = 12;
+```
+
+Pour définir une structure on utilise `struct` :
+
+```c
+struct my_struct {
+  int a;
+  int b;
+};
+
+struct my_struct s;
+s.a = 12;
+s.b = 14;
+```
+
+Mais ce n'est pas pratique d'écrire `struct my_struct` à chaque fois, on peut donc utiliser un alias :
+
+```c
+typedef struct my_struct {
+  int a;
+  int b;
+} my_struct;
+
+my_struct s;
+s.a = 12;
+s.b = 14;
+```
+
+On peut aussi initialiser une structure de la manière suivante :
+
+```c
+my_struct s = {.a = 12, .b = 14};
+```
+
+On peut ainsi faire des structures récursives :
+
+```c
+typedef struct my_struct {
+  int a;
+  struct my_struct * next;
+} my_struct;
+```
+
+Comme en OCaml on peut définir des énumérations :
+
+```c
+typedef enum my_enum {
+  A,
+  B,
+  C
+} my_enum;
+```
+
+Enfin si on veut faire des types plus complexes comme `type t = A of int | B of float` (en OCaml) on peut utiliser des unions :
+
+```c
+typedef struct my_union {
+  enum {
+    A,
+    B
+  } type,
+  union {
+    int a;
+    float b;
+  } value;
+} my_union;
+
+my_union a = {.type = A, .value.a = 12};
+my_union b = {.type = B, .value.b = 12.};
+```
+
+Dans un champ `union` on ne peut accéder qu'à un seul champ à la fois, il faut donc connaître le type pour accéder à la bonne valeur (celà permet d'économiser de la mémoire)
 
 #box(height: 1em)
 #heading([Introduction au OCaml], supplement: [intro],)
@@ -784,11 +861,206 @@ On remarque sur la signature qu'un n-uplet est défini par `type1 * type2 * ...`
 
 == Listes
 
-Il peut être utile de définir des listes, pour cela on utilise le module `List`
+=== Créer une liste
+
+On peut créer une liste en OCaml avec `[]` :
+
+```ocaml
+let lst = [];; (* Définit une liste vide *)
+
+let lst = [1; 2; 3];; (* Définit une liste avec 1, 2 et 3 *)
+(* int list *)
+
+let lst = [[1; 2]; [3; 4]];; (* Définit une liste de listes *)
+(* int list list *)
+```
+
+#warning([
+  Attention, on sépare les éléments de la liste avec `;` et non `,`
+])
+
+Comme en C, on ne peut mélanger les types
+
+=== Opérations sur les listes
+
+Pour ajouter un élément à une liste on utilise `::` :
+
+```ocaml
+let lst = 1 :: [2; 3];; (* Ajoute 1 à la liste [2; 3] *)
+(* int list *)
+```
+
+Il est possible de concaténer deux listes avec `@` :
+
+```ocaml
+let lst = [1; 2] @ [3; 4];; (* Concatène [1; 2] et [3; 4] *)
+(* int list *)
+```
+
+Cette opération est coûteuse en temps, il est donc préférable de ne pas l'utiliser pour des listes de grande taille
+
+(On peut aussi utiliser `List.append lst1 lst2` pour concaténer deux listes)
+
+Les listes en OCaml n'étant pas mutables, il est impossible de modifier une liste, il faut donc créer une nouvelle liste, de plus il n'est pas conseillé d'accéder à un élément d'une liste par son indice (avec la fonction `List.nth`)
+
+Pour récupérer le premier élément d'une liste on utilise `List.hd` :
+
+```ocaml
+let a = List.hd [1; 2; 3];; (* a vaut 1 *)
+(* int *)
+```
+
+Pour récupérer le reste de la liste on utilise `List.tl` :
+
+```ocaml
+let a = List.tl [1; 2; 3];; (* a vaut [2; 3] *)
+(* int list *)
+```
+
+=== Fonctions sur les listes
+
+Il est aussi possible d'utiliser des listes dans des match, ainsi on peut faire :
+
+```ocaml
+let rec sum = function
+  | [] -> 0 (* Si la liste est vide on renvoie 0 *)
+  | [h] -> h (* Si la liste a un seul élément on renvoie cet élément *)
+  | h::t -> h + sum t;; (* Sinon on renvoie le premier élément plus la somme du reste *)
+(* int list -> int *)
+```
+
+Ainsi on peut déconstruire une liste dans les match.
+
+Mais on peut aussi vouloir faire des opérations sur les listes entières.
+
+Si on veut itérer sur une liste on peut utiliser `List.iter` :
+
+```ocaml
+let lst = [1; 2; 3];;
+
+List.iter (fun x -> print_int x) lst;; (* Affiche 123 *)
+```
+
+Si on veut appliquer une fonction à tous les éléments d'une liste on peut utiliser `List.map` :
+
+```ocaml
+let lst = [1; 2; 3];;
+
+let lst2 = List.map (fun x -> x + 1) lst;; (* lst2 vaut [2; 3; 4] *)
+```
+
+Si on veut filtrer une liste on peut utiliser `List.filter` :
+
+```ocaml
+let lst = [1; 2; 3];;
+
+let lst2 = List.filter (fun x -> x mod 2 = 0) lst;; (* lst2 vaut [2] *)
+```
+
+Si on veut vérifier un predicat sur tous les éléments d'une liste on peut utiliser `List.for_all` ($forall$) (la recherche s'arrête dès qu'un élément ne vérifie pas le prédicat) :
+
+```ocaml
+let lst = [1; 2; 3];;
+
+let b = List.for_all (fun x -> x mod 2 = 0) lst;; (* b vaut false *)
+```
+
+Si on veut savoir si un élément de la liste vérifie un prédicat on peut utiliser `List.exists` ($exists$) :
+
+```ocaml
+let lst = [1; 2; 3];;
+
+let b = List.exists (fun x -> x mod 2 = 0) lst;; (* b vaut true *)
+```
+
+Si on veut récupérer le premier élément qui vérifie un prédicat on peut utiliser `List.find` (erreur `Not_found` si aucun élément ne vérifie le prédicat) :
+
+```ocaml
+let lst = [1; 2; 3];;
+
+let a = List.find (fun x -> x mod 2 = 0) lst;; (* a vaut 2 *)
+```
+
+On peut aussi vouloir faire des appels récurrents sur une liste, ainsi on a deux possibilités (`('acc -> 'a -> 'acc) -> 'acc -> 'a list -> 'acc`) :
+
+Si on veut appliquer `f (f (f ... (f x)))` on peut utiliser `List.fold_left` :
+
+```ocaml
+let lst = [1; 2; 3];;
+
+let a = List.fold_left (fun acc x -> acc + x) 0 lst;; (* a vaut 6 *)
+```
+
+Si on veut appliquer `f x (f x (f x ... (f init x)))` on peut utiliser `List.fold_right` (`('a -> 'acc -> 'acc) -> 'a list -> 'acc -> 'acc`) :
+
+```ocaml
+let lst = [1; 2; 3];;
+
+let a = List.fold_right (fun x acc -> acc + x) lst 0;; (* a vaut 6 *)
+```
+
+#warning([
+  On remarque que l'ordre des arguments n'est pas le même entre `List.fold_left` et `List.fold_right`
+])
+
+Si on veut savoir si un élément est dans une liste on peut utiliser `List.mem` :
+
+```ocaml
+let lst = [1; 2; 3];;
+
+let b = List.mem 2 lst;; (* b vaut true *)
+```
+
+Si on veut trier une liste on peut utiliser `List.sort` avec une fonction de comparaison :
+
+```ocaml
+let lst = [3; 2; 1];;
+
+let lst2 = List.sort compare lst;; (* lst2 vaut [1; 2; 3] *)
+```
+
+La fonction de comparaison doit renvoyer un entier négatif si le premier élément est plus petit, un entier positif si le premier élément est plus grand et 0 si les deux éléments sont égaux, et `compare` est une fonction prédéfinie qui fait cela en OCaml
 
 == Tableaux
 
 == Types construits
+
+On peut créer des types construits en OCaml, on a 2 différents types de types construits : les *types somme* (unions ou énumérations) et les *types produit* (structures)
+
+Pour définir un type somme on utilise `type` :
+
+```ocaml
+type fruit = Apple | Banana | Pear | Orange;; (* Définit un type fruit qui peut être Apple, Banana, Pear ou Orange *)
+```
+
+Ainsi on a créé un type `fruit` qui peut être soit `Apple`, soit `Banana`, soit `Pear`, soit `Orange`
+
+Mais on peut vouloir ajouter des informations à un type somme, par exemple la quantité de fruits :
+
+```ocaml
+type basket = Fruit of int | Empty;; (* Définit un type fruit qui peut être Apple, Banana, Pear, Orange ou Fruit avec une quantité *)
+
+let empty = Empty;; (* Définit un panier vide *)
+let my_basket = Fruit 12;; (* Définit un panier avec 12 fruits *)
+```
+
+Il est possible de définir des types produits, pour cela on utilise `type` :
+
+```ocaml
+type point = { x : int; y : int };; (* Définit un type point qui a deux champs x et y *)
+
+let origin = { x = 0; y = 0 };; (* Définit un point d'origine *)
+print_int origin.x;; (* Affiche 0 *)
+print_int origin.y;; (* Affiche 0 *)
+```
+
+Il est possible de définir des types récursifs, par exemple une liste :
+
+```ocaml
+type tree = Leaf | Node of tree * tree;; (* Définit un type arbre qui peut être une feuille ou un noeud avec deux sous arbres *)
+
+let tree = Node (Leaf, Node (Leaf, Leaf));; (* Définit un arbre avec une feuille et un noeud avec deux feuilles *)
+```
 
 == Programmation impérative
 
@@ -802,6 +1074,14 @@ Il peut être utile de définir des listes, pour cela on utilise le module `List
 
 #box(height: 1em)
 #heading([Structures de données], supplement: [struct],)
+
+== Listes chaînées
+
+== Piles
+
+== Files
+
+== Dictionnaires
 
 #box(height: 1em)
 #heading([Piles, files, dictionnaires], supplement: [struct],)
@@ -1458,6 +1738,12 @@ Pour déterminer si une chaîne de caractères est un mot, on a plusieurs approc
 - On utilise un _TRIE_, c'est à dire un arbre où chaque noeud est une lettre et chaque branche est un mot, on a une complexité en $O(p)$ (selon l'implémentation de chaque noeud et de son stockage), on privilégiera de stocker dans un dictionnaire les mots. Une autre solution est de stocker tous les mots dans un dictonnaire et de regarder si le mot est dedans
 
 == Recherche de motifs
+
+Une recherche de motif est une recherche d'une chaîne de caractères dans une autre chaîne de caractères
+
+On considère un motif de longueur $p$ et un texte de longueur $n$
+
+Une première approche naïve est de regarder pour chaque sous-chaîne de longueur $p$ si elle est égale au motif, on a une complexité en $O(n times p)$ (généralement $O(n)$ en pratique)
 
 #counter(heading).update(0)
 #set heading(numbering: none)
