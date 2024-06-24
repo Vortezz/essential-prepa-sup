@@ -3,7 +3,7 @@
 #import "@local/physica:0.9.3": *
 #import "@local/cetz:0.2.2": *
 
-// http://cdn.sci-phy.org/mp2i/Cours-A4.pdf 95
+// http://cdn.sci-phy.org/mp2i/Cours-A4.pdf 133
 
 #let project(title: "", authors: (), date: none, body) = {
   set document(author: authors.map(a => a.name), title: "Essentiel d'informatique")
@@ -861,6 +861,39 @@ let my_func a =
 
 On remarque sur la signature qu'un n-uplet est défini par `type1 * type2 * ...` et qu'on peut donc définir des n-uplets de n'importe quel type (même avec des types différents)
 
+== Exceptions
+
+On peut vouloir lever une exception, pour cela on utilise `raise` :
+
+```ocaml
+let my_func a =
+  if a = 0 then
+    raise (Invalid_argument "a ne peut pas être 0")
+  else
+    1 / a;; (* Renvoie 1/a *)
+(* my_func : int -> int *)
+```
+
+Il est possible de définir ses propres exceptions avec `exception` :
+
+```ocaml
+exception My_exception of string;; (* Définit une exception My_exception qui prend un argument de type string *)
+
+raise (My_exception "Erreur");; (* Lève l'exception My_exception avec le message "Erreur" *)
+```
+
+Si on veut attraper une exception on utilise `try ... with` :
+
+```ocaml
+try
+  let a = 1 / 0 in
+  a (* Renvoie a *)
+with 
+  | Division_by_zero -> 0;; (* Si on a une division par zéro on renvoie 0 *)
+```
+
+Ainsi on peut utiliser un `match` pour attraper une exception dans le `with`.
+
 == Listes
 
 === Créer une liste
@@ -1241,18 +1274,546 @@ let a = tab.(0).(0);; (* a vaut 0 *)
 #align(center, text([🗂 Structures de données], weight: 800, size: 24pt))
 
 #box(height: 1em)
-#heading([Structures de données], supplement: [struct],)
+#heading([Piles, files, dictionnaires], supplement: [struct],)
 
 == Listes chaînées
 
+En OCaml on a vu les listes, qui sont des listes chaînées, c'est à dire que chaque élément pointe vers le suivant.
+
+On pourrait vouloir les réaliser en C :
+
+#algo([Liste chaînée en C],
+```c
+typedef struct list {
+  int value;
+  struct list * next;
+} list;
+```)
+
+Pour ajouter un élément à une liste chaînée on fait :
+
+```c
+void add(list * lst, int value) {
+  list * new = malloc(sizeof(*new*));
+  new->value = value;
+  new->next = lst->next;
+  return new;
+}
+```
+
+Pour récupérer le premier élément d'une liste chaînée on fait :
+
+```c
+int get(list * lst) {
+  if (lst == NULL) { // On empêche une segmentation fault
+    return -1; // On renvoie une valeur par défaut
+  }
+
+  return lst->value;
+}
+```
+
+Pour récupérer le reste de la liste chaînée on fait :
+
+```c
+list * next(list * lst) {
+  if (lst == NULL) { // On empêche une segmentation fault
+    return NULL;
+  }
+
+  return lst->next;
+}
+```
+
+Pour parcourir une liste chaînée on fait :
+
+```c
+void print(list * lst) {
+  while (lst != NULL) {
+    printf("%d ", lst->value);
+    lst = lst->next;
+  }
+}
+```
+
+On pourra bien sûr définir une fonction pour avoir la longueur de la liste chaînée, pour insérer un élément à un indice donné, pour supprimer un élément, pour concaténer deux listes chaînées...
+
+Une fonction intéressante est la fonction pour supprimer totalement une liste chaînée :
+
+```c
+void free_list(list * lst) {
+  while (lst != NULL) {
+    list * tmp = lst;
+    lst = lst->next;
+    free(tmp);
+  }
+}
+```
+
 == Piles
+
+Les piles sont des conteneurs de données qui suivent le principe LIFO (Last In First Out), c'est à dire que le dernier élément ajouté est le premier élément sorti, comme sur une pile d'assiettes.
+
+=== En OCaml
+
+En OCaml on peut utiliser le module `Stack` pour réaliser une pile.
+
+Pour créer une pile on fait `Stack.create` :
+
+```ocaml
+let stack = Stack.create ();; (* Crée une pile *)
+```
+
+Pour ajouter un élément à une pile on fait `Stack.push` :
+
+```ocaml
+Stack.push 12 stack;; (* Ajoute 12 à la pile *)
+```
+
+Pour récupérer le prochain élément d'une pile on fait `Stack.top` :
+
+```ocaml
+let a = Stack.top stack;; (* a vaut 12 *)
+```
+
+Pour récupérer et supprimer le prochain élément d'une pile on fait `Stack.pop` :
+
+```ocaml
+let a = Stack.pop stack;; (* a vaut 12 *)
+```
+
+#warning([
+  Il faut faire attention à ne pas utiliser `Stack.top` ou `Stack.pop` sur une pile vide, sinon on aura l'erreur `Stack.Empty`
+])
+
+On peut aussi vérifier si une pile est vide avec `Stack.is_empty` :
+
+```ocaml
+let b = Stack.is_empty stack;; (* b vaut true *)
+```
+
+=== En C
+
+Pour créer une pile en C on va voir 2 méthodes.
+
+Premièrement on peut utiliser une liste chaînée :
+
+#algo([Pile en C avec liste chaînée],
+```c
+typedef struct cell {
+  int value;
+  struct cell * next;
+} cell;
+typedef struct stack {
+  cell * top;
+} stack;
+```)
+
+On définit alors les fonctions suivantes :
+
+```c
+stack * create_stack() {
+  stack * s = malloc(sizeof(*s));
+  s->top = NULL;
+  return s;
+}
+```
+
+```c
+bool is_empty(stack * s) {
+  return s->top == NULL;
+}
+```
+
+```c
+void push(stack * s, int value) {
+  cell * new = malloc(sizeof(*new));
+  new->value = value;
+  new->next = s->top;
+  s->top = new;
+}
+```
+
+```c
+int top(stack * s) {
+  if (is_empty(s)) { // Très important pour éviter une segmentation fault
+    return -1; // On renvoie une valeur par défaut
+  }
+
+  return s->top->value;
+}
+```
+
+```c
+int pop(stack * s) {
+  if (is_empty(s)) { // Très important pour éviter une segmentation fault
+    return -1; // On renvoie une valeur par défaut
+  }
+
+  int value = s->top->value;
+  cell * tmp = s->top;
+  s->top = s->top->next;
+  free(tmp); // /!\ Il faut libérer la mémoire
+  return value;
+}
+```
+
+On peut faire la fonction pour supprimer la pile comme pour les listes chaînées.
+
+Mais il est aussi possible de réaliser une pile avec un tableau dynamique : pour cela on va doubler la taille du tableau à chaque fois que la taille est atteinte.
+
+#algo([Pile en C avec tableau dynamique],
+```c
+typedef struct stack {
+  int * values;
+  int size;
+  int capacity;
+} stack;
+```)
+
+Ainsi les fonctions s'adaptent :
+
+```c
+stack * create_stack() {
+  stack * s = malloc(sizeof(*s));
+  s->values = malloc(4 * sizeof(int));
+  s->size = 0;
+  s->capacity = 4;
+  return s;
+}
+```
+
+```c
+bool is_empty(stack * s) {
+  return s->size == 0;
+}
+```
+
+La fonction `push` est un peu plus complexe, car il faut doubler la taille du tableau si la capacité est atteinte :
+
+```c
+void push(stack * s, int value) {
+  if (s->size == s->capacity) {
+    s->capacity *= 2;
+    int * new_values = malloc(s->capacity * sizeof(int));
+
+    for (int i = 0; i < s->size; i++) {
+      new_values[i] = s->values[i];
+    }
+
+    free(s->values);
+    s->values = new_values;
+  }
+
+  s->values[s->size] = value;
+  s->size++;
+}
+```
+
+```c
+int top(stack * s) {
+  if (is_empty(s)) { // Très important pour éviter une segmentation fault
+    return -1; // On renvoie une valeur par défaut
+  }
+
+  return s->values[s->size - 1];
+}
+```
+
+```c
+int pop(stack * s) {
+  if (is_empty(s)) { // Très important pour éviter une segmentation fault
+    return -1; // On renvoie une valeur par défaut
+  }
+
+  int value = s->values[s->size - 1];
+  s->size--;
+  return value;
+}
+```
+
+Ainsi on a 2 approches différentes pour créer une pile en C, une avec une liste chaînée et une avec un tableau dynamique.
 
 == Files
 
+Les files sont des conteneurs de données qui suivent le principe FIFO (First In First Out), c'est à dire que le premier élément ajouté est le premier élément sorti, comme dans une file d'attente.
+
+=== En OCaml
+
+En OCaml on peut utiliser le module `Queue` pour réaliser une file.
+
+Pour créer une file on fait `Queue.create` :
+
+```ocaml
+let queue = Queue.create ();; (* Crée une file *)
+```
+
+Pour ajouter un élément à une file on fait `Queue.push` :
+
+```ocaml
+Queue.push 12 queue;; (* Ajoute 12 à la file *)
+```
+
+Pour récupérer le prochain élément d'une file on fait `Queue.top` :
+
+```ocaml
+let a = Queue.top queue;; (* a vaut 12 *)
+```
+
+Pour récupérer et supprimer le prochain élément d'une file on fait `Queue.pop` :
+
+```ocaml
+let a = Queue.pop queue;; (* a vaut 12 *)
+```
+
+#warning([
+  Il faut faire attention à ne pas utiliser `Queue.top` ou `Queue.pop` sur une file vide, sinon on aura l'erreur `Queue.Empty`
+])
+
+Pour vérifier si une file est vide on fait `Queue.is_empty` :
+
+```ocaml
+let b = Queue.is_empty queue;; (* b vaut true *)
+```
+
+=== En C
+
+Pour réaliser une file en C, on pourrait faire un tableau dynamique, mais on peut aussi faire une liste doublement chaînée.
+
+#algo([File en C avec liste doublement chaînée],
+```c
+typedef struct cell {
+  int value;
+  struct cell * next;
+  struct cell * prev;
+} cell;
+typedef struct queue {
+  cell * front;
+  cell * back;
+} queue;
+```)
+
+On définit alors les fonctions suivantes :
+
+```c
+queue * create_queue() {
+  queue * q = malloc(sizeof(*q));
+  q->front = NULL;
+  q->back = NULL;
+  return q;
+}
+```
+
+```c
+bool is_empty(queue * q) {
+  return q->front == NULL;
+}
+```
+
+Pour l'opération d'ajout on ajoute un nouvel élément à la fin de la file, ainsi on le met à la fin de la liste chaînée :
+
+```c
+void push(queue * q, int value) {
+  cell * new = malloc(sizeof(*new));
+  new->value = value;
+  new->next = NULL;
+  new->prev = q->back;
+
+  if (q->back != NULL) { // Si la file n'est pas vide
+    q->back->next = new;
+  }
+
+  q->back = new;
+
+  if (q->front == NULL) { // Si la file est vide
+    q->front = new;
+  }
+}
+```
+
+Pour récupérer le prochain élément de la file on prend le premier élément de la liste chaînée :
+
+```c
+int top(queue * q) {
+  if (is_empty(q)) { // Très important pour éviter une segmentation fault
+    return -1; // On renvoie une valeur par défaut
+  }
+
+  return q->front->value;
+}
+```
+
+Pour récupérer et supprimer le prochain élément de la file on prend le premier élément de la liste chaînée et on le supprime :
+
+```c
+int pop(queue * q) {
+  if (is_empty(q)) { // Très important pour éviter une segmentation fault
+    return -1; // On renvoie une valeur par défaut
+  }
+
+  int value = q->front->value;
+  cell * tmp = q->front;
+  q->front = q->front->next;
+
+  if (q->front == NULL) { // Si la file est vide
+    q->back = NULL;
+  } else {
+    q->front->prev = NULL;
+  }
+
+  free(tmp); // /!\ Il faut libérer la mémoire
+  return value;
+}
+```
+
+On peut faire la fonction pour supprimer la file comme pour les listes chaînées.
+
 == Dictionnaires
 
-#box(height: 1em)
-#heading([Piles, files, dictionnaires], supplement: [struct],)
+Les dictionnaires sont des conteneurs de données qui associent une clé à une valeur pour permettre une recherche rapide.
+
+On parle de *table de hachage* pour réaliser un dictionnaire, on va donc utiliser une fonction de hachage pour associer une clé à un indice.
+
+En OCaml on utilise la fonction `Hashtbl.hash` pour obtenir le hachage d'une clé.
+
+En C le hachage est souvent réalisé avec une fonction de hachage codée à la main, par exemple :
+
+```c
+uint32_t hash(char* s) {
+  uint32_t r = 0;
+  for (int i=0; s[i] != '\0'; ++i) {
+    r = (r+(r<<5)) ^ s[i]; // 33 = 1 + 2^5
+  }
+  return r;
+}
+```
+
+=== En OCaml
+
+En OCaml on peut utiliser le module `Hashtbl` pour réaliser un dictionnaire.
+
+Pour créer un dictionnaire on fait `Hashtbl.create` :
+
+```ocaml
+let dict = Hashtbl.create 97;; (* Crée un dictionnaire *)
+```
+
+#warning([
+  Il est important de donner une taille première au dictionnaire
+])
+
+Pour ajouter un élément à un dictionnaire on fait `Hashtbl.add` :
+
+```ocaml
+Hashtbl.add dict "key" 12;; (* Ajoute 12 à la clé "key" *)
+```
+
+Pour récupérer un élément d'un dictionnaire on fait `Hashtbl.find` :
+
+```ocaml
+let a = Hashtbl.find dict "key";; (* a vaut 12 *)
+```
+
+#warning([
+  Il faut faire attention à ne pas utiliser `Hashtbl.find` sur une clé qui n'existe pas, sinon on aura l'erreur `Not_found`
+])
+
+Pour vérifier si une clé est dans un dictionnaire on fait `Hashtbl.mem` :
+
+```ocaml
+let b = Hashtbl.mem dict "key";; (* b vaut true *)
+```
+
+Pour supprimer un élément d'un dictionnaire on fait `Hashtbl.remove` :
+
+```ocaml
+Hashtbl.remove dict "key";; (* Supprime la clé "key" *)
+```
+
+=== En C
+
+Pour implémenter un dictionnaire en C on va utiliser une liste chaînée, et une fonction de hashage `hash` préalablement définie.
+
+On va considérér un tableau de listes chaînées, pour éviter que les recherches soient trop longues.
+
+Ainsi dans la case $i$ du tableau on aura une liste chaînée de tous les éléments ayant le hachage $i mod n$.
+
+#algo([Dictionnaire en C avec liste chaînée],
+```c
+typedef struct cell {
+  char * key;
+  int value;
+  struct cell * next;
+} cell;
+typedef struct dict {
+  cell ** values;
+  int size;
+  int nb_keys;
+} dict;
+```)
+
+On ne s'attardera pas ici sur l'augmentation de la taille du tableau, mais on peut imaginer que quand beaucoup d'éléments sont dans le dictionnaire on perd en efficacité, donc on va doubler la taille du tableau et réinsérer tous les éléments à leur nouvelle place.
+
+On définit alors les fonctions suivantes :
+
+```c
+dict * create_dict(int size) {
+  dict * d = malloc(sizeof(*d));
+  d->values = malloc(size * sizeof(cell*));
+  d->size = size;
+  d->nb_keys = 0;
+
+  for (int i = 0; i < size; i++) {
+    d->values[i] = NULL;
+  }
+
+  return d;
+}
+```
+
+```c
+char * find(dict * d, char * key) {
+  uint32_t h = hash(key) % d->size; // On calcule le hachage modulo la taille du tableau
+  cell * c = d->values[h];
+
+  while (c != NULL) { // On regarde toute la liste chaînée
+    if (strcmp(c->key, key) == 0) {
+      return c->value;
+    }
+
+    c = c->next;
+  }
+
+  return NULL;
+}
+```
+
+```c
+void add(dict * d, char * key, int value) {
+  uint32_t h = hash(key) % d->size; // On calcule le hachage modulo la taille du tableau
+  cell * c = d->values[h];
+
+  while (c != NULL) { // On regarde toute la liste chaînée
+    if (strcmp(c->key, key) == 0) {
+      // On a trouvé la clé, on modifie la valeur
+      c->value = value;
+      return;
+    }
+
+    c = c->next;
+  }
+
+  // On ajoute un élément en tête de liste
+  cell * new = malloc(sizeof(*new));
+  new->key = key;
+  new->value = value;
+  new->next = d->values[h];
+  d->values[h] = new;
+  d->nb_keys++;
+}
+```
+
+Ces fonctions sont un peu complexes, mais elles permettent de réaliser un dictionnaire en C.
 
 #box(height: 1em)
 #heading([Arbres], supplement: [struct],)
