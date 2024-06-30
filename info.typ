@@ -3,7 +3,7 @@
 #import "@local/physica:0.9.3": *
 #import "@local/cetz:0.2.2": *
 
-// http://cdn.sci-phy.org/mp2i/Cours-A4.pdf 133
+// http://cdn.sci-phy.org/mp2i/Cours-A4.pdf 179
 
 #let project(title: "", authors: (), date: none, body) = {
   set document(author: authors.map(a => a.name), title: "Essentiel d'informatique")
@@ -1580,7 +1580,7 @@ let b = Queue.is_empty queue;; (* b vaut true *)
 
 Pour réaliser une file en C, on pourrait faire un tableau dynamique, mais on peut aussi faire une liste doublement chaînée.
 
-#algo([File en C avec liste doublement chaînée],
+#algo([File en C],
 ```c
 typedef struct cell {
   int value;
@@ -1818,8 +1818,315 @@ Ces fonctions sont un peu complexes, mais elles permettent de réaliser un dicti
 #box(height: 1em)
 #heading([Arbres], supplement: [struct],)
 
+#todo(text: [À venir])
+
+== Définitions
+
+Un *arbre* est une collection d'éléments appelés *noeuds* reliés par des *liens*. Les noeuds peuvent porter des étiquettes.
+
+Si un lien va d'un noeud $alpha$ vers un noeud $beta$, on dit que $alpha$ est le *parent* de $beta$ et que $beta$ est un *enfant* de $alpha$.
+
+Le noeud qui n'a pas de parent est appelé *racine* de l'arbre, tandis que les noeuds qui n'ont pas d'enfants sont appelés *feuilles*. Les autres noeuds sont appelés *noeuds internes*.
+
+On parle de *descendant* d'un noeud $alpha$ pour tout noeud $beta$ tel qu'il existe un chemin de $alpha$ à $beta$.
+
+On parle d'*antécédent* d'un noeud $beta$ pour tout noeud $alpha$ tel qu'il existe un chemin de $alpha$ à $beta$.
+
+On appelle *branche* une suite de noeuds reliés par des liens.
+
+On appelle *sous-arbre* d'un noeud $alpha$ l'arbre formé par $alpha$ et tous ses descendants.
+
+On appelle *arité* d'un noeud le nombre de ses enfants.
+
+On appelle *squelette* d'un arbre l'arbre obtenu en supprimant les étiquettes.
+
+On note $|A|$ la *taille* d'un arbre $A$, c'est à dire le nombre de noeuds.
+
+La *profondeur* d'un noeud est la longueur du chemin de la racine à ce noeud.
+
+On note $h(A)$ la *hauteur* d'un arbre $A$, c'est à dire la longueur du plus long chemin de la racine à une feuille, ou la profondeur du noeud le plus profond.
+
+Un arbre est dit *parfait* si tous les noeuds internes ont le même nombre d'enfants.
+
+#theorem([Majorations de la hauteur/taille],[
+  Pour un arbre binaire d'arité maximale $a$, on a :
+
+  $ h(A) + 1 <= abs(A) <= (a^(h(A) + 1) - 1)/(a-1) $
+
+  On en déduit que $floor(log_a ((a-1) abs(A))) <= h(A) <= |A| - 1$
+])
+
+#demo([
+  Il suffit d'encadrer le nombre de noeuds par le nombre de noeuds de profondeur $p$ par :
+
+  $ sum_(p=0)^h(A) 1 <= abs(A) <= sum_(p=0)^h(A) a^p $
+
+  Pour la deuxième inégalité, on reprend :
+
+  $ abs(A) &<= (a^(h(A) + 1) - 1)/(a-1) \ abs(A) (a-1) + 1 &<= a^(h(A) + 1) $
+
+  D'où l'inégalité en passant au logarithme en base $a$.
+])
+
+== Représentation en OCaml
+
+Une première représentation d'un arbre en OCaml est faite avec une liste d'enfants :
+
+```ocaml
+type 'a tree = { element: 'a; children: 'a tree list };;
+```
+
+Mais on préfère représenter avec un couple :
+
+```ocaml
+type 'a tree = Node of 'a * 'a tree list;;
+```
+
+On en déduit des fonctions pour récupérer la racine, les enfants, les feuilles, la taille, la hauteur, la profondeur, le nombre de feuilles, le nombre de noeuds internes...
+
+Les algorithmes importants sur les arbres sont le parcours en profondeur (préfixe, infixe, postfixe) et le parcours en largeur.
+
+Pour faire un parcours en profondeur on peut faire :
+
+#algo([Parcours en profondeur (Arbres)],
+```ocaml
+let rec dfs f = function
+  | Node (a, children) -> print_string a; List.iter (dfs f) children
+(* ('a -> unit) -> 'a tree -> unit *)
+```)
+
+Ainsi on réalise un parcours en profondeur (_Depth First Search_) en appliquant la fonction `f` à chaque noeud, en allant le plus profondément possible puis en remontant.
+
+Pour faire un parcours en largeur on peut faire :
+
+#algo([Parcours en largeur (Arbres)],
+```ocaml
+let bfs f tree = 
+  let queue = Queue.create () in
+  Queue.push tree queue;
+  while not (Queue.is_empty queue) do
+    let Node (a, children) = Queue.pop queue in
+      f a;
+      List.iter (fun x -> Queue.push x queue) children
+  done;;
+(* ('a -> unit) -> 'a tree -> unit *)
+```)
+
+== Arbres binaires stricts
+
+On appelle *arbre binaire* un arbre dont chaque noeud a au plus 2 enfants (ie l'arité est au plus 2).
+
+On peut alors définir un arbre binaire en OCaml :
+
+```ocaml
+type 'a binary_tree =
+  | Leaf of 'a
+  | Node of 'a * 'a binary_tree * 'a binary_tree;;
+```
+
+On peut alors définir des fonctions pour récupérer la racine, les enfants, les feuilles, la taille, la hauteur, la profondeur, le nombre de feuilles, le nombre de noeuds internes...
+
+Il est possible de définir de manière formelle un arbre binaire :
+
+#theorem([Arbres binaires stricts],[Par induction structurelle on définit :
+
+- Toute feuille $y$ est un arbre binaire strict
+- Si $cal(A)_g$ et $cal(A)_d$ sont des arbres binaires stricts, alors $(x, cal(A)_g, cal(A)_d)$ est un arbre binaire strict
+])
+
+Ainsi on peut démontrer facilement des propriétés sur les arbres binaires stricts avec l'induction structurelle, car si l'assertion est vraie pour les sous-arbres, elle est vraie pour l'arbre.
+
+#theorem([Nombre de feuilles],[
+  Pour un arbre binaire strict $cal(A)$ non vide, $f$ le nombre de feuilles, $n$ le nombre de noeuds internes, on a $f = n + 1$
+])
+
+#demo([
+  Pour un arbre à une feuille, on a $f = 1$ et $n = 0$, donc $f = n + 1$
+
+  Soit $cal(A)$ un arbre binaire strict, avec $cal(A)_g$ et $cal(A)_d$ les sous-arbres gauches et droits, on a $f = f_g + f_d$ et $n = n_g + n_d + 1$
+
+  D'où $f = f_g + f_d = (n_g + 1) + (n_d + 1) = n + 1$
+
+  Il est aussi possible de démontrer cette propriété par double comptage : on a $n$ noeuds internes, avec chacun $2$ enfants et une racine et le nombre de noeuds sans la racine est $n+f-1$, d'où $n + f - 1 = 2n$ d'où $f = n + 1$
+])
+
+== Arbres binaires unaires
+
+Il est aussi possible de définir des arbres binaires unaires, c'est à dire des arbres dont chaque noeud a 0, 1 ou 2 enfants.
+
+En OCaml on peut définir un arbre binaire unaire :
+
+```ocaml
+type 'a tree =
+  | Nil
+  | Node of 'a * 'a tree * 'a tree;;
+```
+
+Ainsi une feuille sera un noeud avec 0 enfant.
+
+Il est possible de définir de manière formelle un arbre binaire unaire :
+
+#theorem([Arbres binaires unaires],[Par induction structurelle on définit :
+
+- `Nil` est un arbre binaire unaire (ie l'arbre vide)
+- Si $cal(A)_g$ et $cal(A)_d$ sont des arbres binaires unaires, alors $(x, cal(A)_g, cal(A)_d)$ est un arbre binaire unaire
+])
+
+On retrouve l'encadrement de la taille d'un arbre binaire unaire :
+
+#theorem([Majorations de la hauteur/taille (Arbres binaires unaires)],[
+  Pour un arbre binaire unaire on a :
+
+  $ h(A) + 1 <= abs(A) <= 2^(h(A) + 1) - 1 $
+])
+
+#demo([
+  On peut reprendre la preuve de l'encadrement précédent ou en le faisant par induction structurelle
+])
+
+On retrouve aussi un résultat analogue pour le nombre de feuilles :
+
+#theorem([Nombre de feuilles (Arbres binaires unaires)],[
+  Pour un arbre binaire unaire $cal(A)$ non vide, $f$ le nombre de feuilles, $n$ le nombre de noeuds internes, on a $f <= n + 1$
+])
+
+#demo([
+  La preuve est la même que dans le cas strict à la différence près de l'inégalité
+])
+
+Ainsi on peut définir les fonctions pour récupérer la racine, les enfants, les feuilles, la taille, la hauteur, la profondeur, le nombre de feuilles, le nombre de noeuds internes...
+
+On revient rapidement sur les algorithmes de parcours en profondeur et en largeur.
+
+On va distinguer les parcours en profondeur préfixe, infixe et suffixe :
+
+- Le parcours en profondeur préfixe est le parcours en profondeur où on applique la fonction à la racine avant les enfants
+
+- Le parcours en profondeur infixe est le parcours en profondeur où on applique la fonction à la racine entre les enfants
+
+- Le parcours en profondeur suffixe est le parcours en profondeur où on applique la fonction à la racine après les enfants
+
+Pour faire un parcours en profondeur préfixe on peut faire :
+
+#algo([Parcours en profondeur préfixe (Arbres binaires)],
+```ocaml
+let rec dfs f = function
+  | Nil -> ()
+  | Node (a, left, right) -> f a; dfs f left; dfs f right
+(* ('a -> unit) -> 'a tree -> unit *)
+```)
+
+Pour faire un parcours en profondeur infixe ou suffixe on déplacera l'appel à la fonction `f`, respectivement `dfs f left;f a;dfs f right` ou `dfs f left;dfs f right;f a`.
+
+L'algorithme de parcours en largeur est le même que pour les arbres sans contrainte.
+
+Il peut être intéressant de numéroter les noeuds d'un arbre.
+
+#theorem([Numérotation de Sosa-Stradonitz],[On numérote les noeuds d'un arbre binaire de la manière suivante :
+
+- La racine est numérotée $1$
+- Si un noeud est numéroté $i$, alors son fils gauche est numéroté $2i$ et son fils droit $2i+1$
+])
+
+Cette numérotation est d'autant plus intéressante qu'elle permet de retrouver le chemin vers un noeud depuis la racine grâce à sa représentation binaire : si le bit $i$ est à $0$ alors on va à gauche, sinon à droite.
+
+== Complexité
+
+On va être amené à faire des opérations sur les arbres, il est donc important de connaître la complexité de ces opérations.
+
+Pour toute fonction qui visite tous les noeuds d'un arbre un nombre constant de fois, la complexité est en $O(|A|)$.
+
+Il existe des cas où les fonctions seront plus complexes, notamment si on commence à travailler avec des listes : on se rend compte qu'utiliser `::` pour ajouter un élément en tête est en $O(1)$, mais `@` pour concaténer deux listes est en $O(n)$.
+
+Prenons l'exemple d'une fonction qui transforme un arbre binaire en liste :
+
+```ocaml
+let rec to_list = function
+  | Nil -> []
+  | Node (a, left, right) -> to_list left @ [a] @ to_list right
+```
+
+On voit bien que si l'arbre est une branche qui descend vers la gauche la complexité va exploser car on va concaténer des listes de plus en plus grandes.
+
+Ainsi on peut réécrire la fonction pour être en $O(|A|)$ :
+
+```ocaml
+let to_lst t =
+  let rec aux lst = function
+    | Nil -> lst
+    | Node (x, lchild, rchild) -> aux (x::aux lst rchild) lchild
+  in aux [] t;;
+```
+
+On a donc une complexité en $O(|A|)$ car on ne fait que des ajouts en tête de liste.
+
+== En C
+
+En C on utilisera souvent la représentation d'un arbre binaire avec une structure :
+
+#algo([Arbre binaire en C],
+```c
+typedef struct node {
+  int value;
+  struct node * left;
+  struct node * right;
+} node;
+```)
+
+Les fonctions pour récupérer la racine, les enfants, les feuilles, la taille, la hauteur, la profondeur, le nombre de feuilles, le nombre de noeuds internes seront similaires à celles en OCaml.
+
+#warning([
+  Il est important de faire des null-checks pour éviter les segmentation faults
+])
+
+== Arbres binaires de recherche
+
+Beaucoup de problèmes en informatique peuvent être résolus avec des arbres binaires de recherche.
+
+#theorem([Arbres binaires de recherche],[On définit un arbre binaire de recherche par :
+
+- Si l'arbre est vide, c'est un arbre binaire de recherche
+- Sinon il est de la forme $(x, cal(A)_g, cal(A)_d)$ avec $cal(A)_g$ et $cal(A)_d$ des arbres binaires de recherche et $x$ une valeur telle que $forall y in cal(A)_g, y <= x$ et $forall y in cal(A)_d, y >= x$ (pour une certaine relation d'ordre)
+])
+
+On adoptera la représentation en OCaml des arbres unaires pour les arbres binaires de recherche.
+
+Pour rechercher un élément dans un arbre binaire de recherche on peut faire :
+
+#algo([Recherche dans un arbre binaire de recherche],
+```ocaml
+let rec mem y = function
+  | Nil -> false
+  | Node (x, left, right) when x = y -> true (* On a trouvé l'élément *)
+  | Node (x, left, right) when x > y -> mem y left (* On va à gauche *)
+  | Node (x, left, right) -> mem y right (* On va à droite *)
+(* 'a -> 'a tree -> bool *)
+```)
+
+Cet algorithme est en $O(h(A))$ où $h(A)$ est la hauteur de l'arbre, donc en $O(log(abs(A)))$
+
+On dit que $y$ est le *successeur* de $x$ si $y = sup_{z in A | z > x} z$ et $y$ est le *prédécesseur* de $x$ si $y = inf_{z in A | z < x} z$
+
+== Arbres binaires de recherche équilibrés
+
+== Tas binaires
+
 #box(height: 1em)
 #heading([Graphes], supplement: [struct],)
+
+#todo(text: [À venir])
+
+== Définitions
+
+== En OCaml
+
+== En C
+
+== Étiquetage
+
+== Parcours de graphes
+
+== Cycles
 
 == Recherche de plus cours chemin
 
@@ -2068,6 +2375,14 @@ L'avantage de la dichotomie est qu'elle a une complexité en $O(log(n))$ : elle 
 
 #box(height: 1em)
 #heading([Récursion], supplement: [theory],)
+
+== Terminaison
+
+== Récursion terminale
+
+== Retour sur trace
+
+== Programmation dynamique
 
 #box(height: 1em)
 #heading([Stratégies algorithmiques], supplement: [theory],)
@@ -2477,6 +2792,8 @@ Une première approche naïve est de regarder pour chaque sous-chaîne de longue
 #box(height: 1em)
 #heading([Formules propositionnelles], supplement: [theory],)
 
+== Bases
+
 #theorem([Formule propositionnelle],[
   On a deux constantes, $tack.b$ qui est toujours vraie et $tack.t$ qui est toujours fausse
 
@@ -2490,6 +2807,55 @@ Une première approche naïve est de regarder pour chaque sous-chaîne de longue
 On définit la hauteur et la taille d'une formule propositionnelle comme la hauteur et la taille de l'arbre de la formule
 
 Ainsi $(cal(A) and tack.b) or ((cal(B) and tack.t) and cal(C))$ est de hauteur $2$ et de taille $5$.
+
+On a les opérations binaires suivantes :
+
+#theorem([Opérations binaires],[
+  - `OR` $equiv a or b$ (noté `|`)
+  - `AND` $equiv a and b$ (noté `&`)
+  - `XOR` $equiv a xor b equiv (a or b) and not (a and b)$ (noté `^`)
+  - `NAND` $equiv not (a and b)$
+  - `NOR` $equiv not (a or b)$
+])
+
+Une formule propositionnelle est dite *satisfiable* si il existe une valuation des variables qui rend la formule vraie.
+
+On dit que $f$ est une *conséquence logique* de $e$ si pour toute valuation de $e$, $f$ est vraie et on note $e tack.r.double f$
+
+De même si $f$ est une conséquence logique de $e_1, dots, e_n$, on note $e_1, dots, e_n tack.r.double f$ qui est équivalent à $(e_1 and dots and e_n) tack.r.double f$	
+
+On parle de *systeme complet* si on peut exprimer toutes les fonctions logiques avec un nombre fini de connecteurs
+
+Ainsi ${and, not}$, ${or, not}$, ${$`NAND`$}$ et ${$`NOR`$}$ sont des systèmes complets
+
+== Table de vérité
+
+Construire la table de vérité d'une formule propositionnelle est fastidieux car on a $2^n$ lignes pour $n$ variables
+
+Ainsi on utilise l'algorithme de *Quine* pour simplifier les formules propositionnelles, pour chaque formule propositionnelle qui n'est pas $tack.t$ ou $tack.b$ on choisit une variable qui apparaît dans la formule et on la simplifie, en créant deux sous enfants, un avec la variable à vrai et un avec la variable à faux.
+
+On continue jusqu'à ce que tous les noeuds soient soit $tack.t$ soit $tack.b$, et si on a au moins un feuille $tack.b$ alors la formule est satisfiable.
+
+== Formes normales et canoniques
+
+On appelle *littéral* une variable ou sa négation
+
+On appelle *conjonction* une suite de littéraux connectés par des $and$ (par exemple $f_1 and dots and f_n$) et on appelle *disjonction* une suite de littéraux connectés par des $or$ (par exemple $f_1 or dots or f_n$)
+
+On parle de *forme conjonctive* si on a une conjonction de disjonctions et de *forme disjonctive* si on a une disjonction de conjonctions
+
+Un *minterme* est une conjonctions de littéraux où chaque variable apparaît une seule fois, et un *maxterme* est une disjonction de littéraux où chaque variable apparaît une seule fois
+
+On parle de *forme normale conjonctive* de $f$ si on a une formule $f'$ équivalente à $f$ telle que $f'$ est sous forme conjonctive, et de *forme normale disjonctive* si on a une formule $f'$ équivalente à $f$ telle que $f'$ est sous forme disjonctive
+
+== Problème $k$-SAT
+
+Tout problème $k$-SAT peut être ramené à un problème $3$-SAT
+
+On va classer les problèmes en fonction de leur complexité :
+
+- $P$ pour les problèmes qui peuvent être résolus en temps polynomial
+- $N P$ pour les problèmes qui peuvent être vérifiés en temps polynomial
 
 #counter(heading).update(0)
 #set heading(numbering: none)
