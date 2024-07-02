@@ -221,6 +221,8 @@ _Dans la dernière partie une liste de méthodes est détaillée pour faciliter 
 
 #outline(depth:1,indent: 10pt, fill: [], title: "Magnétostatique :", target: heading.where(supplement: [magne]))
 
+#outline(depth:1,indent: 10pt, fill: [], title: "Mécanique quantique :", target: heading.where(supplement: [quantum]))
+
 #outline(depth:1,indent: 10pt, fill: [], title: "Fiches TP :", target: heading.where(supplement: [tp]))
 
 #outline(depth:1,indent: 10pt, fill: [], title: "Annexe :", target: heading.where(supplement: [annex]))
@@ -392,13 +394,15 @@ Une lentille est dite *divergente* si elle est à bords épais.
 
 == Constructions 
 
+On fera toujours les constructions au crayon à papier, et on respectera les règles suivantes :
+
 - Un rayon incident qui passe par $O$ est non dévié
 - Un rayon incident qui passe par $F$ émerge parallèlement à $O A$
 - Un rayon émergent qui passe par $F'$ incide parallèlement à $O A$
 - Deux rayons incidents parallèles entre eux émergent en se croisant en un même point du plan focal image
 - Deux rayons émergents parallèles entre eux incident en se croisant en un même point du plan focal objet
 
-#todo(text: [(Ajouter des schémas?)])
+#figure(image("physics/optical/optical.png", width: 80%))
 
 == Relations de conjugaison
 
@@ -428,13 +432,49 @@ Une lentille est dite *divergente* si elle est à bords épais.
 ])
 
 #demo([
-  #todo()
+  On pose $overline(A A') = D$ d'où $overline(O A') = D - x$ et $overline(O A) = -x$ (grandeurs algébriques)
+
+  On utilie la relation de conjugaison, $1/overline(O A') - 1/overline(O A) = 1/f'$ d'où $1/(D - x) + 1/x = 1/f'$
+  
+  Ainsi on a $x^2 - D x + f' D$ donc $Delta = D(D-4 f')$, ainsi si $D >= 4 f'$ on a $Delta >= 0$ donc $x >= 0$ donc $A'$ est réel, sinon $A'$ est virtuel (d'où la condition)
 ])
 
 #box(height: 1em)
-#heading([L'oeil], supplement: [optical])
+#heading([Appareils optiques], supplement: [optical])
 
-#todo()
+== Généralités
+
+On parle de *diamètre apparent* pour l'angle sous lequel on voit un objet.
+
+#theorem([Grossissement],[
+  On a le *grossissement*, $ G = alpha_"appareil optique" / alpha_"oeil nu" $
+])
+
+La plus petite séparation angulaire que l'oeil peut distinguer est de $1'$ (minute d'arc) soit $1/60$ degré.
+
+== La lunette astronomique
+
+#figure(image("physics/tp/lunette_astro.png", width: 50%))
+
+La lunette astronomique est un système optique composé de deux lentilles, une *objectif* et une *oculaire*.
+
+Le foyer principal objet de l'objectif est au foyer principal image de l'oculaire.
+
+Ce dispositif permet d'avoir une image à l'infini d'un objet à l'infini.
+
+Il est détaillé dans les fiches TP.
+
+== L'oeil
+
+L'oeil est modélisable comme un dispositif optique :
+
+- On l'iris qui joue le role de diaphragme
+
+- Le cristallin qui joue le role de lentille convergente
+
+- La rétine qui joue le role d'écran
+
+On parlera de *puctum proximum* pour la distance minimale à laquelle on peut voir distinctement ($qty("25","cm")$, et de *punctum remotum* pour la distance maximale à laquelle on peut accomoder ($oo$)
 
 #pagebreak()
 
@@ -591,9 +631,6 @@ Un *générateur de tension* est un dipole qui impose une tension entre ses born
 $U$ est donc indépendante, c'est une dipôle actif.
 
 #figure(image("physics/elec/thevenin.png", width: 20%))
-
-#todo()
-// TODO : REDO THE PICTURE
 
 Un générateur réel est un générateur de Thévenin, on a :
 
@@ -1055,14 +1092,74 @@ On a la *largeur de la bande passante*, $Delta omega = max(omega) - min(omega)$ 
 
 Dans un filtre du premier ordre, $omega_c = omega_0$ et $Delta omega = omega_0$
 
+#align(center, 
+  table(
+    columns: 4,
+    align: center + horizon,
+    [Type],
+    [Transmittance],
+    [Pulsation de coupure],
+    [Gain],
+    [Passe-bas (ordre 1)],
+    [$ 1/(1 + j omega/omega_0) $],
+    [$ omega_0 $],
+    [$ 1/sqrt(1 + (omega/omega_0)^2) $],
+    [Passe-haut (ordre 1)],
+    [$ (j omega/omega_0)/(1 + j omega/omega_0) $],
+    [$ omega_0 $],
+    [$ 1/sqrt(1 + (omega/omega_0)^2) $]
+  )
+)
 
-#todo()
-// TODO : Table with all first order filters (low and high frequence)
+On peut tracer les *diagrammes de Bode* en fonction de $omega/omega_0$ pour le gain et le déphasage, et observer un comportement intégrateur ou dérivateur.
+
+On a un comportement intégrateur dans le cas d'un passe-bas et dérivateur dans le cas d'un passe-haut.
 
 == Filtre d'ordre 2
 
-// TODO : Do that part from scratch
-#todo()
+Seul le filtre passe-bande d'ordre 2 est au programme
+
+#theorem([Transmittance passe-bande],[
+  Dans un *filtre passe-bande d'ordre 2*, on a $underline(H) = 1/(1 + j Q (omega/omega_0 - omega_0/omega))$
+])
+
+On retrouve $Q$ le facteur de qualité.
+
+Comme son nom l'indique, le filtre passe-bande laisse passer une bande de fréquences autour de $omega_0$.
+
+#theorem([Lien pulsation coupure et facteur de qualité],[
+  On a $omega_0/(Delta omega_c) = Q$
+])
+
+Ainsi si $Q$ est grand, la bande passante est étroite, et si $Q$ est petit, la bande passante est large.
+
+Les résultats suivants sont hors programme mais peuvent être utiles :
+
+#align(center,
+  table(
+    columns: 3,
+    align: center + horizon,
+    [Type],
+    [Transmittance],
+    [Pulsation de coupure],
+    [Passe-bande (ordre 2)],
+    [$ 1/(1 + j Q (omega/omega_0 - omega_0/omega)) $],
+    [$ omega_0 $],
+    [Passe-bas (ordre 2)],
+    [$ 1/(1 + j omega/omega_0 - (omega/(Q omega_0))^2) $],
+    [$ omega_0 $],
+    [Passe-haut (ordre 2)],
+    [$ (-(omega/omega_0)^2)/(1 + j omega/omega_0 - (omega/(Q omega_0))^2) $],
+    [$ omega_0 $],
+    [Réjecteur de bande],
+    [$ (1 + (omega/(omega_0))^2)/(1 + j omega/omega_0 - (omega/(Q omega_0))^2) $],
+    [$ omega_0 $]
+  )
+)
+
+#warning([
+  On remarquera que la forme canonique a toujours un $1$ au dénominateur
+])
 
 #pagebreak()
 
@@ -1447,10 +1544,6 @@ On est à vitesse constante, ainsi $arrow(v) = ddt(x) ex$ d'où en intégrant on
 === Mouvement circulaire uniforme
 
 Dans un mouvement circulaire uniforme on a $r$ fixé, donc avec $arrow(v) = cancel(dot(r) er) + r dot(theta) et$ d'où $norm(arrow(v)) = r dot(theta)$ donc $theta(t) = omega t + theta_0$
-
-=== Mouvement uniformément accéléré
-
-#todo(text: [(Voir si vraiment nécessaire)])
 
 #box(height: 1em)
 #heading([Dynamique du point], supplement: [meca])
@@ -2928,6 +3021,49 @@ Ensuite on réalise un bilan de puissances :
 On multiplie par $dot(x)$ ou $i$ puis on obtient un bilan qui peut faire intervenir $R i^2$ la puissance dissipée par effet Joule, ou encore $ddt(cal(E)_c)$ comme termes
 
 Il peut aussi y avoir des termes en plus, comme la puissance fournie par l'opérateur
+
+#pagebreak()
+
+#counter(heading).update(0)
+
+#set heading(numbering: "🪄 I.1.a")
+
+#align(center, text([🪄 Mécanique quantique], weight: 800, size: 24pt))
+
+#box(height: 1em)
+#heading([Introduction à la mécanique quantique], supplement: [quantum])
+
+== Nature ondulatoire de la lumière
+
+Un *corps noir* est un objet qui absorbe toute la lumière incidente, et qui émet un rayonnement thermique.
+
+Le début de la théorie quantique est liée à l'effet photoélectrique, qui est l'émission d'électrons (arrachés) par un matériau sous l'effet de la lumière. On observe une fréquence seuil au delà de laquelle l'effet photoélectrique se produit, mais on n'arrive pas à expliquer pourquoi avec la théorie ondulatoire.
+
+C'est là qu'entre en jeu Einstein, avec la théorie des *quanta* : on considère que la lumière n'est plus continue mais est faite de quanta d'énergie $h f$ d'où la présence d'une fréquence seuil.
+
+#theorem([Relation de Plank-Einstein],[
+  La lumière se compose de *photon* d'énergie $E = h f$ avec $h = qty("6.63e-34", "J s")$ la constante de Planck et $f$ la fréquence (parfois notée $nu$)
+
+  Dans le vide, la lumière se propage à la vitesse $c = qty("3e8", "m/s")$
+
+  Le photon possède une quantité de mouvement $p = h/lambda = (h f)/c$ avec $lambda$ la longueur d'onde
+])
+
+#warning([
+  Les expressions ci dessus ne sont vraies que pour les photons, et $arrow(p) = m arrow(v)$ n'est valable que dans le cas *non relativiste* ($v <= 0.1c$)
+])
+
+== Nature ondulatoire de la matière
+
+En mécanique classique on représente un électron par un corpuscule, mais cette représentation est incompatible avec les trous de Young : en effet on observe un phénomène d'interférence avec des électrons.
+
+#theorem([Relation de de Broglie],[
+  Pour toute particule de quantité de mouvement $p$ on a une longueur d'onde associée $lambda = h/p$ avec $h$ la constante de Planck
+])
+
+On prononce "de Broglie" comme "de Broille"
+
+Les phénomènes quantiques sont observables quand les obstacles sont de l'ordre de la longueur d'onde de de Broglie
 
 #pagebreak()
 
