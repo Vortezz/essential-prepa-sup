@@ -441,6 +441,51 @@ Ainsi la principale différence entre les temps _perfect  continuous_ et les tem
 
 #pagebreak()
 
+#counter(heading).update(0)
+
+#set heading(numbering: "📖 I.1.a")
+
+#align(center, text([📖 Grammaire], weight: 800, size: 24pt))
+
+#pagebreak()
+
+#counter(heading).update(0)
+
+#set heading(numbering: "📃 I.1.a")
+
+#align(center, text([📃 Épreuves], weight: 800, size: 24pt))
+
+#pagebreak()
+
+#counter(heading).update(0)
+
+#set heading(numbering: "🫂 I.1.a")
+
+#align(center, text([🫂 Exemples], weight: 800, size: 24pt))
+
+#box(height: 1em)
+#heading([Environnement], supplement: [ex],)
+
+#box(height: 1em)
+#heading([Droit des femmes], supplement: [ex],)
+
+#box(height: 1em)
+#heading([IA/Nouvelles technologies], supplement: [ex],)
+
+#box(height: 1em)
+#heading([États Unis], supplement: [ex],)
+
+== Politique
+
+== Armes
+
+#box(height: 1em)
+#heading([Royaume Uni], supplement: [ex],)
+
+== Famille royale/Commonwealth
+
+#pagebreak()
+
 #{
   counter(heading).update(0)
   set heading(numbering: none)
