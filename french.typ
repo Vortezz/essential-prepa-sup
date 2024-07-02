@@ -208,16 +208,50 @@
 
 #outline(depth:1,indent: 10pt, fill: [], title: "Livres :", target: heading.where(supplement: [book]))
 
+#outline(depth:1,indent: 10pt, fill: [], title: "Citations :", target: heading.where(supplement: [quotes]))
+
 #pagebreak()
 
 #counter(heading).update(0)
 
-#set heading(numbering: "👼 I.1.a")
+#set heading(numbering: "📖 I.1.a")
 
-#align(center, text([👼 Type], weight: 800, size: 24pt))
+#align(center, text([📖 Livres], weight: 800, size: 24pt))
 
 #box(height: 1em)
-#heading([Chapter title], supplement: [book],)
+#heading([Les Suppliantes et Les sept contre Thèbes], supplement: [book],)
+
+== L'auteur : Eschyle
+
+== Résumé
+
+== Analyse
+
+#box(height: 1em)
+#heading([Traité théologico-politique], supplement: [book],)
+
+== L'auteur : Baruch Spinoza
+
+== Résumé
+
+== Analyse
+
+#box(height: 1em)
+#heading([Le temps de l'innocence], supplement: [book],)
+
+== L'auteur : Edith Wharton
+
+== Résumé
+
+== Analyse
+
+#pagebreak()
+
+#counter(heading).update(0)
+
+#set heading(numbering: "🗿 I.1.a")
+
+#align(center, text([🗿 Citations], weight: 800, size: 24pt))
 
 #pagebreak()
 
