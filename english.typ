@@ -662,6 +662,20 @@ On peut utiliser _shall_ pour donner une suggestion
 #box(height: 1em)
 #heading([Droit des femmes], supplement: [ex],)
 
+*Roe v. Wade* \ 
+Roe v. Wade is a landmark decision of the U.S. Supreme Court in which the Court ruled that the Constitution of the United States *protects a pregnant woman's liberty to choose to have an abortion* without excessive government restriction. This decision was made in *1973*. \
+But in *2022*, the Supreme Court of the United States *overturned the Roe v. Wade decision*, which was a major setback (backlash) for women rights.
+As a result, many states have passed laws that restrict access to abortion. \
+
+*Suffragettes* \
+The suffragettes movement was a political movement in the late 19th and early 20th centuries that fought for women's right to vote, mainly in the UK and the US. \
+The movement was successful in many countries, as women got the right to vote in the UK in *1918* (only if they were over 30 years old, and all women got the right to vote in *1928*), in the US in *1920*, in France in *1944*, in New Zealand in *1893* (the first country)
+
+*Women of color* \
+In some countries, not all women were allowed to vote at the same time. For example, in the US, the 19th amendment was passed in *1920* but in some states afro-americans were still not allowed to vote until the 1960s. \
+They were also discriminated against in other ways, for example, in the US, the Civil Rights Act was passed in *1964* to protect people from discrimination \
+Finally in *1965*, the Voting Rights Act was passed to protect the right to vote of all citizens, regardless of their physical appearance or origin
+
 #box(height: 1em)
 #heading([IA/Nouvelles technologies], supplement: [ex],)
 
