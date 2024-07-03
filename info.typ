@@ -2107,7 +2107,86 @@ Cet algorithme est en $O(h(A))$ où $h(A)$ est la hauteur de l'arbre, donc en $O
 
 On dit que $y$ est le *successeur* de $x$ si $y = sup_{z in A | z > x} z$ et $y$ est le *prédécesseur* de $x$ si $y = inf_{z in A | z < x} z$
 
+On peut vouloir partitionner un arbre binaire de recherche par rapport à une valeur $x$ :
+
+#algo([Partitionnement d'un arbre binaire de recherche],
+```ocaml
+let rec partition x = function
+  | Nil -> Nil, Nil
+  | Node (y, left, right) when y <= x ->
+    let l, r = partition x left in Node (y, left, l), r
+  | Node (y, left, right) ->
+    let l, r = partition x right in l, Node (y, r, right)
+(* 'a -> 'a tree -> 'a tree * 'a tree *)
+```)
+
+Il est intéressant de noter que cet algorithme est en $O(h(A))$.
+
+Si on veut vérifier qu'un arbre de binaire est un arbre de recherche, on doit vérifier :
+
+- Que les sous-arbres gauches sont bien inférieurs à la racine
+
+- Que les sous-arbres droits sont bien supérieurs à la racine
+
+On a aussi des fortes contraintes sur les enfants de droite d'un enfant de gauche, les valeurs doivent être comprises entre la valeur de l'enfant de gauche et la valeur de son parent.
+
+Il existe une deuxième manière de vérifier si un arbre binaire est un arbre de recherche, c'est de faire un parcours en profondeur infixe et de vérifier que les valeurs sont triées.
+
+Il peut être intéressant de réaliser des opérations sur les arbres binaires de recherche, comme l'insertion d'un élément, on peut insérer soit au niveau des feuilles, soit au niveau de la racine.
+
+#algo([Insertion dans un arbre binaire de recherche],
+```ocaml
+let rec insert x = function
+  | Nil -> Node (x, Nil, Nil)
+  | Node (y, left, right) when x <= y -> Node (y, insert x left, right)
+  | Node (y, left, right) -> Node (y, left, insert x right)
+(* 'a -> 'a tree -> 'a tree *)
+```)
+
+Pour insérer au niveau de la racine on peut utiliser la fonction de partition.
+
+Pour la suppression d'un élément, on peut distinguer 3 cas :
+
+- Si l'élément est une feuille, on le supprime
+
+- Si l'élément a un seul enfant, on le remplace par son enfant
+
+- Si l'élément a deux enfants, on le remplace par son successeur
+
+Ainsi on a l'algorithme de suppression :
+
+#algo([Suppression dans un arbre binaire de recherche],
+```ocaml
+let rec pop_min = function
+  | Nil -> raise Empty
+  | Node (x, Nil, right) -> x, right
+  | Node (x, left, right) -> let y, l = pop_min left in y, Node (x, l, right);;
+
+let rec fusion t1 t2 = match t1, t2 with
+  | Nil, t -> t
+  | t, Nil -> t
+  | _ -> let min, bst = pop_min t2 in Node (min, t1, bst);;
+
+let rec remove x = function
+  | Nil -> raise Not_found
+  | Node (y, left, right) when x = y -> fusion left right
+  | Node (y, left, right) when x < y -> Node (y, remove x left, right)
+  | Node (y, left, right) -> Node (y, left, remove x right);;
+(* 'a -> 'a tree -> 'a tree *)
+```)
+
+On remarquera qu'il est possible d'utiliser des arbres binaires de recherche comme des dictionnaires.
+
 == Arbres binaires de recherche équilibrés
+
+Les arbres binaires de recherche peuvent devenir très déséquilibrés, on peut alors avoir une complexité en $O(|A|)$ pour les opérations qui devraient être en $O(log(|A|))$.
+
+#theorem([Arbre équilibré],[
+  On dit que $cal(E)$ est un ensemble d'arbre *équilibrés* si pour tout arbre $cal(A)$, $abs(cal(A)) = O(log(abs(cal(A))))$
+
+])
+
+On va voir ici les *arbres rouges-noirs* qui sont des arbres binaires de recherche équilibrés.
 
 == Tas binaires
 
