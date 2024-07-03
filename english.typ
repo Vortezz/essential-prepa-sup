@@ -418,26 +418,219 @@ Ainsi la principale différence entre les temps _perfect  continuous_ et les tem
 
 == Present perfect simple
 
+On utilise le *present perfect simple* pour des actions qui ont commencé dans le passé et qui ont un lien avec le présent
+
+Sa forme affirmative se forme de la manière suivante *sujet + have/has + participe passé + complément*
+
+#example([
+  I *have* walk#text([*ed*])
+])
+
+Sa forme négative se forme de la manière suivante *sujet + have/has + not + participe passé + complément*
+
+#example([
+  I *have not* walk#text([*ed*])
+])
+
+Sa forme interrogative se forme de la manière suivante *have/has + sujet + participe passé + complément*
+
+#example([
+  *Have* I walk#text([*ed*])?
+])
+
 == Present perfect contineous
+
+On utilise le *present perfect continuous* pour des actions qui ont commencé dans le passé et qui sont toujours en cours
+
+Sa forme affirmative se forme de la manière suivante *sujet + have/has + been + base verbale -ing + complément*
+
+#example([
+  I *have been* walk#text([*ing*])
+])
+
+Sa forme négative se forme de la manière suivante *sujet + have/has + not + been + base verbale -ing + complément*
+
+#example([
+  I *have not been* walk#text([*ing*])
+])
+
+Sa forme interrogative se forme de la manière suivante *have/has + sujet + been + base verbale -ing + complément*
+
+#example([
+  *Have* I been walk#text([*ing*])?
+])
 
 == Past perfect simple
 
+On utilise le *past perfect simple* pour une action qui a eu lieu avant une autre action dans le passé
+
+Sa forme affirmative se forme de la manière suivante *sujet + had + participe passé + complément*
+
+#example([
+  I *had* walk#text([*ed*])
+])
+
+Sa forme négative se forme de la manière suivante *sujet + had + not + participe passé + complément*
+
+#example([
+  I *had not* walk#text([*ed*])
+])
+
+Sa forme interrogative se forme de la manière suivante *had + sujet + participe passé + complément*
+
+#example([
+  *Had* I walk#text([*ed*])?
+])
+
 == Past perfect contineous
+
+On utilise le *past perfect continuous* pour une action qui a eu lieu avant une autre action dans le passé et qui est toujours en cours
+
+Sa forme affirmative se forme de la manière suivante *sujet + had + been + base verbale -ing + complément*
+
+#example([
+  I *had been* walk#text([*ing*])
+])
+
+Sa forme négative se forme de la manière suivante *sujet + had + not + been + base verbale -ing + complément*
+
+#example([
+  I *had not been* walk#text([*ing*])
+])
+
+Sa forme interrogative se forme de la manière suivante *had + sujet + been + base verbale -ing + complément*
+
+#example([
+  *Had* I been walk#text([*ing*])?
+])
 
 == Future perfect simple
 
+On utilise le *future perfect simple* pour une action future antérieure à une autre action future
+
+Sa forme affirmative se forme de la manière suivante *sujet + will + have + participe passé + complément*
+
+#example([
+  I *will have* walk#text([*ed*])
+])
+
+Sa forme négative se forme de la manière suivante *sujet + will + not + have + participe passé + complément*
+
+#example([
+  I *will not have* walk#text([*ed*])
+])
+
+Sa forme interrogative se forme de la manière suivante *will + sujet + have + participe passé + complément*
+
+#example([
+  *Will* I have walk#text([*ed*])?
+])
+
 == Future perfect contineous
+
+On utilise le *future perfect continuous* pour une action future antérieure à une autre action future et qui est toujours en cours
+
+Sa forme affirmative se forme de la manière suivante *sujet + will + have + been + base verbale -ing + complément*
+
+#example([
+  I *will have been* walk#text([*ing*])
+])
+
+Sa forme négative se forme de la manière suivante *sujet + will + not + have + been + base verbale -ing + complément*
+
+#example([
+  I *will not have been* walk#text([*ing*])
+])
+
+Sa forme interrogative se forme de la manière suivante *will + sujet + have + been + base verbale -ing + complément*
+
+#example([
+  *Will* I have been walk#text([*ing*])?
+])
 
 #box(height: 1em)
 #heading([Autres temps], supplement: [conjug],)
 
 == Conditionnel
 
+Il existe 4 niveaux de conditionnel en anglais selon la probabilité de réalisation de l'action
+
+- _Zero conditional_ : pour exprimer une vérité générale (si $A$ se passe, alors $B$ se passe)
+
+  Sa forme affirmative se forme de la manière suivante *if present simple/present simple*
+
+  #example([
+    *If* you heat ice, it *melts*
+  ])
+
+- _First conditional_ : pour exprimer une action probable (si $A$ se passe, alors $B$ se passera)
+
+  Sa forme affirmative se forme de la manière suivante *if present simple/will*
+
+  #example([
+    *If* you study, you *will* pass
+  ])
+
+- _Second conditional_ : pour exprimer une action improbable (si $A$ se passait, alors $B$ se passerait)
+
+  Sa forme affirmative se forme de la manière suivante *if past simple/would + base verbale*
+
+  #example([
+    *If* you studied, you *would* pass
+  ])
+
+- _Third conditional_ : pour exprimer une action impossible (si $A$ s'était passé, alors $B$ se serait passé)
+
+  Sa forme affirmative se forme de la manière suivante *if past perfect/would have + participe passé*
+
+  #example([
+    *If* you had studied, you *would have* passed
+  ])
+
 == Impératif
+
+L'impératif est utilisé pour donner un ordre, un conseil ou une recommandation
+
+On a deux formes d'impératif, une pour les ordres et une pour les conseils
+
+La forme affirmative pour les ordres se forme de la manière suivante *base verbale + complément*
+
+#example([
+  *Go* to the store
+])
+
+La forme affirmative pour les conseils se forme de la manière suivante *let's + base verbale + complément*
+
+#example([
+  *Let's go* to the store
+])
+
+La forme négative pour les ordres se forme de la manière suivante *do not + base verbale + complément*
+
+#example([
+  *Do not go* to the store
+])
+
+La forme négative pour les conseils se forme de la manière suivante *let's not + base verbale + complément*
+
+#example([
+  *Let's not go* to the store
+])
+
+
+On peut utiliser _shall_ pour donner une suggestion
+
+#example([
+  *Shall we go* to the store?
+])
 
 == Modaux
 
+#todo(text: [(A faire)])
+
 == Concordance des temps
+
+#todo(text: [(A faire)])
 
 #pagebreak()
 
