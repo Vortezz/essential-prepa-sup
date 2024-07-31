@@ -241,6 +241,40 @@
 
 == L'auteur : Edith Wharton
 
+== Personnages
+
+La filiation étant compliquée dans le temps de l'innocence, on redonne une carte mentale :
+
+#pagebreak()
+
+#box(height: 220pt)
+
+#rotate(90deg,align(center + horizon,figure(image("french/inno_gen.png", width: 150%), caption: [Arbre généalogique des personnages principaux])))
+
+#pagebreak()
+
+Nous allons maintenant détailler les personnages principaux du roman :
+
+=== Newland Archer
+
+Newland Archer est le personnage principal du roman. Il est fiancé à May Welland, mais a une relation amoureuse extraconjugale avec Ellen Olenska, qui ne s'étendra pas au-delà de la simple relation amoureuse. Il est un avocat new-yorkais de la haute société, et est proche de la famille van der Luyden, qui est une famille influente de la haute société new-yorkaise.
+
+=== May Welland
+
+May Welland est la fiancée de Newland Archer. Elle est la cousine d'Ellen Olenska. Elle est une jeune femme de la haute société new-yorkaise, qui a depuis son enfance été élevée dans le respect des conventions sociales, et gardera, à l'image de sa mère, une attitude innocente et naïve auprès de son mari tout au long du roman, même si elle est consciente de la relation entre Newland et Ellen.
+
+=== Ellen Olenska
+
+Ellen Olenska est la cousine de May Welland. Elle est mariée au comte Olenski, un comte polonais, mais elle est en instance de divorce. Elle est une femme libre, qui a vécu en Europe, et qui est revenue à New York pour échapper à son mari. Elle est une femme indépendante, qui ne se soucie pas des conventions sociales, et qui est en quête de liberté. Elle est l'amante de Newland Archer, mais elle ne veut pas être la cause de la rupture de son mariage avec May, et partira donc pour l'Europe afin de ne pas être un obstacle à leur mariage.
+
+=== Mrs Manson Mingott
+
+Mrs Manson Mingott est la grand-mère de May Welland et Ellen Olenska. Elle est une femme influente de la haute société new-yorkaise, qui a une grande influence sur la famille Mingott. Malgré son age avancé elle reste très active et est très respectée par la haute société new-yorkaise, même si elle ne se déplace plus en public, et qu'elle est connue pour être un peu radine.
+
+=== Mrs Augusta Welland
+
+Mrs Augusta Welland est la mère de May Welland. Elle est une femme de la haute société new-yorkaise, qui est très attachée aux conventions sociales, et qui a élevé sa fille dans le respect des conventions sociales. Elle joue un role important sur le recul de la date du mariage.
+
 == Résumé
 
 == Analyse

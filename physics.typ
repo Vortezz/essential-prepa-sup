@@ -617,7 +617,7 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
 #theorem([Pont diviseur courant],[Soit $R_1$ et $R_2$ deux résistances en parallèle, $I_1 = R_2/(R_1 + R_2) I$])
 
 #demo([
-  #todo()
+  On a $I_1 = U/R_1$ et $U = (R_1 R_2)/(R_1 + R_2) I$ d'où $I_1 = (R_2)/(R_1+R_2) I$
 ])
 
 == Générateurs
@@ -1359,7 +1359,7 @@ Si les deux ondes sont en phase, on a $cos(Delta phi) = 1$ d'où $I = I_1 + I_2 
 
 Si les deux ondes sont opposition en phase, on a $cos(Delta phi) = -1$ d'où $I = I_1 + I_2 - 2 sqrt(I_1 I_2)$ ou encore $I = 0$ sous les hypothèses précédentes. On dit dans ce cas qu'on a des *inteférences destructives*.
 
-#todo(text:[(Voir pour expliciter les expressions des trous d'Young)])
+#todo(text:[(Voir pour expliciter les expressions des trous d'Young + interfrange)])
 
 #box(height: 1em)
 #heading([La lumière onde], supplement: [waves])
@@ -1402,11 +1402,21 @@ Dans un milieu inhomogène, le chemin optique est $L_"AB" = integral_A^B n dd(l)
 
 == Diffraction
 
-#todo()
+Il est possible de retrouver la nature de l'objet diffractant avec la forme de la figure de diffraction
+
+Pour un objet rectangulaire le caractère diffractant est d'autant plus marqué que le côté est proche de $lambda$
+
+On observe une *tache d'Airy* lorsque l'on fait passer un laser dans une fente
+
+#figure(image("physics/waves/airy.jpg", width: 30%))
 
 == Interférences
 
-#todo()
+On peut refaire l'expérience des trous de Young en lumière monochromatique :
+
+#figure(image("physics/waves/young.jpg", width: 50%))
+
+Il est aussi possible de la faire en lumière blanche, on observe que plus on s'éloigne du point central, plus les couleurs disparaissent car aucune longueur d'onde ne sera majoritaire
 
 #counter(heading).update(0)
 
@@ -2116,9 +2126,9 @@ On a les moments d'inertie suivants :
 ))
 
 #demo([
-  #todo(text: [(Refaire plus proprement avec la masse linéique $mu$)])
-
-  Cas d'une tige, on a $J_Delta = integral_0^r m/r x^2 dd(x)= m/r integral_0^r x^2 dd(x) = m/r r^3/3 = 1/3 m r^2$
+  On note $mu$ la *masse linéique*, on a $J_Delta = integral_0^r r^2 mu dd(r) = mu integral_0^r r^2 dd(r) = mu r^3/3$
+  
+  Or dans le cas d'une tige *homogène* on a $mu = m/r$ d'où $J_Delta = m r^2/3$
 ])
 
 #theorem([Énergie cinétique],[
@@ -2247,9 +2257,7 @@ A l'équilibre thermodynamique un système voit ses variables d'état liées par
 
 #theorem([Équation des gaz parfaits], [On a à l'équilibre thermodynamique : $P V = n R T$ avec $R = qty("8.31", "J/K/mol")$ la constante des gaz parfaits.])
 
-#demo([
-  #todo()
-])
+_Si quelqu'un voulait la démo de l'équation des gaz parfaits j'ai pas envie désolé :)_
 
 #box(height: 1em)
 #heading([Premier principe], supplement: [thermo])
@@ -2535,15 +2543,19 @@ Pour étudier un moteur on peut utiliser le diagramme de Raveau avec les zones s
 
 Ainsi on a le tableau suivant :
 
-#table(columns: (120pt, 140pt), align: center, rows: 20pt,
+#table(columns: (120pt, 140pt, 140pt), align: center+horizon, rows: 30pt,
 [*Type de machine*],
+[*Transferts thermiques*],
 [*Rendement/Efficacité*],
 [Moteur],
-[$eta = - W/Q_c$],
+[$Q_c > 0$ et $Q_f < 0$],
+[$ eta = - W/Q_c $],
 [Réfrigirateur],
-[$eta = Q_f/W$],
+[$Q_c < 0$ et $Q_f > 0$],
+[$ eta = Q_f/W $],
 [Pompe à chaleur],
-[$eta = - Q_c/W$],
+[$Q_c < 0$ et $Q_f > 0$],
+[$ eta = - Q_c/W $],
 )
 
 #theorem([Rendement de Carnot], [Pour un moteur ditherme son rendement maximal est : \
@@ -2554,7 +2566,25 @@ $ eta_c = 1 - T_F/T_C$  avec $eta <= eta_c$])
   D'où $eta = (Q_C + Q_F)/Q_C = 1 + Q_F/Q_C$ or $Q_F <= -Q_C T_F/T_C$ d'où $eta <= 1 - T_F/T_C$
 ])
 
-#todo(text: [(Efficacité de Carnot)])
+#theorem([Efficacité de Carnot (réfrigirateur)], [Pour un réfrigirateur son efficacité maximale est : \
+$ eta_c = T_F/(T_C - T_F)$  avec $eta <= eta_c$])
+
+#demo([
+  On a $Q_F + Q_C + W = 0$, $Q_C/T_C + Q_F/T_F <= 0$ et $eta = Q_F/W$ \ \
+  D'où $eta = - Q_F/(Q_C + Q_F)$ avec $Q_F >= -Q_C T_F/T_C$ d'où $eta <= T_F/(T_C - T_F)$
+])
+
+Dans les faits, $3 <= e <= 4$
+
+#theorem([Efficacité de Carnot (pompe à chaleur)], [Pour une pompe à chaleur son efficacité maximale est : \
+$ eta_c = T_C/(T_C - T_F)$  avec $eta <= eta_c$])
+
+#demo([
+  On a $Q_F + Q_C + W = 0$, $Q_C/T_C + Q_F/T_F <= 0$ et $eta = -Q_C/W$ \ \
+  D'où $eta = Q_C/(Q_C + Q_F)$ avec $Q_F >= -Q_C T_F/T_C$ d'où $eta <= T_C/(T_C - T_F)$
+])
+
+Dans les faits, $2 <= e <= 5$
 
 #box(height: 1em)
 #heading([Changement de phase du corps pur], supplement: [thermo])
@@ -3522,19 +3552,175 @@ Ainsi en identifiant les dimensions on a $[X] = A^(1 - z) C^(y - 1)$
 
 == Homogénéité
 
-#todo(text: [(Remplir le tableau suivant)])
-
 #align(center,
   table(
-    columns: (100pt, 100pt, 100pt,100pt),
-    rows: (18pt),
-    align: center,
-    [*Unité*],
+    columns: (160pt, 100pt, 100pt,100pt),
+    rows: (30pt),
+    align: center + horizon,
+    [*Unité/Grandeur*],
     [*Unités SI*],
     [*Dimension*],
     [*Relation*],
-    [Volts ($unit("V")$)],
-    $$
+    [Énergie $cal(E)$],
+    [$unit("J")$],
+    [$unit("kg m^2 s^-2")$],
+    [$ E = m g h $],
+    [Puissance $cal(P)$],
+    [$unit("W")$],
+    [$unit("kg m^2 s^-3")$],
+    [$ P = E/t $],
+    [Travail $cal(W)$],
+    [$unit("J")$],
+    [$unit("kg m^2 s^-2")$],
+    [$ W = m g h $],
+    [Intensité lumineuse $I$],
+    [$unit("W/m^2")$],
+    [$unit("kg s^-3")$],
+    [$ I = P/S $],
+    [Charge électrique $q$],
+    [$unit("C")$],
+    [$unit("A s")$],
+    [$ Q = I t $],
+    [Tension $U$],
+    [$unit("V")$],
+    [$unit("kg m^2 s^-3 A^-1")$],
+    [$ U = P/I $],
+    [Capacité $C$],
+    [$unit("F")$],
+    [$unit("kg^-1 m^-2 s^4 A^2")$],
+    [$ C = Q/U $],
+    [Résistance $R$],
+    [$unit("Ohm")$],
+    [$unit("kg m^2 s^-3 A^-2")$],
+    [$ R = U/I $],
+    [Inductance $L$],
+    [$unit("H")$],
+    [$unit("kg m^2 s^-2 A^-2")$],
+    [$ L = U/ddt(I) $],
+    [Conductivité électrique $sigma$],
+    [$unit("S/m")$],
+    [$unit("kg^-1 m^-3 s^3 A^2")$],
+    [$ sigma = 1/R $],
+    [Vecteur d'onde $k$],
+    [$unit("m^-1")$],
+    [$unit("m^-1")$],
+    [$ k = (2 pi)/lambda $],
+    [Position $x$],
+    [$unit("m")$],
+    [$unit("m")$],
+    [$ x = x_0 + v t $],
+    [Vitesse $v$],
+    [$unit("m/s")$],
+    [$unit("m/s")$],
+    [$ v = ddt(x) $],
+    [Accélération $a$],
+    [$unit("m/s^2")$],
+    [$unit("m/s^2")$],
+    [$ a = ddt(v) $],
+    [Quantité de mouvement $p$],
+    [$unit("kg m/s")$],
+    [$unit("kg m/s")$],
+    [$ p = m v $],
+    [Force $F$],
+    [$unit("N")$],
+    [$unit("kg m/s^2")$],
+    [$ F = m g $],
+    [Constante de raideur $k$],
+    [$unit("N/m")$],
+    [$unit("kg/s^2")$],
+    [$ k = F/x $],
+    [Constante de gravitation $cal(G)$],
+    [$unit("m^3 kg^-1 s^-2")$],
+    [$unit("m^3 kg^-1 s^-2")$],
+    [$ F = G m M/r^2 $],
+    [Permittivité magné. du vide $mu_0$],
+    [$unit("H/m")$],
+    [$unit("kg m s^-2 A^-2")$],
+    [/],
+    [Permittivité élec. du vide $epsilon_0$],
+    [$unit("F/m")$],
+    [$unit("kg^-1 m^-3 s^4 A^2")$],
+    [/],
+    [Moment cinétique $L$],
+    [$unit("N m s")$],
+    [$unit("kg m^2/s")$],
+    [$ L = m v r $],
+    [Moment d'une force $M$],
+    [$unit("N m")$],
+    [$unit("kg m^2/s^2")$],
+    [$ M = r F $],
+    [Moment d'inertie $I$],
+    [$unit("J")$],
+    [$unit("kg m^2")$],
+    [$ I = m r^2 $],
+    [Couple $Gamma$],
+    [$unit("N m")$],
+    [$unit("kg m^2/s^2")$],
+    [$ Gamma = ddt(L) $],
+    [Champ électrique $E$],
+    [$unit("V/m")$],
+    [$unit("kg m s^-3 A^-1")$],
+    [$ E = U/d $],
+    [Champ magnétique $B$],
+    [$unit("T")$],
+    [$unit("kg s^-2 A^-1")$],
+    [$ E = mu dot B $],
+    [Moment magnétique $mu$],
+    [$unit("A m^2")$],
+    [$unit("A m^2")$],
+    [$ mu = I S $],
+    [Constante de Planck $h$],
+    [$unit("J s")$],
+    [$unit("kg m^2 s^-1")$],
+    [$ E = h f $],
+    [Pression $P$],
+    [$unit("Pa")$],
+    [$unit("kg m^-1 s^-2")$],
+    [$ P = F/S $],
+    [Constante des gaz parfaits $R$],
+    [$unit("J/mol/K")$],
+    [$unit("kg m^2 s^-2 mol^-1 K^-1")$],
+    [$ P V = n R T $],
+    [Transfert thermique $Q$],
+    [$unit("J")$],
+    [$unit("kg m^2 s^-2")$],
+    [$ Q = Delta U - W $],
+    [Capacité thermique $C$],
+    [$unit("J/K")$],
+    [$unit("kg m^2 s^-2 K^-1")$],
+    [$ Delta U = C Delta T $],
+    [Enthalpie $H$],
+    [$unit("J")$],
+    [$unit("kg m^2 s^-2")$],
+    [$ H = U + P V $],
+    [Entropie $S$],
+    [$unit("J/K")$],
+    [$unit("kg m^2 s^-2 K^-1")$],
+    [$ S_e = Q/T $],
+    [Flux thermique $Phi$],
+    [$unit("W")$],
+    [$unit("kg m^2 s^-3")$],
+    [$ Phi = ddt(Q) $],
+    [Résistance thermique $R$],
+    [$unit("K/W")$],
+    [$unit("K/W")$],
+    [$ R = Delta T/Phi $],
+    [Conductivité thermique $lambda$],
+    [$unit("W/m/K")$],
+    [$unit("kg m s^-3 K^-1")$],
+    [$ R = e/(lambda S) $],
+    [Coefficient de transfert thq $h$],
+    [$unit("W/m^2/K")$],
+    [$unit("kg s^-3 K^-1")$],
+    [$ Phi = h S Delta T $],
+    [Enthalpie de chgt d'état $Delta h$],
+    [$unit("J/kg")$],
+    [$unit("kg m^2 s^-2")$],
+    [$ Delta H = m Delta h + ... $],
+    [Entropie de chgt d'état $Delta S$],
+    [$unit("J/kg/K")$],
+    [$unit("kg m^2 s^-2 K^-1")$],
+    [$ Delta S = (m Delta h)/T $],
   ),
 )
 
