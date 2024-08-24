@@ -251,13 +251,13 @@ On a la *vitesse de la lumière* dans le vide, $c = qty("3.0e8", "m/s")$
 
 #theorem([Indice optique],[
   On a l'*indice optique* $n$ (ou _indice de réfraction_), usuellement $n > 1$.
-  On a $v = c/n$ la vitesse dans un THI donné.
+  On a $n = c/v$ avec $v$ la vitesse dans un THI donné.
 ])
 
 On a $n_"vide" = 1$, $n_"air" - n_"vide" = num("3e-4")$ et $n_"eau" = 1.3$
 
 #theorem([Relation de dispertion], [
-  On a $lambda = c/f$ avec $f$ la fréquence temporelle et $lambda$ la longueur d'onde. Dans un THI on a donc $lambda = c/(n f)$
+  On a $lambda = c/f$ avec $f$ la fréquence temporelle et $lambda$ la longueur d'onde dans le vide. Dans un THI on a donc $lambda = c/(n f)$
 ])
 
 #figure(image("physics/optical/spectrum.png", width: 70%))
@@ -307,6 +307,8 @@ Dans la suite on se place dans cette approximation
 
 === Lois de l'optique géométrique
 
+On parle d'un *dioptre* pour désigner la surface entre deux milieux transparents.
+
 #theorem([Principe de retour inverse],[La forme d'un rayon lumineux ne dépend pas du sens dans lequel la lumière le parcourt])
 
 #theorem([Loi de Descartes pour la réflexion],[Les rayons incidents et réfléchis sont dans le même plan , et $ alpha = i $ Avec $alpha$ l'angle réféchi et $i$ d'incidence])
@@ -317,13 +319,15 @@ Dans la suite on se place dans cette approximation
 
 Si $n_1 > n_2$, on dit que le milieu $1$ est plus *réfringent* que le milieu $2$.
 
-#theorem([Réflexion totale],[Il existe un angle d'incidence limite $i_"1,lim" = arcsin(n_2/n_1)$ tel que si $i_1 > i_"1,lim"$ il n'y a plus de rayon réfracté])
+#theorem([Réflexion totale],[Il existe un angle d'incidence limite $i_"1,lim" = arcsin(n_2/n_1)$ tel que si $i_1 > i_"1,lim"$ il n'y ait plus de rayon réfracté])
 
 #demo([
   On part de la loi de Descartes pour la réfraction, $n_1 sin(i) = n_r sin(r)$ avec $r > i$ et $n_1 > n_2$ d'où $n_1/n_2 = sin(r)/sin(i) > 1$ d'où $sin(r) > sin(i)$.
 
-  Ainsi $sin(r) = n_i/n_r sin(i)$ d'où si $i > arcsin(n_2/n_1)$ on a $sin(r) > 0$ ce qui est contradictoire.
+  Ainsi $sin(r) = n_i/n_r sin(i)$ d'où si $i > arcsin(n_2/n_1)$ on a $sin(r) > 1$ ce qui est contradictoire.
 ])
+
+Ce phénomène est utilisé dans les fibres optiques.
 
 #box(height: 1em)
 #heading([Lentilles minces et miroir plan], supplement: [optical])
@@ -348,14 +352,14 @@ On parle de *système centré* pour un système possédant un axe de symétrie a
 
 On parle d'*aplanétisme* si $2$ points objets dans le même plan orthogonal à $O A$ sont conjugués à $2$ points image dans un même plan orthogonal à $O A$ (encore le cas du miroir plan)
 
-Un point est *réel* si il existe, et *virtuel* si on le voit dans un instrument d'optique (ou pas du tout)
+Un point est *réel* si il exist réellement, et *virtuel* un point où se coupent les prolongements des rayons incidents.
 
 == Lentilles minces
 
 On parle de lentille mince car l'épaisseur est petite devant les rayons de courbure.
 
 #theorem([Conditions de Gauss],[
-  Tous les rayons sont *paraxiaux*, soit peu inclinés et peu éloigné de $O A$.
+  Tous les rayons sont *paraxiaux*, soit peu inclinés et peu éloignés de $O A$.
 
   Dans ces conditions on a un stigmatisme approché et un applanétisme approché.
 
@@ -394,7 +398,7 @@ Une lentille est dite *divergente* si elle est à bords épais.
 
 == Constructions 
 
-On fera toujours les constructions au crayon à papier, et on respectera les règles suivantes :
+On fera toujours les constructions au stylo, et on respectera les règles suivantes :
 
 - Un rayon incident qui passe par $O$ est non dévié
 - Un rayon incident qui passe par $F$ émerge parallèlement à $O A$
@@ -450,15 +454,17 @@ On parle de *diamètre apparent* pour l'angle sous lequel on voit un objet.
   On a le *grossissement*, $ G = alpha_"appareil optique" / alpha_"oeil nu" $
 ])
 
-La plus petite séparation angulaire que l'oeil peut distinguer est de $1'$ (minute d'arc) soit $1/60$ degré.
-
 == La lunette astronomique
 
 #figure(image("physics/tp/lunette_astro.png", width: 50%))
 
 La lunette astronomique est un système optique composé de deux lentilles, une *objectif* et une *oculaire*.
 
-Le foyer principal objet de l'objectif est au foyer principal image de l'oculaire.
+L'*objectif* est la lentille qui reçoit la lumière, et l'*oculaire* est la lentille qui donne l'image.
+
+Le *foyer principal objet* de l'objectif doit être confondu avec le *foyer principal image* de l'oculaire.
+
+On parle d'un système *afocal* si on donne une image à l'infini d'un objet à l'infini.
 
 Ce dispositif permet d'avoir une image à l'infini d'un objet à l'infini.
 
@@ -466,9 +472,11 @@ Il est détaillé dans les fiches TP.
 
 == L'oeil
 
+La plus petite séparation angulaire que l'oeil peut distinguer est de $1'$ (minute d'arc) soit $1/60$ degré.
+
 L'oeil est modélisable comme un dispositif optique :
 
-- On l'iris qui joue le role de diaphragme
+- On a l'iris qui joue le role de diaphragme
 
 - Le cristallin qui joue le role de lentille convergente
 
@@ -499,11 +507,15 @@ La charge est portée par les électrons ($-e$) et les protons ($e$) avec $e = 1
 
 Le *courant électrique* est un déplacement d'ensemble de charges
 
+On parle de *régime continu* si le courant est constant, et de *régime variable* si le courant varie.
+
 === Dipôle, branche, maille, circuit
 
 Un *dipôle* possède 2 pôles, lui permettant d'être traversé par un courant électrique. Une association de dipôles forme un *circuit*.
 
 Un association de dipôles à la suite est appelée *association série* et forme une *branche*.
+
+On parle de *noeud* pour un point où plusieurs branches se rejoignent.
 
 Un association de dipôles bouclant sur elle même est appelée *maille*.
 
@@ -513,17 +525,44 @@ L'*intensité électrique* est un débit de charge noté $I$, avec $I = (delta Q
 
 Pour mesurer une intensité on utilise un _ampèremètre_ avec le $+$ sur le $m A$ ou $mu A$ et le $-$ sur le COM (en série).
 
+#figure(
+  image("physics/elec/nodes_law.png", width: 20%)
+)
+
 #theorem([Loi des noeuds],[
   Dans une maille on a : $ sum_"entrants" I = sum_"sortants" I $
 ])
+
+Ordres de grandeur de l'intensité :
+
+- $I_"téléphone" approx unit("mA")$
+- $I_"prise" = "qq" unit("A")$
+- $I_"TGV, ligne haute tension" = 500 - 1000 unit("A")$
+- $I_"foudre" = 10^4 unit("A")$
 
 == La tension électrique
 
 La *tension électrique* $U$ est une différence de potentiels en Volts ($unit("V")$) et est additive.
 
+#figure(
+  image("physics/elec/tension_ab.png", width: 20%)
+)
+
 #theorem([Expression de $U_"AB"$],[
-  On a $U_"AB" = V_A - V_B$ avec $V_A$ et $V_B$ deux potentiels.
+  On a $U_"AB" = V_A - V_B$ avec $V_A$ et $V_B$ deux potentiels électriques
 ])
+
+Ordres de grandeur de la tension :
+
+- $U_"pile" = 1 - 9 unit("V")$
+- $U_"batterie" = 12 unit("V")$
+- $U_"prise" = 220 unit("V")$
+- $U_"ligne haute tension" = 150 - 1000 unit("kV")$
+- $U_"foudre" = 10^8 unit("V")$
+
+#figure(
+  image("physics/elec/loop_law.png", width: 20%)
+)
 
 #theorem([Loi des mailles],[
   Dans une maille, on a : $ sum_"tension maille" epsilon_i U_i $
@@ -540,7 +579,7 @@ Pour mesurer une tension on utilise un _voltmètre_ avec le $+$ sur la borne $Om
   Si $tau >> d/c$ avec $tau$ le temps caractéristique, $d$ la taille du circuit et $c$ la longueur du vide alors on est dans l'approximation.
 ])
 
-Si ce critère est vérifié, tous les points du circuit "voient" le changement en direct. Ce critère est tout le temps vérifié en série.
+Si ce critère est vérifié, tous les points du circuit "voient" le changement en direct. Ce critère est tout le temps vérifié en tp.
 
 == Résistors
 
@@ -548,13 +587,22 @@ Un *résistor* est une dipôle qui conduit $+$ ou $-$ bien l'électricité.
 
 #figure(image("physics/elec/resistance.png", width: 20%))
 
-Une résistance est schématisée ainsi en convention récepteur
+Une résistance est schématisée ainsi en convention récepteur (ie l'intensité et la tension ne sont pas dans le même sens), et dans ce cas la $P = U I$ représente la puissance reçue.
 
 #theorem([Loi d'Ohm],[
   On a $U = R I$ avec $R$ la résistance en Ohm ($unit("Ohm")$) en convention récepteur.
 
   Attention, en convention générateur, on a $U = - R I$
 ])
+
+On définit la *conductance* $G = 1/R$ en Siemens ($unit("S")$).
+
+Ordres de grandeur de la résistance :
+
+- $R_"Ampèremètre" = "qq" unit("Ohm")$
+- $R_"Fer à repasser" = 40 unit("Ohm")$
+- $R_"Électronique" = 10^6 - 10^7 unit("Ohm")$
+- $R_"Voltmètre" = 10^6 unit("Ohm")$
 
 On dit qu'un résistor est un dipôle passif (en l'absence de $I$, pas de $U$) et linéaire ($U = f(I)$).
 
@@ -606,7 +654,7 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
 
 #figure(image("physics/elec/serial_res.png", width: 30%))
 
-#theorem([Pont diviseur tension],[Soit $R_1$ et $R_2$ deux résistances en séries, $U = R_1/(R_1 + R_2) I$])
+#theorem([Pont diviseur tension],[Soit $R_1$ et $R_2$ deux résistances en séries, $U_1 = R_1/(R_1 + R_2) U$])
 
 #demo([
   On a $U_1 = R_1 I$ et $U = (R_1 + R_2) I$ d'où $U_1/U = (R_1 I)/((R_1+R_2) I)$
@@ -614,7 +662,7 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
 
 #figure(image("physics/elec/parallel_res.png", width: 25%))
 
-#theorem([Pont diviseur courant],[Soit $R_1$ et $R_2$ deux résistances en parallèle, $I_1 = R_2/(R_1 + R_2) I$])
+#theorem([Pont diviseur courant],[Soit $R_1$ et $R_2$ deux résistances en parallèle, $I_1 = R_2/(R_1 + R_2) I = (1/R_1)/(1/R_1 + 1/R_2) I$])
 
 #demo([
   On a $I_1 = U/R_1$ et $U = (R_1 R_2)/(R_1 + R_2) I$ d'où $I_1 = (R_2)/(R_1+R_2) I$
@@ -626,7 +674,7 @@ En théorie elle est choisie arbitrairement, mais en pratique elle est imposée 
 
 #figure(image("physics/elec/tension.png", width: 10%))
 
-Un *générateur de tension* est un dipole qui impose une tension entre ses bornes. La tension imposée par un générateur est aussi appelée sa *force électromagnétique* (f.e.m)
+Un *générateur de tension* est un dipole qui impose une tension entre ses bornes. La tension imposée par un générateur est aussi appelée sa *force électromotrice* (f.e.m)
 
 $U$ est donc indépendante, c'est une dipôle actif.
 
@@ -658,6 +706,12 @@ Le *condensateur* est un dipôle linéaire composé de deux armatures séparées
 On a $Q$ la charge algébrique par l'armature de gauche et $-Q$ par celle de droite : le condensateur est globalement neutre.
 
 On a $Q = C U$ avec $C$ la *capacité du condensateur* en Farad ($unit("F")$)
+
+Ordres de grandeur de la capacité :
+
+- $C_"condensateur de TP" = 1 unit("nF") - 1 unit("uF")$
+- $C_"condensateur en électrotechnique" = 1 unit("uF") - 1 unit("F")$
+- $C_"condensateur en électronique" = 1 unit("pF") - 1 unit("uF")$
 
 #theorem([Intensité aux bornes d'un condensateur],[
   En convention récepteur, $I = C ddt(U)$
@@ -716,7 +770,7 @@ On a $Q = C U$ avec $C$ la *capacité du condensateur* en Farad ($unit("F")$)
 On peut étudier la charge d'un condensateur (ou sa décharge) avec une équation d'ordre 1 dans un circuit RC
 
 #theorem([Équation différentielle RC],[
-  On a $ ddt(U) + 1/(R C) U = A $ avec $tau = R C$ le temps caractéristique
+  On a $ ddt(U) + U/tau = U_infinity/tau $ avec $tau = R C$ le temps caractéristique dans le circuit RC
 ])
 
 == La bobine
@@ -728,6 +782,12 @@ La *bobine* est un dipôle linéaire composé d'un enroulement de fils sur lui m
 #figure(image("physics/elec/inductor.png", width: 20%))
 
 On associe à une bobine une *inductance* $L$ en Henry ($unit("H")$), dépendant du nombre de fils et la quantités de spires (tours)
+
+Ordres de grandeur de l'inductance :
+
+- $L_"bobine de TP" = 1 unit("uH") - 1 unit("mH")$
+- $L_"haut parleur" = 1 unit("mH")$
+- $L_"1m de cable" = 100 unit("nH")$
 
 #theorem([Intensité aux bornes d'une bobine],[
   En convention récepteur, $U = L ddt(i)$
@@ -749,7 +809,7 @@ On associe à une bobine une *inductance* $L$ en Henry ($unit("H")$), dépendant
   On suppose $i$ discontinue donc $E$ aussi, ainsi $P = ddt(E)$ diverge donc $P_"reçue"$ infinie n'est pas possible
 ])
 
-#theorem([Comportement en régime permanant],[
+#theorem([Comportement en régime permanent],[
   En régime permanent un condensateur est équivalent à un fil ($U = 0 unit("V")$)
 ])
 
@@ -791,7 +851,7 @@ On considère un circuit LC, on trouve $L C dv(U,t,2) + U = E$ d'où en posant $
 #theorem([Oscillateur harmonique],[
   On a l'équation différentielle de l'oscillateur harmonique :
 
-  $ dot.double(theta) + omega_0^2 theta = B $
+  $ dot.double(theta) + omega_0^2 theta = omega_0^2 B $
   avec $omega_0$ la *pulsation caractéristique* homogène à un $unit("r/s")$ et $B$ une constante
 ])
 
@@ -812,8 +872,8 @@ On considère maintenant un circuit RLC, ainsi on trouve l'équation différenti
 #theorem([Oscillateur amorti], [
   On a l'équation différentielle de l'oscillateur armorti :
 
-  $ dot.double(theta) + omega_0/Q dot(theta) + omega_0^2 theta = omega_0^2 B $
-  avec $omega_0$ la *pulsation caractéristique* homogène à un $unit("r/s")$, $Q$ le *facteur de qualité* adimensionné et $B$ une constante
+  $ dot.double(theta) + omega_0/Q dot(theta) + omega_0^2 theta = omega_0^2 theta_infinity $
+  avec $omega_0$ la *pulsation caractéristique* homogène à un $unit("r/s")$, $Q$ le *facteur de qualité* adimensionné
   ])
 
 Si on a beaucoup d'oscillations, $Q$ correspond au nombre de périodes avant armortissement.
@@ -828,7 +888,7 @@ Selon la valeur de $Q$ on a un des trois types d'oscillateurs suivants :
 
 Dans le cas apériodique on a $Delta > 0$ d'où $U(t) = "sp" + A e^(-t/tau_1) + B e^(-t/tau_2)$, la résolution étant détaillée en @equa[annexe].
 
-$U$ s'amortit donc en quelques $max(tau_1, tau_2)$.
+$U$ s'amortit donc en quelques $max(tau_1, tau_2)$, et en faisant un DL on a $tau_2 = 1/(w_0 Q)$
 
 #graph(funcs: ((x) => {
   return calc.pow(calc.e, -x/(25))
@@ -836,7 +896,7 @@ $U$ s'amortit donc en quelques $max(tau_1, tau_2)$.
 
 === Régime critique
 
-Dans le cas critique, on a $Delta = 0$ d'où $U(t) = "sp" + (A t + B)e^(-t/tau)$, la résolution étant détaillée en @equa[annexe].
+Dans le cas critique, on a $Delta = 0$ d'où $U(t) = "sp" + (A t + B)e^(-t/tau)$, la résolution étant détaillée en @equa[annexe], on a quelques $tau = 1/(w_0)$
 
 Le cas critique est très compliqué à réaliser expérimentalement.
 
@@ -848,13 +908,15 @@ Le cas critique est très compliqué à réaliser expérimentalement.
 
 Dans le cas pseudo-périodique, on a $Delta < 0$ d'où on a $U(t) = "sp" + (A cos (omega t) + B sin (omega t)) e^(-t/tau)$ avec $omega$ la *pseudo-pulsation*, la résolution étant détaillée en @equa[annexe].
 
+On a quelques $tau = (2 Q)/w_0$
+
 Ainsi dans ce cas les oscillateurs voient leur amplitude d'oscillations diminuer avec le temps.
 
 #graph(funcs: ((x) => {
   return calc.sin(x) * calc.pow(calc.e, -x/(25))
 },), domain: (0,100))
 
-On définit le *décrément logarithmique* $delta = T/tau$, avec $T$ la *pseudo-période*. Le décrément logarithmique s'obtient en prenant deux valeurs maximales et en faisant $delta = ln(v_1/v_2)$ avec $t_1 < t_2$.
+On définit le *décrément logarithmique* $delta = ln(A(t)/(A(t+T))) = T/tau$, avec $T$ la *pseudo-période*. Le décrément logarithmique s'obtient en prenant deux valeurs maximales et en faisant $delta = ln(v_1/v_2)$ avec $t_1 < t_2$.
 
 La durée du transitoire est de quelques $tau$.
 
@@ -1079,7 +1141,7 @@ Pour étudier un filtre :
 - On regarde ensuite le gain $abs(underline(H))$ en BF et HF en négligeant $omega/omega_0$ ou $omega_0/omega$ selon le cas.
 
 #theorem([Gain en décibel],[
-  On a le *gain en décibel* $G_unit("dB") = 20 log_10 (underline(H))$, l'échelle log étant plus adaptée car à chaque facteur $times 10$ on a $plus.minus 20k$
+  On a le *gain en décibel* $G_unit("dB") = 20 log_10 (abs(underline(H)))$, l'échelle log étant plus adaptée car à chaque facteur $times 10$ on a $plus.minus 20k$
 ])
 
 On a la *pulsation de coupure* à $-3 unit("dB")$ telle que $G_unit("dB") = - 3 unit("dB")$
@@ -1300,6 +1362,12 @@ On considère $s(0, t) = S_0 + sum_(m=1)^(+ infinity) S_m cos(m omega t + phi_m)
 
 De plus on a la *relation de dispersion* entre $k_omega$ et $m_omega$, $m_omega = k_m c$
 
+== Ordre de grandeur
+
+On a $lambda = 10^-6 unit("m")$ pour les ondes lumineuses, $f = 10^14 unit("Hz")$ et $omega = 10^15 unit("r/s")$
+
+Le spectre de l'audible est de $20 unit("Hz")$ à $20 unit("kHz")$ et le spectre des ondes radio est de $10 unit("kHz")$ à $10 unit("GHz")$
+
 #box(height: 1em)
 #heading([Diffraction/Interférences], supplement: [waves])
 
@@ -1320,7 +1388,9 @@ La *diffraction* se fait selon le schéma suivant :
   - Si $a >> lambda$ l'onde n'est pas diffractée
 ])
 
-Si $lambda <= a$, l'onde est contrainte dans un secteur angulaire d'un demi angle au sommet $theta$ tel que $sin(theta) approx lambda/a$
+#theorem([Formule de la diffraction],[
+  Si $lambda <= a$, l'onde est contrainte dans un secteur angulaire d'un demi angle au sommet $theta$ tel que $sin(theta) approx lambda/a$
+])
 
 == Interférences
 
@@ -1465,13 +1535,21 @@ On se place dans le contexte de la relativité galiléenne, le temps est absolu 
   Soit $O$ l'origine et $M$ un point matériel, ainsi *vecteur position* est $arrow(O M)$
 ])
 
+Le *vecteur déplacement élémentaire* est $dd(arrow(O M)) = arrow(M(t) M(t + dt))$
+
 #theorem([Vitesse],[
   La *vitesse* est la dérivée de la position par rapport au temps, $arrow(v) = ddt(arrow(O M))$
 ])
 
+Le vecteur vitesse est tangent à la trajectoire.
+
 #theorem([Accélération],[
   L'*accélération* est la dérivée de la vitesse par rapport au temps, $arrow(a) = ddt(arrow(v)) = dv(arrow(O M),t,2)$
 ])
+
+On dit qu'un mouvement est *rectiligne* si la trajectoire est une droite, *circulaire* si la trajectoire est un cercle, *curviligne* si la trajectoire est une courbe.
+
+De plus le mouvement est *uniforme* si la vitesse est constante, *accéléré* si la vitesse augmente, *décéléré* si la vitesse diminue.
 
 === Coordonnées cartésiennes
 
@@ -1565,6 +1643,8 @@ En dynamique on s'intéresse aux causes des mouvements contrairement à la ciné
 L'*inertie* est la résistance d'un corps à une variation de son état de mouvement.
 
 La *masse* en physique est une mesure de l'inertie d'un corps, elle s'exprime en kilogramme ($unit("kg")$), est extensive et additive.
+
+On appelle *centre de masse* le point où l'on peut assimiler la masse du système à une masse ponctuelle, et on note $G$ le centre de masse (aussi appelé barycentre). On a $arrow(O G) = 1/M sum m_i arrow(O_i G_i)$
 
 #theorem([Quantité de mouvement],[
   La *quantité de mouvement* est le produit de la masse par la vitesse, $arrow(P) = m arrow(v)$
@@ -1674,7 +1754,7 @@ On a 2 types de frottements
   On a $arrow(F_f) = - alpha arrow(v)$ qui s'opposent à la vitesse
 ])
 
-Il existe aussi les frottements quadratiques (HP)
+Il existe aussi les frottements quadratiques, pour des vitesses plus élevées modélisés par $arrow(F_f) = - beta arrow(v)^2$
 
 == Intéractions à connaître
 
@@ -1683,7 +1763,7 @@ Il existe aussi les frottements quadratiques (HP)
 On considère 2 points massifs
 
 #theorem([Force d'intéraction gravitationnelle],[
-  On a $arrow(F) = cal(G) (m_1 m_2)/d^2 arrow(u)$ avec $cal(G) = qty("6.7e-11","m^3/kg/s^2")$ la constante de pesanteur
+  On a $arrow(F) = - cal(G) (m_1 m_2)/d^2 arrow(u)$ avec $cal(G) = qty("6.7e-11","m^3/kg/s^2")$ la constante de pesanteur
 ])
 
 === Intéraction coulombienne
@@ -1736,6 +1816,10 @@ On a pour le poids $W_p = - m g h$
   $ Delta cal(E)_c = sum W_arrow(F)_"ext" $
 ])
 
+#theorem([Théorème puissance cinétique],[
+  On a $ ddt(cal(E)_c) = sum P_"ext" $
+])
+
 #demo([
   Par PFD on a $m ddt(arrow(v)) = sum arrow(F)_"ext"$ d'où $m ddt(arrow(v)) dot arrow(v) = sum arrow(F)_"ext" dot arrow(v)$, ainsi on a $ddt((1/2 m v^2)) = sum P_"ext"$ donc on a $dd((1/2 m v^2)) = sum P_"ext" dd(t)$ donc en intégrant $Delta cal(E_c) = sum W_arrow(F)_"ext"$
 ])
@@ -1749,11 +1833,11 @@ On a $cal(E)_p$ l'*énergie potentielle*, et est définie à une constante près
 #theorem([Énergies potentielles à connaître],[
   Une force conservative admet une énergie potentielle :
 
-  - Pour le poids, $cal(E)_(p p) = m g h$ (appelée *énergie potentielle de pesanteur*)
+  - Pour le poids, $cal(E)_(p p) = m g h$ (appelée *énergie potentielle de pesanteur*), avec un $-$ devant si $ez$ est descendant
 
   - Pour le rappel élastique, $cal(E)_p = k/2 (l - l_0)^2$
 
-  - Pour la gravitation, $cal(E)_p = cal(G) (m_1 m_2)/d$
+  - Pour la gravitation, $cal(E)_p = - cal(G) (m_1 m_2)/d$
 
   - Pour la force coulombienne, $cal(E)_p = (q_1 q_2)/(4 pi epsilon_0 d)$
 ])
@@ -1776,7 +1860,7 @@ Un système est dit *conservatif* si toutes les forces sont conservatives
 
 #theorem([Relation $cal(E)_p$/$arrow(F)$],[
 
-  On a $arrow(F) = dv(cal(E)_p,x) ex$
+  On a $arrow(F) = dv(cal(E)_p,O M) arrow(O M)$
 ])
 
 == Théorème de l'énergie mécanique
@@ -1986,11 +2070,17 @@ De même on parle de *apoastre* quand il est au plus loin de l'astre, *aphélie*
 
 Un *jour solaire* est un intervalle de temps entre 2 passage au zénith du Soleil, on a $T_s = qty("24", "h") = qty("86400", "s")$
 
-Un *jour sidéral* est la durée pour que la Terre fasse un tour complet dans le référentiel géocentrique.
+Un *jour sidéral* est la durée pour que la Terre fasse un tour complet dans le référentiel géocentrique, on a $T_"sidéral" = qty("86164", "s") = qty("23","h") qty("56","min") qty("4","s")$
 
 #figure(image("physics/meca/sideral.png", width: 20%))
 
 On a $alpha = (2 pi)/(num("365.25") "jours")$ 
+
+== Satellites géostationnaires
+
+Un satellite est dit *géostationnaire* si il pointe toujours vers le même point de la Terre.
+
+Un satellite géostationnaire est à une altitude de $h = 35786 unit("km")$, a une période de révolution de $T_"sidéral" = qty("86164", "s")$ et a une trajectoire circulaire dans le plan équatorial.
 
 #box(height: 1em)
 #heading([Mécanique du solide], supplement: [meca])
@@ -2340,7 +2430,7 @@ On a l'*enthalpie* une fonction d'état additive et extensive telle que $H = U +
 
 #theorem([2e loi de Joule], [Dans le cas d'un gaz parfait, $H$ = $A times T$ avec $A$ une constante])
 
-Ainsi on a le second principe :
+Ainsi on a le premier principe monobare :
 
 #theorem([Premier principe monobare], [Dans un système fermé évoluant entre des états d'équilibre avec une transformation monobare on a $Delta (E_m_("macro") + H) = W_u + Q$ d'où dans la plupart des cas : \ $ Delta H = W_u + Q $])
 
@@ -2348,7 +2438,7 @@ Ainsi on a le second principe :
 
 Avec $W_u$ la puissance utile des autres forces (souvent nulles d'où $Delta H = Q$ dans certains cas)
 
-On définit la capacité thermique à pression fixée par $C_p = derivativePart(H, T, P)$ et $C_p = dv(H, T)$ dans le cas d'un GP.
+On définit la capacité thermique à pression fixée par $C_p = derivativePart(H, T, P)$ et $C_p = dv(H, T)$ dans le cas d'un gaz parfait.
 
 #theorem([Expression de $Delta H$], [On a $Delta H = integral_(T_i)^T_f C_p d T = C_p Delta T$])
 
@@ -2373,7 +2463,7 @@ On pose $gamma = C_p/C_v$
 
 == Entropie et second principe
 
-On considère un système fermé avec un ou plusieurs thermostats, ainsi il existe une fonction d'état appelée *entropie* notée $S$, additive et extensive en $unit("J/K")$ qui est une mesure du désordre.
+On considère un système fermé avec un ou plusieurs thermostats, ainsi il *existe* une fonction d'état appelée *entropie* notée $S$, additive et extensive en $unit("J/K")$ qui est une mesure du désordre.
 
 #theorem([Second principe], [Dans un tel système, on a $Delta S = S_"créée" + S_"échangée"$ avec $S_c >= 0$])
 
@@ -2552,10 +2642,10 @@ Ainsi on a le tableau suivant :
 [$ eta = - W/Q_c $],
 [Réfrigirateur],
 [$Q_c < 0$ et $Q_f > 0$],
-[$ eta = Q_f/W $],
+[$ e = Q_f/W $],
 [Pompe à chaleur],
 [$Q_c < 0$ et $Q_f > 0$],
-[$ eta = - Q_c/W $],
+[$ e = - Q_c/W $],
 )
 
 #theorem([Rendement de Carnot], [Pour un moteur ditherme son rendement maximal est : \
@@ -2567,7 +2657,7 @@ $ eta_c = 1 - T_F/T_C$  avec $eta <= eta_c$])
 ])
 
 #theorem([Efficacité de Carnot (réfrigirateur)], [Pour un réfrigirateur son efficacité maximale est : \
-$ eta_c = T_F/(T_C - T_F)$  avec $eta <= eta_c$])
+$ e_c = T_F/(T_C - T_F)$  avec $eta <= eta_c$])
 
 #demo([
   On a $Q_F + Q_C + W = 0$, $Q_C/T_C + Q_F/T_F <= 0$ et $eta = Q_F/W$ \ \
@@ -2577,7 +2667,7 @@ $ eta_c = T_F/(T_C - T_F)$  avec $eta <= eta_c$])
 Dans les faits, $3 <= e <= 4$
 
 #theorem([Efficacité de Carnot (pompe à chaleur)], [Pour une pompe à chaleur son efficacité maximale est : \
-$ eta_c = T_C/(T_C - T_F)$  avec $eta <= eta_c$])
+$ e_c = T_C/(T_C - T_F)$  avec $eta <= eta_c$])
 
 #demo([
   On a $Q_F + Q_C + W = 0$, $Q_C/T_C + Q_F/T_F <= 0$ et $eta = -Q_C/W$ \ \
@@ -2729,7 +2819,7 @@ La puissance est nulle, en effet $P = (q arrow(v) and arrow(B)) dot arrow(v) = 0
 Le *champ magnétique* est un champ vectoriel $arrow(B)(M, t)$ s'exprimant en Tesla ($unit("T")$). On le mesure avec une sonde à effet Hall.
 
 On a les ordres de grandeurs suivants :
-- $B_"Terre" = qty("e-5", "T")$
+- $B_"Terre" = qty("e-5", "T") = qty("0.01", "mT")$
 - $B_"aimant" = qtyrange("0.1", "1", "T")$
 - $B_"IRM" = "qqs" unit("T")$
 - $B_"LABO" = qty("10", "T")$
