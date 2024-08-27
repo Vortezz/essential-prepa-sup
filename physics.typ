@@ -978,9 +978,9 @@ Pour parler d'une représentation complexe en physique on utilise $underline(s) 
 
 #warning([Dans le contexte spécifique de l'électricité et pour éviter des confusions avec l'intensité $i$, on note $j$ le nombre imaginaire tel que $j^2 = -1$ (définition différente des mathématiques)])
 
-En posant $u = U_0 cos(omega t + phi)$, on a $underline(u) = U_0 e^(j (omega t + phi))$ d'où $underline(u) = U_0 e^(j phi) e^(j omega t)$ avec $U = U_0 e^(j phi)$ *l'amplitude complexe* et $U = abs(underline(u)(t))$
+En posant $u = U_0 cos(omega t + phi)$, on a $underline(u) = U_0 e^(j (omega t + phi))$ d'où $underline(u) = U_0 e^(j phi) e^(j omega t)$ avec $underline(U) = U_0 e^(j phi)$ *l'amplitude complexe* et $U = abs(underline(u)(t))$
 
-De plus on a $phi = arg(U) = arg(U_0 e^(j phi))$
+De plus on a $phi = arg(underline(U)) = arg(U_0 e^(j phi))$
 
 Dériver en complexe revient à multiplier par $j omega$
 
@@ -1064,6 +1064,8 @@ On remarque qu'on peut retrouver l'équation différentielle, on a $underline(u)
 
 == Résonnance
 
+Lorsque l'amplitude de la réponse sinusoïdale d'un système à une excitation sinusoïdale, d'amplitude fixe mais de fréquence variable passe par un maximun, on dit qu'il y a *résonance*.
+
 Dans un RLC série alimeté par un générateur de tension idéal, on a : $underline(I) = underline(U)/underline(R) = (U_0\/R)/(1 + j Q(omega/omega_0 - omega_0/omega))$ ($omega_0 = 1/(sqrt(L C))$ et $Q = 1/(R) sqrt(L/C)$)
 
 Si on trace la *réponse en amplitude*, l'amplitude réelle présente un maximum, alors on dit qu'il y a *résonance en intensité*. On définit $omega_"res"$ la *pulsation de résonnance*, pas toujours égale à $omega_0$ (notamment dans du 2nd ordre).
@@ -1077,6 +1079,8 @@ De plus on a aussi $omega_"res"/(Delta omega_c)$ l'*acuité de résonance*, plus
 On peut tracer la *réponse en phase*, $phi = - arctan(Q (omega/omega_0 - omega_0/omega))$, on remarque dans le cas d'un RLC que $phi(omega_"res") = 0$, $abs(phi(omega_c)) = pi/4$ et $omega_"res" = omega_0$.
 
 On a résonance en intensité peu importe le facteur de qualité, mais ça n'est pas toujours le cas (notamment en tension ou en vitesse en mécanique)
+
+On a aussi $Q = omega_"res"/(Delta omega_c)$
 
 #box(height: 1em)
 #heading([Filtrage], supplement: [elec])
@@ -1092,6 +1096,8 @@ On a $u(t) = E_0 + sum_(n=1)^(+ infinity) E_n cos(2 pi n f t + phi_n)$ (décompo
 On a $E_0$ la *valeur moyenne* du signal et les $E_k cos(2 pi k f t + phi_k)$ sont appelés les *harmoniques*. La première harmonique, $E_1 cos(2 pi f t + phi_1)$ est appelée *le fondamental*.
 
 Donner le spectre en amplitude c'est fournir les valeurs des $E_n$
+
+#todo(text: ([Spectre en amplitude]))
 
 == Réponse fréquentielle d'un quadripole
 
@@ -1259,6 +1265,18 @@ On se limitera à la description de la propagation des ondes dans un milieu illi
 - *Non dispersif* : La vitesse ne dépend pas de la longueur d'onde
 - *Transparent* : Pas de perte d'énergie de l'onde vers le milieu
 
+Ondes accoustiques :
+
+- Sons audibles : $20 - 20000 unit("Hz")$
+- Téléphonie : $300 - 3400 unit("Hz")$
+- La3 par un diapason : $440 unit("Hz")$
+
+Ondes électromagnétiques :
+
+- WiFi : $2.4 - 5 unit("GHz")$
+- Lumière visible : $400 - 800 unit("THz")$ ($num("4e14") - num("8e14") unit("Hz")$)
+- Radio FM : $88 - 108 unit("MHz")$
+
 == Célérité, couplage temps/espace
 
 Dans les conditions d'études, une onde unidimensionnelle se propage en se translatant
@@ -1295,6 +1313,8 @@ On a une onde qui se déplace de la manière suivante, en #text("bleu", fill: bl
   }
 }), domain: (0,1), width: 100%, x_axis: $t$)
 
+On notera qu'un graphe en fonction de $t(y)$ donnera une symétrie par rapport à l'axe des ordonnées de l'onde.
+
 #theorem([Forme de l'onde planaire],[
   Dans le cas d'une onde planaire on a : $ s(x, t) = F(x plus.minus v t) $
 
@@ -1309,9 +1329,9 @@ Dans le cas *sphérique isotrope* (onde émise dans toutes les directions), on a
 
 Une onde *plane* est une onde 3D mais ne nécessitant qu'une seule dimension pour être décrite un plan $P(x,t)$.
 
-Une onde est dite *harmonique* lorsque $P(x,t) = P_0 cos(k (x plus.minus v t))$
+Une onde est dite *harmonique* lorsque $P(x,t) = P_0 cos(k (x plus.minus v t) + phi) = P_0 cos(k x plus.minus omega t + phi)$
 
-Le $k$ est appelé *vecteur d'onde* et est de dimension $unit("L^-1")$ et $k = (2 pi)/lambda$
+Le $k$ est appelé *vecteur d'onde* et est de dimension $unit("r L^-1")$ et $k = (2 pi)/lambda$
 
 #theorem([Relations avec $k$],[
   On a $T = lambda/v$, $f = v/lambda$ et $omega = k v$
@@ -1429,7 +1449,15 @@ Si les deux ondes sont en phase, on a $cos(Delta phi) = 1$ d'où $I = I_1 + I_2 
 
 Si les deux ondes sont opposition en phase, on a $cos(Delta phi) = -1$ d'où $I = I_1 + I_2 - 2 sqrt(I_1 I_2)$ ou encore $I = 0$ sous les hypothèses précédentes. On dit dans ce cas qu'on a des *inteférences destructives*.
 
+On définit la *différence de marche* $delta(M) = d_2(M) - d_1(M)$ la différence de chemin optique entre les deux ondes.
+
+De même on a des interférences constructives si $Delta phi = 2 k pi$ ou $delta(M) = k lambda$ (différence de marche) et des interférences destructives si $Delta phi = (2 k + 1) pi$ ou $delta(M) = (2 k + 1) lambda/2$
+
 #todo(text:[(Voir pour expliciter les expressions des trous d'Young + interfrange)])
+
+#theorem([Interfrange],[
+  On a l'*interfrange* $i = (lambda d)/a$ l'espacement entre deux interférences constructives
+])
 
 #box(height: 1em)
 #heading([La lumière onde], supplement: [waves])
@@ -1976,7 +2004,7 @@ On appelle *bras de levier* la distance entre $A$ et la droite d'action de $arro
 Ainsi si la droite d'action passe par $A$, le bras de levier est nul donc il n'y a pas de mouvement.
 
 #theorem([Théorème du moment cinétique du moment scalaire],[
-Dans un référentiel galiléen avec *$A$ fixe* dans le référentiel d'étude, on a $ ddt(L_A_u) = sum M_A_u (arrow(F)_"ext") $
+Dans un référentiel galiléen avec *$A_u$ fixe* dans le référentiel d'étude, on a $ ddt(L_A_u) = sum M_A_u (arrow(F)_"ext") $
 ])
 
 #demo([Immédiat par produit scalaire])
@@ -1991,6 +2019,8 @@ Une *force centrale* est une force qui pointe vers/depuis un point fixe du réf�
 On considère un astéroïde ($a$) de masse $m$ et un astre ($A$) de masse $M$, par principe des actions réciproques, on a $norm(arrow(F)_(a -> A)) = norm(arrow(F)_(A -> a))$
 
 Pour savoir qui impose une force centrale sur qui, on regarde le rapport $m/M$
+
+On parle de *force newtonienne* si $arrow(F) = - k/r^2 arrow(u_r)$, et ces forces dérivent d'un potentiel
 
 == Propriétés de mouvement dans un champ de force centrale
 
@@ -2038,13 +2068,19 @@ On a $cal(C) > 0$ et $dot(theta) > 0$, de plus le système est conservatif d'où
 
 On a $cal(E)_m = 1/2 m dot(r)^2 + 1/2 m cal(C)^2/r^2 - cal(G) (M m)/r$ avec $cal(E)_p = 1/2 m cal(C)^2/r^2 - cal(G) (M m)/r$
 
+On constate l'apparition d'un nouveau terme pour l'énergie potentielle : on appelle $cal(E)_(p,"eff") = 1/2 m cal(C)^2/r^2$ l'*énergie potentielle effective*
+
 D'où on a :
 
 #graph(funcs: ((x) => {
   return 2/(2 *calc.pow(x,2)) - 7/x
-},), domain: (0.1, 3), x_axis: $r$, y_axis: $cal(E)_p$)
+},), domain: (0.1, 3), x_axis: $r$, y_axis: $cal(E)_(p,"eff")$)
 
 Ainsi selon le rayon du satellite on a une trajectioire libre ou liée.
+
+Le graphe d'$cal(E)_(p,"eff")$ passe par un minimum pour $r = r_0$, dans ce cas la trajectoire est *circulaire*.
+
+Si $cal(E)_m$ > 0, la trajectoire est une hyperbole, si $cal(E)_m$ = 0, la trajectoire est une parabole, et si $cal(E)_m$ < 0, la trajectoire est une ellipse.
 
 Lorsque l'astéroide est au plus proche de l'astre (ou au plus loin) on a $dot(r) = 0$
 
@@ -2061,10 +2097,10 @@ De même on parle de *apoastre* quand il est au plus loin de l'astre, *aphélie*
 
   2. *Loi des aires* (voir plus tôt)
 
-  3. *Loi des périodes*, le rapport $T^2/a^3$ est indépendant de la planète considérée dans le système solaire, avec $a$ le demi-axe de l'ellipse
+  3. *Loi des périodes*, le rapport $T^2/a^3$ est indépendant de la planète considérée dans le système solaire, avec $a$ le demi-axe de l'ellipse, et dans le cas du système solaire, $T^2/a^3 = (4 pi^2)/(cal(G) M_s)$
 ])
 
-#todo(text: [(Savoir retrouver $T^2/a^3$, vitesse et Em)])
+#todo(text: [(Savoir retrouver $T^2/a^3$, vitesse et Em + vitesse orbite basse et vitesse+  de libération)])
 
 == Jour solaire vs jour sidéral
 
@@ -2180,6 +2216,8 @@ Une loi importante n'est pas mise en défaut par un solide en translation
   D'où $arrow(v) = r omega et$
 ])
 
+Le vecteur $arrow(omega)$ est appelé *vecteur rotation instantané* du solide.
+
 #warning([La loi de quantité de mouvement n'a plus de sens ici, $ddt(arrow(p)) = sum arrow(F)_ext arrow.r.double.not m ddt(arrow(v)) = sum arrow(F)_ext$])
 
 Il ne faut aussi pas confondre mouvement circulaire, rotation et translation circulaire
@@ -2276,7 +2314,7 @@ Dans un solide indéformable il n'y a pas de travail interne
 #warning([Cette affirmation entre en défaut lorsque l'on travaille avec un solide articulé])
 
 #theorem([Théorème de la puissance cinétique pour un solide en rotation], [
-  On a $P = M_Delta (arrow(F)) dot(theta)$ d'où on a :
+  On a $P = M_Delta (arrow(F)) times omega$ d'où on a :
   $ ddt(cal(E)_c) = sum P_ext = sum M_Delta (arrow(F_ext)) dot(theta) $
 ])
 
@@ -2299,6 +2337,14 @@ Il est toujours possible d'utiliser les théorèmes d'énergétique de la dynami
 
 == Généralités
 
+On parle de *système thermodynamique* pour une portion de matière ou un ensemble de portions de matière séparées du reste de l'univers par une frontière réelle ou imaginaire qui est constitué d'un trop grand nombre de particules pour être étudié individuellement.
+
+*Échelle macroscopique* : On observe la matière à notre échelle, à cette échelle la matière est continue
+
+*Échelle microscopique* : On observe la matière à l'échelle des particules, à cette échelle la matière est discrète (donc discontinue)
+
+*Échelle mésoscopique* : On observe la matière à l'échelle intermédiaire, à cette échelle la matière apparaît continue
+
 On a $cal(N)_A = 6.02 times 10^(23) unit("mol^-1")$ la constante d'Avogadro
 
 Les 3 états de la matière :
@@ -2315,6 +2361,8 @@ Une *variable d'état* est une grandeur permettant de décrire l'équilibre ther
 
 Une grandeur est dite *extensive* si elle dépend de la taille du système (volume par ex) et *intensive* si ce n'est pas le cas (pression par ex), à noter que le produit de 2 grandeurs extensives donne une grandeur intensive.
 
+Pour toute grandeur $G$ extension on peut définir la *grandeur molaire* $G_m = G/n$ avec $n$ le nombre de moles et la *grandeur massique* $g = G/m$ avec $m$ la masse.
+
 === Pression
 
 La *pression* est une variable d'état en Pascal ($unit("Pa")$) avec $1 unit("bar") = 10^5 unit("Pa")$, est intensive et est causée par des chocs particulaires sur la paroi
@@ -2329,7 +2377,7 @@ Si on a une paroi non plane on a $arrow(F) = integral P d S arrow(u)$ avec $arro
 
 La température s'exprime en Kelvin ($unit("K")$), avec $T > 0 unit("K")$ et $0 unit("dC") = 273.15 unit("K")$, est intensive et provient d'une agitation moléculaire.
 
-On a $E_c = 3/2 k_B T$ l'énergie thermique moléculaire avec $k_B = R/cal(N)_A$ la constante de Boltzmann.
+On a $cal(E)_c = 3/2 k_B T$ l'énergie thermique moléculaire avec $k_B = R/cal(N)_A$ la constante de Boltzmann.
 
 == Équilibre thermodynamique
 
@@ -2354,9 +2402,13 @@ _Si quelqu'un voulait la démo de l'équation des gaz parfaits j'ai pas envie d�
 
 == Énergie interne, capacité thermique à volume constant
 
-On note $U$ l'*énergie interne* d'un système thermique, c'est une fonction d'état additive et extensive s'exprimant en Joule.
+On note $U$ l'*énergie interne* d'un système thermique, c'est une fonction d'état additive et extensive s'exprimant en Joule : c'est l'énergie microscopique du système.
 
-#theorem([1ère loi de Joule], [Dans le cas d'un gaz parfait, $U$ = $A times T$ avec $A$ une constante])
+La variation des fonctions d'état ne dépend que des états initial et final, et est indépendante du chemin parcouru.
+
+#theorem([1ère loi de Joule], [Dans le cas d'un gaz parfait, $U$ = $A T$, ainsi elle ne dépend que de la température])
+
+Dans le cas d'un gaz parfait monoatomique on a $U = 3/2 n R T$ et dans le cas d'un gaz parfait diatomique on a $U = 5/2 n R T$
 
 A noter qu'il y a énormément d'énergie stockée de manière interne.
 
@@ -2366,11 +2418,19 @@ On défini la *capacité thermique* à volume fixé par $C_v = derivativePart(U,
 
 == Premier principe
 
-#theorem([Premier principe], [Dans un système fermé évoluant entre des états d'équilibre on a $Delta (E_m_("macro") + U) = W + Q$ d'où dans la plupart des cas : \ $ Delta U = W + Q $])
+#theorem([Premier principe], [Dans un *système fermé* évoluant entre des états d'équilibre on a $Delta (E_m_("macro") + U) = W + Q$ d'où dans la plupart des cas : \ $ Delta U = W + Q $])
 
 Dans le cas infinitésimal on a $d U = delta W + delta Q$
 
 Avec $W$ le travail reçu par le système ($W > 0$ si récepteur et moteur sinon) et $Q$ le transfert thermique ($Q > 0$ reçoit et fournit sinon).
+
+On a 3 types de transfert thermiques :
+
+- *Convection* : Transfert accompagné d'un déplacement macroscopique de matière et concerne donc les fluides
+
+- *Conduction* : Transfert thermique qui intervient dans un milieu où la température n'est pas homogène, et qui ne s'accompagne pas de déplacement de matière : c'est celui qui prédomine dans les solides
+
+- *Rayonnement* : Transfert thermique par rayonnement électromagnétique
 
 Il faut bien penser à définir le système pour utiliser le premier principe
 
@@ -2380,16 +2440,11 @@ Il faut bien penser à définir le système pour utiliser le premier principe
 - *Monobare* : Au contact d'un système qui fixe la pression
 - *Monotherme* : Au contact d'un système de température fixée (un thermostat)
 - *Quasi statiques* : État d'équilibre au cours de toute la transformation
+- *Brutale* : Les variables d'état ne sont pas définies dans les moments intermédiaires mais seulement à l'état initial et final
 - *Système Calorifugé* : Limite les échanges de chaleur
 - *Isochore* : $V$ constant
 - *Isotherme* : $T$ constant
 - *Isobare* : $P$ constant
-
-On a 3 types de transfert thermiques :
-
-- *Convection*
-- *Conduction*
-- *Rayonnement*
 
 == Travail des forces de pression
 
@@ -2436,7 +2491,7 @@ Ainsi on a le premier principe monobare :
 
 #demo([On a $Delta (E_m_("macro") + U) = W_u + W_"pression" + Q$ or $W_"pression" = - Delta (P V) = 0$, ainsi on a la propriété recherchée])
 
-Avec $W_u$ la puissance utile des autres forces (souvent nulles d'où $Delta H = Q$ dans certains cas)
+Avec $W_u$ la puissance utile des autres forces que celles de pression (souvent nulles d'où $Delta H = Q$ dans certains cas)
 
 On définit la capacité thermique à pression fixée par $C_p = derivativePart(H, T, P)$ et $C_p = dv(H, T)$ dans le cas d'un gaz parfait.
 
@@ -2695,7 +2750,7 @@ La *pression de vapeur saturante* est la pression d'équilibre liquide vapeur
 
 Dans le cas des corps purs, on a $P_"vap" = f(T_"ébul")$
 
-== Diagramme ($P$, $T$), Clapeyron
+== Diagramme ($P$, $T$)
 
 #figure(
   image("physics/thermo/clapeyron.jpg", width: 30%)
@@ -2705,9 +2760,9 @@ $T$ représente le *point triple*, c'est à dire le point où on a équilibre va
 
 $C$ représente le *point critique*, c'est à dire au delà duquel il n'y a plus de différence entre état liquide et gazeux (on parle de *fluide supercritique*)
 
-En regardant le diagramme de Clapeyron on a des informations sur l'état du système considéré, et on peut se rendre compte que de l'eau se liquéfie sous l'effet de la compression
+En regardant le diagramme on a des informations sur l'état du système considéré, et on peut se rendre compte que de l'eau se liquéfie sous l'effet de la compression
 
-== Diagramme ($P$, $v$), isotherme d'Andrews
+== Diagramme de Clapeyron ($P$, $v$), isotherme d'Andrews
 
 #figure(
   image("physics/thermo/andrews.svg", width: 50%),
@@ -2735,6 +2790,8 @@ Dans le cas d'un diagramme ($P$, $H$) on a aussi $x_l = (h_"gaz" - h)/(h_"gaz" -
 == Enthalpie et entropie de changement d'état
 
 Lors d'un changement d'état, l'enthalpie présente une discontinuité, ainsi on définit l'*enthalpie de changement d'état* (ou chaleur latente), de même il y a discontinuité de l'entropie.
+
+Les enthalpies de changement d'état sont définies par la différence d'enthalpie entre les deux états à température fixée.
 
 #theorem([Variations d'enthalpie/d'entropie], [
   Soit $Delta_"A"h$ l'enthalpie de changement d'état $A$ et $Delta_"A"s$ l'entropie de changement d'état $A$.
@@ -2765,18 +2822,28 @@ On considère des particules dans un champ magnétique et électrique
   On a la *force de Lorentz*, $arrow(F) = q arrow(E) + q arrow(v) and arrow(B)$ la force subie par un électron
 ])
 
+Dans l'étude d'un mouvement dans un champ électromagnétique, le poids et les forces de frottement sont négligées.
+
 == Origine électrique
+
+Le champ électrique peut modifier l'énergie cinétique d'une particule chargée : elle peut agir à la fois sur la norme et la direction de la vitesse.
 
 On note $arrow(E)$ un *champ électrique* en $unit("V/m")$ et une particule plongée dans un tel champ subit la composante électrique c'est à dire $arrow(F) = q arrow(E)$
 
 Pour créer un champ homogène on utilise un condensateur, $arrow(E)$ est homogène quand on n'est pas trop proche des bords (pas des bornes) du condensateur
 
-Le champ $arrow(E)$ est orienté vers l'armature de plus faible potentiel, $norm(arrow(E)) = U/d$ avec $d$ la distance entre les électrodes.
+#theorem([Champ électrique créé par un condensateur],[
+  Un condensateur crée un champ électrique $E = U/d$ avec $U$ la tension et $d$ la distance entre les électrodes
+])
+
+Le champ $arrow(E)$ est orienté vers l'armature de plus faible potentiel
+
+Le vecteur accélération d'une particule chargée dans un champ électrique est $arrow(a) = q arrow(E)/m$ et est donc constant : sa trajectoire est donc une portion de parabole ou une droite si sa vitesse initiale est nulle ou parallèle à $arrow(E)$
 
 La force de Lorentz électrique dérive d'un potentiel
 
 #theorem([Énergie potentielle de Lorentz électrique],[
-  On a $E_p = q V$
+  On a $E_p = q V = q (-x E_x)$ en supposant que $arrow(E) = E_x ex$
 ])
 
 #demo([
@@ -2799,11 +2866,13 @@ Dans un système conservatif on a $v = sqrt((2 abs(q) U)/m)$ si $v <= 0.1 c$
 
 == Origine magnétique
 
+Un champ magnétique ne peut pas modifier l'énergie cinétique d'une particule chargée, il agit uniquement sur la direction de la vitesse.
+
 Un *champ magnétique* est un champ vectoriel noté $arrow(B)$ en Tesla ($unit("T")$)
 
 La composante magnétique de la force de Lorentz est $arrow(F) = q arrow(v) and arrow(B)$
 
-La trajectoire dans $arrow(B)$ s'apparente à un cercle
+Une particule de charge $q$ à une vitesse initiale $arrow(v_0)$ perpendiculaire à $arrow(B)$ décrit un cercle de rayon $R = (m v_0)/(abs(q) B)$ à la vitese angulaire $omega = (abs(q) B)/m$, on parle de *pulsation cyclotron*
 
 #demo([
   #todo(text:[(Pas prioritaire mais à faire)])
@@ -2829,6 +2898,8 @@ On a les ordres de grandeurs suivants :
 
   Leur principal intêret est la lisibilité et que la distance entre les lignes de champ varie comme l'inverse de l'intensité du champ.
 ])
+
+Le champ est nul en un point si les lignes de champ se croisent en ce point
 
 Propriété HP : Les lignes de champ sont orthogonales aux lignes iso-champ.
 
@@ -2886,13 +2957,13 @@ La Terre en est un bon exemple, le noyau externe constitue un champ magnétique 
 
 #theorem([Moment magnétique],[
   Dans le cas d'une spire parcourue par un courant $I$, on a :
-  $ arrow(mu) = I S arrow(u) $
-  avec $S$ l'aire du disque, $arrow(u)$ un vecteur unitaire.
+  $ arrow(mu) = I S arrow(u) = I arrow(S) $
+  avec $S$ l'aire du disque, $arrow(u)$ un vecteur unitaire ou $arrow(S)$ le vecteur surface
   
   On a $[arrow(mu)] = unit("A m^2")$
 ])
 
-Le moment magnétique quantifie à quel point l'aimant est "fort"
+Le moment magnétique quantifie à quel point l'aimant est "fort" : la norme du moment magnétique est proportionnelle à la force de l'aimant et la direction de $arrow(mu)$ définit l'axe de révolution des lignes de champ.
 
 #theorem([Couple de Laplace, Energie potentielle],[
   Un dipôle magnétique de moment $arrow(mu)$ subit le *couple de Laplace*, $arrow(Gamma) = arrow(mu) and arrow(B)$.
@@ -2910,6 +2981,8 @@ On peut utiliser des bobines ou un aimant pour créer un champ magnétique.
 
 Dans un solénoïde infini, le champ est continu par morceaux sauf si on s'approche trop près du bord.
 
+Pour créer un champ tournant, on alimente des bobines par des courants sinusoïdaux déphasés.
+
 == Lire une carte magnétique
 
 #theorem([Lecture d'une carte de champ],[
@@ -2918,7 +2991,7 @@ Dans un solénoïde infini, le champ est continu par morceaux sauf si on s'appro
   L'orientation des lignes de champ ou des fils respectent la règle de la main droite
 ])
 
-Dans le cas d'un aimant on a :
+Dans le cas d'un aimant les lignes de champ sortent du pôle nord et rentrent par le pôle sud.
 
 #figure(image("physics/magnet/magnet.png", width: 50%))
 
@@ -2930,6 +3003,8 @@ On a l'expérience des rails de Laplace :
 
 #theorem([Forces de Laplace],[
   Un barreau rectiligne conducteur de longueur $l$ parcouru par une intensité $I$ dans un champ magnétique $arrow(B)$ subit une force $ arrow(F_L) = I l arrow(u) and arrow(B) $ avec $arrow(u)$ un vecteur unitaire orienté dans le sens du courant.
+
+  Dans le cas d'un chemin on a $ arrow(F_L) = integral I arrow(dd(l)) and arrow(B) $
 ])
 
 #demo([
@@ -3004,6 +3079,10 @@ On considère maintenant le schéma suivant :
 
 == Les phénomènes d'induction
 
+L'*induction électromagnétique* est le phénomène par lequel un courant électrique apparaît dans un circuit fermé sans générateur.
+
+L'induction est utilisée dans les transformateurs électriques ou encore les rechargement par induction.
+
 On considère des circuits *filiformes* *rigides* *fixes* :
 
 - *filiforme* : On ne considère que le contour
@@ -3012,7 +3091,7 @@ On considère des circuits *filiformes* *rigides* *fixes* :
 #theorem([Flux],[
   Dans un champ magnétique $arrow(B)$ avec $S$ la surface on a :
   $ Phi_B = integral.double_"surface délimitée \n par le contour" arrow(B) dot dd(arrow(S)) $
-  avec $dd(arrow(S))$ orienté selon le sens du courant (règle de la main droite)
+  avec $dd(arrow(S))$ orienté selon le sens du courant (règle de la main droite) et $[Phi_B] = unit("Wb") = unit("T/m^2")$ (Weber)
 ])
 
 Le flux est additif (par linéarité des intégrales)
@@ -3042,6 +3121,8 @@ On remarque que le champ magnétique induit est toujours dans le sens inverse à
   On a la *loi de Lenz* qui est un principe de modération : Un phénomène d'induction s'oppose par ses conséquences aux causes qui l'ont engendré
 ])
 
+Pour étudier un circuit, on l'oriente puis on définit le vecteur surface $arrow(S)$ perpendiculaire au plan du circuit et orienté par la règle de la main droite.
+
 == Loi de Faraday
 
 On place dans le cadre de l'ARQS
@@ -3053,6 +3134,8 @@ On place dans le cadre de l'ARQS
 
   $ e = - ddt(Phi_B) $
 ])
+
+Le $-$ dans la formule est dû à la loi de Lenz
 
 == Auto induction et couplage inductif
 
@@ -3142,6 +3225,8 @@ On multiplie par $dot(x)$ ou $i$ puis on obtient un bilan qui peut faire interve
 
 Il peut aussi y avoir des termes en plus, comme la puissance fournie par l'opérateur
 
+A noter que pour un circuit mobile, la somme des puissances est nulle (il y a conversion de l'énergie mécanique en énergie électrique)
+
 #pagebreak()
 
 #counter(heading).update(0)
@@ -3183,7 +3268,7 @@ En mécanique classique on représente un électron par un corpuscule, mais cett
 
 On prononce "de Broglie" comme "de Broille"
 
-Les phénomènes quantiques sont observables quand les obstacles sont de l'ordre de la longueur d'onde de de Broglie
+Les phénomènes quantiques sont observables quand les obstacles sont de l'ordre de la longueur d'onde de de Broglie, si jamais la longueur d'onde est trop petite devant la taille de l'obstacle on retrouve les lois classiques.
 
 #pagebreak()
 
