@@ -2188,7 +2188,67 @@ Les arbres binaires de recherche peuvent devenir très déséquilibrés, on peut
 
 On va voir ici les *arbres rouges-noirs* qui sont des arbres binaires de recherche équilibrés.
 
+Dans un arbre rouge-noirs on a les conditions suivantes :
+
+- Chacun des noeuds rouges a un parent noir
+- Toutes les branches ont le même nombre de noeuds noirs
+
+Pour avoir un arbre binaire strict, on considère les `Nil` comme des noeuds noirs. On définit la *hauteure noire* d'un arbre rouge-noir $h_n(A)$ comme le nombre de noeuds noirs sur le chemin de la racine à une feuille.
+
+#warning([
+  Les définitions varient beaucoup selon la source
+])
+
+#theorem([Ensemble des arbres rouge-noirs],[
+  L'ensemble des arbres rouge-noirs est un ensemble d'arbres équilibrés
+])
+
+#demo([
+  Démontrable par récurrence sur la hauteur de l'arbre ou avec les arbres 2-3-4
+])
+
+Pour les ajouts et suppression, voir poly de Dewaele p217-219
+
 == Tas binaires
+
+Un *tas binaire max* est un arbre binaire $cal(A)$ tel que tout noeud excepté la racine a une valeur inférieure à celle de son parent.
+
+Un *tas binaire min* est un arbre binaire $cal(A)$ tel que tout noeud excepté la racine a une valeur supérieure à celle de son parent.
+
+Dans un tas chacun des niveaux est rempli au maximum (excepté le dernier qui peut ne pas l'être) et les feuilles sont remplies de gauche à droite.
+
+#theorem([Ensemble des tas binaires],[
+  L'ensemble des tas binaires est un ensemble d'arbres équilibrés
+])
+
+#demo([
+  On a $2^(h(A)) <= abs(A) < 2^(h(A) + 1)$ d'où $h(A) <= log(abs(A))$
+])
+
+Il est intéressant de représenter un tas binaire avec un tableau, en effet en utilisant la numérotation de Sosa-Stradonitz on peut représenter un tas binaire avec un tableau en mettant le noeud numéroté $k$ en case $k-1$.
+
+Ainsi la racine est en case $0$, le fils gauche de la case $k$ est en case $2k+1$ et le fils droit en case $2k+2$, et le parent de la case $k$ est en case $floor((k-1)/2)$.
+
+Si un élément dépasse son père on peut le remonter en échangeant les deux éléments, et le faire récursivement.
+
+Un élément peut aussi diminuer et devenir plus petit qu'un (ou ses deux) fils, on peut alors le descendre en échangeant avec le plus grand des deux fils, et le faire récursivement.
+
+Ainsi on peut contruire un tas binaire en insérant les éléments et en les remontant, pour une complexité en $O(n log(n))$, mais on peut aussi construire un tas binaire en $O(n)$ en insérant les éléments et en les descendant.
+
+La bonne complexité d'un tas nous invite à faire un tris par tas : on prend une liste, et la racine est le plus grand élément, on l'échange avec le dernier élément et on refait un tas avec les éléments restants, puis on échange le premier élément avec l'avant-dernier, etc.
+
+#algo([Tri par tas],```ml
+let heapsort t =
+  let h = {data = t; n = Array.length t} in
+  create_heap h;
+  for i = h.n - 1 downto 1 do
+    swap h 0 i;
+    h.n <- h.n - 1;
+    repair_down h 0;
+  done;
+```)
+
+Les tas permettent aussi de faire une file de priorité avec un tas, en comparant sur un tuple $(p, x)$ avec $p$ la priorité et $x$ la valeur.
 
 #box(height: 1em)
 #heading([Graphes], supplement: [struct],)
@@ -2197,17 +2257,541 @@ On va voir ici les *arbres rouges-noirs* qui sont des arbres binaires de recherc
 
 == Définitions
 
+=== Définitions générales
+
+Un graphe non orienté est défini par un ensemble fini de sommets $V$ et un ensemble fini d'arêtes $E$ (une arête est une paire de sommets).
+
+On dit qu'un graphe est *planaire* si il existe une représentation plane du graphe où les arêtes ne se croisent pas.
+
+Pour une arrête $e_i = (v_j, v_k)$, les sommets $v_j$ et $v_k$ sont les *extrémités* de l'arête. On dit que $e_i$ est *incidente* à $v_j$ et $v_k$.
+
+Les sommet $v_j$ et $v_k$ sont *adjacents*, et $v_k$ est *voisin* de $v_j$.
+
+Si $v_j = v_k$ on dit que l'arête est une *boucle*.
+
+Le *degré* (ou la *valence*) d'un sommet est le nombre d'arêtes incidentes à ce sommet, on note $deg(v)$ le degré de $v$.
+
+L'*ordre* d'un graphe est le nombre de sommets, et le *degree* d'un graphe est le maximum des degrés des sommets.
+
+#theorem([Lemme des poignées de main],[
+  Pour tout graphe non orienté on a :
+  $ sum_(v in V) deg(v) = 2 abs(E) $
+])
+
+#demo([
+  Chaque arête est incidente à deux sommets, donc chaque arête est comptée deux fois
+])
+
+=== Graphes particuliers
+
+Un graphe est dit *simple* si il n'a pas de boucles ni d'arêtes multiples, dans le cas contraire on parle de *multigraphe*.
+
+Ici on ne s'intéressera qu'aux graphes simples.
+
+Un graphe est *complet* si les sommets sont tous adjacents les uns aux autres.
+
+#theorem([Nombre d'arêtes dans un graphe complet],[
+  Un graphe complet de $n$ sommets a $n(n-1)/2 = binom(n,k)$ arêtes.
+])
+
+#demo([
+  Chaque sommet est adjacent à tous les autres sauf lui-même, donc il y a $n-1$ arêtes par sommet, d'où le résultat en utilisant le principe de double comptage
+])
+
+Un graphe $G' = (V', E')$ est un *sous-graphe* de $G = (V, E)$ si $V' subset V$ et $E' subset E$.
+
+Le *sous graphe induit* par $V' subset V$ est le sous-graphe de $G$ avec les sommets de $V'$ et les arêtes de $E$ qui ont leurs deux extrémités dans $V'$.
+
+Une *clique* est un sous-graphe complet.
+
+=== Cycles/Chemins
+
+Un *chemin* de longueur $n$ est une suite de $n+1$ sommets $alpha = v_0, ..., v_n = beta$ tel que $v_i$ et $v_{i+1}$ soient adjacents. On appelle $alpha$ et $beta$ les *extrémités* du chemin.
+
+On dit qu'un chemin est *simple* si toutes les arêtes sont distinctes.
+
+On dit qu'un chemin est élémentaire si tous les sommets sont distincts (à l'exception des extrémités).
+
+On dit qu'un chemin est *ouvert* si les extrémités sont distinctes, et *fermé* si les extrémités sont identiques.
+
+On notera $v_0 triangle.small.r ... triangle.small.r v_n$ un chemin de $v_0$ à $v_n$.
+
+#theorem([Chemin élémentaire],[
+  De toute chemin on peut extraire un chemin élémentaire et un chemin simple
+])
+
+#demo([
+  On suppose un chemin non élémentaire, alors il existe un sommet qui est visité deux fois, on peut alors faire disparaitre le cycle en supprimant les sommets entre les deux visites
+
+  En continuant on obtient un chemin élémentaire
+])
+
+On parle de *circuit* pour un chemin simple, fermé de longueur non nulle.
+
+On parle de *cycle* pour un chemin simple et élémentaire fermé de longueur non nulle.
+
+Un graphe est *acyclique* s'il ne contient pas de cycle.
+
+#theorem([Existence d'un cyle],[
+  Si le degré de tous les sommets d'un graphe est supérieur ou égal à $2$ alors le graphe contient un cycle
+])
+
+#demo([
+  On construit une suite de sommet telle que $v_i in.not {v_0, ..., v_(i-1)}$ et $v_i$ est voisin de $v_(i-1)$, cette construction se terminant par finitude des sommets du graphe
+
+  Ainsi on considère $v_k$ le dernier sommet de la suite, ainsi il possède au moins deux voisins distincts dans la liste : $v_(k-1)$ et $v_j != v_(k-1)$, d'où on peut considérer $v_k triangle.small.r v_j triangle.small.r v_(j+1) triangle.small.r ... triangle.small.r v_(k-1) triangle.small.r v_k$ un cycle car élémentaire, fermé par construction et de longueur au moins $3$ (ça ne peut être un allez-retour)
+])
+
+Un chemin est dit *euclidien* si il s'agit d'un chemin simple passant par toutes les arêtes du graphe.
+
+Un chemin est dit *hamiltonien* si il s'agit d'un chemin simple et élémentaire passant par tous les sommets du graphe.
+
+#theorem([Extraction de cycle],[
+  De tout circuit dans un graphe on peut extraire un cycle
+])
+
+#demo([
+  On note $v_0 triangle.small.r ... triangle.small.r v_n = v_0$ un tel circuit, ainsi on peut extraire un chemin simple et élémentaire $C'$ de $v_1 triangle.small.r ... triangle.small.r v_n$, et en ajoutant devant ce chemin $v_0 triangle.small.r v_1$ on construit un chemin simple, élémentaire et fermé.
+])
+
+=== Distance/Connexité
+
+La *distance* entre deux sommets est la longueur du plus court chemin entre ces deux sommets. Un chemin de cette longueur est dit *géodésique*.
+
+On considère que la distance est infinie si deux sommets ne sont pas accessibles.
+
+Si il existe au moins un chemin de $alpha$ à $beta$ alors $beta$ est *accessible* depuis $alpha$.
+
+Un graphe est dit *connexe* si tout sommet est accessible depuis tout autre sommet.
+
+#theorem([Connexité],[
+  Un graphe est connexe si et seulement si il existe un sommet qui soit à une distance finie de tous les autres sommets du graphe.
+])
+
+#demo([
+  Le caractère nécessaire est évident d'après la définition.
+
+  Pour le caractère suffisant, on utilise l'inégalité triangulaire, si $alpha$ et $beta$ sont à une distance finie de $gamma$ alors ils sont à une distance finie l'un de l'autre ($d(alpha, beta) <= d(alpha, gamma) + d(gamma, beta)$)
+])
+
+On peut définir une relation $|->$ sur l'ensemble $V$ des sommets d'un graphe non-orienté $G$, par $alpha |-> beta$ si et seulement si $alpha$ et $beta$ sont adjacents.
+
+De manière générale, on peut définir une relation $|->^*$ sur $V$ par $alpha |->^* beta$ si et seulement si il existe un chemin de $alpha$ à $beta$.
+
+#theorem([Cloture réflexive et transitive],[
+  $|->^*$ est la plus petite reltaion sur $V$ contenant $|->$ qui soit réflexive et transitive. On dit que $|->^*$ est la *cloture réflexive et transitive* de $|->$.
+])
+
+#theorem([Graphe non orienté connexe],[
+  Un graphe non-orienté connexe d'ordre $n$ contient au moins $n-1$ arrêtes
+])
+
+#demo([
+On fait une récurrence sur le nombre de sommets d'un graphe connexe
+
+  C'est vrai pour $n=1$
+
+  Si $n>1$ supposons la propriété vraie pour un graphe d'ordre $n-1$, deux cas :
+  - Si il existe dans $G$ un sommet $v$ de degré $1$, alors $G\\v$ est un graphe d'ordre $n-1$ connexe, d'où il contient au moins $n-2$ arêtes, et $G$ contient donc au moins $n-1$ arêtes
+  - Sinon on a au moins la somme des degrés des sommets qui est supérieure à $2n$ d'où $abs(E) >= n$ ce qui conclut
+])
+
+#theorem([Graphe non orienté acyclique],[
+  Un graphe non-orienté acyclique d'ordre $n$ contient au plus $n-1$ arrêtes
+])
+
+#demo([
+  Pour $n=1$ c'est vrai
+
+  Supposons la propriété acquise au rang $n-1$ et considérons un graphe olympique d'ordre $n$.
+
+  Il existe au moins un sommet de degré $0$ ou $1$ ainsi on le supprime ainsi que sa potentielle arête, le sous graphe obtenu, encore acyclique content au plus $n-2$ arêtes d'où par HR ça conclut
+])
+
+=== Arbres
+
+Un *arbre* est un graphe non-orienté connexe acyclique.
+
+#theorem([Caractérisation des arbres],[
+  Les propriétés suivantes sont équivalentes :
+  - $G$ est un arbre
+  - $G$ est non-orienté connexe avec $n-1$ arêtes
+  - $G$ est non-orienté acyclique avec $n-1$ arêtes
+])
+
+Un graphe non-orienté acyclique et non connexe est appelé *forêt*.
+
+Si un tel graphe a $p$ composantes connexes, alors on a $n-p$ arêtes.
+
+=== Graphes bipartis
+
+Un graphe non orienté $G$ est dit *biparti* si il existe une partition $(V_1, V_2)$ de $V$ tel que pour tout arête $(v_i, v_j)$ de $E$, $v_i$ et $v_j$ ne soient pas dans le même ensemble $V_1$ ou $V_2$.
+
+#theorem([Longueur d'un chemin fermé],[
+  Tout chemin fermé dans un graphe biparti a une longueur paire
+])
+
+#demo([
+  On considère un chemin fermé $v_0 triangle.small.r ... triangle.small.r v_n = v_0$ dans un graphe biparti, on note $V_1$ et $V_2$ les deux ensembles de la partition.
+  
+  Si $v_0 in V_1$, alors les $V_(2i) in V_1$ et les $V_(2i+1) in V_2$, d'où $v_0 = v_n in V_1$ d'où $n$ pair
+])
+
+On parle de *graphe biparti complet* si chaque sommet de $V_1$ est adjacent à chaque sommet de $V_2$.
+
+=== Graphe orienté
+
+Dans un graphe orienté, on distingue les arêtes menant d'un sommet $alpha$ à un sommet $beta$ des arêtes menant de $beta$ à $alpha$. On parle d'*arc* pour une telle arête.
+
+On parle de *degré entrant* d'un sommet pour le nombre d'arcs entrants, et de *degré sortant* pour le nombre d'arcs sortants.
+
+On définit un *chemin* dans un graphe orienté de la même manière que pour un graphe non-orienté, mais en remplaçant les arêtes par des arcs.
+
+On définit aussi la *distance* entre deux sommets de la même manière, mais elle n'est pas nécessairement symétrique.
+
+Dans un graphe orienté on parle de *chaîne* entre deux sommets $alpha$ et $beta$ une suite de $n+1$ somments tel que pour tout $v_i$ et $v_(i+1)$ il existe un arc de $v_i$ à $v_(i+1)$ ou de $v_(i+1)$ à $v_i$.
+
+Un graphe est dit *connexe* si il existe une _chaîne_ entre tout couple de sommets.
+
+Un graphe est dit *fortement connexe* si pour tout $alpha, beta$ il existe un chemin de $alpha$ à $beta$ et de $beta$ à $alpha$.
+
 == En OCaml
+
+On peut représenter de plusieurs manières des graphes en OCaml.
+
+=== Représentation mathématique
+
+On peut représenter un graphe par un ensemble de sommets et un ensemble d'arêtes.
+
+```ocaml
+type 'a graph = {vertices : 'a list; edges : ('a * 'a) list};;
+```
+
+On pourra assez facilement implémenter des fonctions pour savoir si il existe une arête entre deux sommets, ou pour avoir la liste des voisins
+
+=== Liste d'adjacence
+
+Pour accélérer la recherche on peut définir une liste d'adjaence, c'est à dire pour chaque sommet une liste de ses voisins.
+
+```ocaml
+type 'a vertex = { id: 'a; neighbors: 'a list };;
+type 'a graph = 'a vertex list;;
+```
+
+=== Tableau d'adjacence
+
+Pour accélérer la recherche d'un sommet on peut utiliser un tableau d'adjacence, c'est à dire un tableau de listes de voisins.
+
+```ocaml
+type 'a graph = int list array;;
+```
+
+Il est aussi possible de stocker le graph dans une `Hashtbl`.
+
+```ocaml
+type 'a graph = ('a, 'a list) Hashtbl.t;;
+```
+
+=== Matrice d'adjacence
+
+Pour un graphe non orienté on peut utiliser une matrice d'adjacence, c'est à dire une matrice $M$ telle que $M_{i,j} = 1$ si il existe une arête entre $v_i$ et $v_j$.
+
+```ocaml
+type 'a graph = int array array;;
+```
+
+Cette représentation est très pratique mais prend beaucoup de place en mémoire.
+
+Une propriété intéressante est que la puissance de la matrice d'adjacence donne le nombre de chemins de longueur $n$ entre deux sommets.
 
 == En C
 
+Comme d'habitude le C est cringe.
+
+On utilise souvent une matrice d'adjacence représentée par un tableau de taille $n times n$ et on accède à l'élément $M_(i,j)$ avec `M[i * n + j]`.
+
+On peut aussi faire une liste d'adjacence (avec des listes chaînées) mais le programme demande de garder des tablaux pour une liste d'adjacence.
+
+La première solution consiste à stocker le nombre d'éléments du tableau dans la première case, et ensuite les éléments.
+
+La deuxième solution consiste à remplir le tableau et à garder une sentinelle à la fin (par exemple $-1$).
+
 == Étiquetage
+
+Un étiquetage d'un graphe est la donnée d'une fonction $f : V -> E$ qui associe à chaque sommet un élément de $E$.
+
+L'étiquetage a plusieurs usages : renseigner sur le nombre de ressources, sur les distances, sur les couleurs, etc.
+
+Un dictionnaire est particulièrement adapté pour stocker un étiquetage.
+
+Mais on peut aussi étiqueter les arêtes, notamment pour les pondérer.	On parle dans ce cas de *graphe pondéré* et de *poids* d'une arête.
 
 == Parcours de graphes
 
+La différence majeure avec un arbre est que l'on peut revenir sur un sommet déjà visité.
+
+Ainsi il faut adapter les algorithmes de parcours pour ne pas tomber dans des boucles infinies en stockant les sommets déjà visités.
+
+On peut donc faire un parcours en profondeur et en largeur par exemple.
+
+On voit rapidement l'implémentation de l'un de ces parcours :
+
+#algo([Parcours en profondeur (graphes)],```ocaml
+let dfs f graph start =
+  let visited = Hashtbl.create 97 in
+  let rec aux v =
+    if not (Hashtbl.mem visited v) then begin
+      f v;
+      Hashtbl.add visited v ();
+      List.iter aux (neighbors v)
+    end
+  in aux start;;
+```)
+
+Il est bien sûr aussi possible de faire un parcours en largeur avec une file, et de faire un parcours en profondeur avec une pile.
+
+#theorem([Lien avec la forte connexité],[
+  Lorsque qu'ils opèrent sur un graphe orienté fortement connexe, les parcours en profondeur et en largeur visitent tous les sommets du graphe quel que soit le sommet de départ
+
+  Inversement, si le parcours - quel que soit le sommet de départ - visite tous les sommets alors le graphe est fortement connexe.
+])
+
+#demo([
+  Pour la première affirmation si on suppose $V'$ l'ensemble des sommets non visités dans un parcours issu de $v$. 
+  
+  Soit $v' in V'$, alors puisque le graphe est fortement connexe il existe un chemin de $v$ à $v'$, et donc $v'$ est visité.
+
+  Lorsque l'on suit ce chemin, puisque $v in V\\V'$ et $v' in V'$ on visite deux sommets consécutifs tel que le premier est dans $V\\V'$ et le second dans $V'$, ce qui est absurde.
+
+  La seconde affirmation est triviale
+])
+
+Si on considère un arbre (au sens de la théorie des graphes) et qu'on le parcourt en conservant les arcs dans l'ordre de parcours, on obtient un *arbre enraciné*
+
+#theorem([Arbre enraciné],[
+  On considère $G = (V,E)$ et un sommet quelconque $v in V$. Il existe une unique façon d'orienter les arêtes de $E$ pour obtenir un arbre enraciné avec $v$ comme racine.
+])
+
+#demo([
+  On suppose qu'on peut construire deux arbres enracinés distincts avec $v$ comme racine, on a ainsi une paire $v_j$ et $v_k$ tel que le sens de l'arc $v_j triangle.small.r v_k$ est différent dans les deux arbres.
+
+  Dans l'arbre où l'arc est orienté de $v_j$ à $v_k$ si on considère le chemin de $v$ à $v_j$, alors on peut considérer le chemin de $v$ à $v_k$ en suivant l'arc $v_j triangle.small.r v_k$. Ainsi c'est l'unique chemin de $v$ à $v_k$ dans cet arbre.
+
+  Dans le second arbre enraciné il n'y a plus d'arc de $v_j$ à $v_k$ d'où il n'y a pas de chemin de $v$ à $v_k$ ce qui est absurde.
+]) 
+
+Pour trouver toutes les composantes connexes d'un graphe on peut utiliser un parcours en profondeur ou en largeur. On peut aussi utiliser une *recherche en profondeur d'abord* (DFS) qui consiste à parcourir le graphe en profondeur en partant d'un sommet, puis en continuant avec un autre sommet non visité. Et on peut construire des listes de sommets visités pour chaque composante connexe.
+
 == Cycles
 
+=== Cas des graphes non orientés
+
+Il est aisé de savoir si un non-orienté graphe contient un cycle en regardant le nombre d'arêtes, en effet si il y a plus de $n-1$ arêtes alors il y a un cycle.
+
+Mais identifier un cycle est plus compliqué, on peut utiliser un parcours en profondeur et regarder si on revient sur un sommet déjà visité.
+
+On stocke le sommet depuis lequel on est parti pour chaque sommet, et si on revient sur un sommet déjà visité on peut remonter la chaîne pour trouver le cycle.
+
+=== Cas des graphes orientés
+
+Trouver un cycle dans un graphe orienté est plus délicate, l'algorithme précédent fonctionne mais le résultat dépend du sommet de départ.
+
+On va donc procéder à un *tri topologique* qui consiste à ordonner les sommets de sorte qui se un sommet $v_i$ apparaît avant un sommet $v_j$ alors il n'y a pas de chemin de $v_j$ à $v_i$.
+
+#theorem([Degré sortant nul],[
+  Dans un graphe orienté acyclique il existe au moins un sommet de degré sortant nul
+])
+
+#demo([
+  Si il n'existait pas de sommet de degré sortant nul, alors on peut construire un chemin infini en suivant les arcs sortants d'un sommet à l'autre car le graphe est acyclique ce qui est absurde dans un graphe de taille finie
+])
+
+L'algorithme de tri topologique est le suivant :
+
+- On trouve un sommet de degré sortant nul et on le supprime du graphe en le mettant à la fin de la liste
+
+- On continue en prenant les sommets de degré sortant nul en les ajoutant petit à petit à la fin de la liste (en gardant le premier sommet de degré sortant nul tout au bout de la liste)
+
+Mais il suffit en fait de remarquer que en faisant un parcours en profondeur on peut obtenir un tri topologique : on arrivera toujours à un sommet de degré sortant nul dans un graphe acyclique.
+
+Ainsi il suffit de faire un parcours en profondeur et d'ajouter les sommets à la fin de la liste.
+
+Une implémentation en OCaml est la suivante :
+
+#algo([Tri topologique],```ocaml
+let topological_sort gr vertices =
+  let visited = Hashtbl.create 97 and let result = ref [] in
+    let rec explore v =
+      Hashbl.add visited v true;
+      (* On fait notre dfs *)
+      List.iter
+        (fun w -> if not (Hashtbl.mem visited w) then explore w)
+        (neighbors gr v);
+        sorted := v :: !sorted
+        (* Appel de la fonction explore pour chaque sommet *)
+    in List.iter
+      (fun v -> if not (Hashtbl.mem visited v) then explore v)
+      vertices;
+  !sorted;;
+```)
+
+Cet algorithme sert de base à beaucoup d'autres, on considère qu'on colore tous les sommets en blanc, et que quand on traite un sommet on le met en gris, et quand on a fini on le met en noir.
+
+Ainsi le graphe contient un cycle si et seulement si on retombe sur un sommet gris dans le graphe, les sommets gris formant un chemin dans ce dernier.
+
 == Recherche de plus cours chemin
+
+On a déjà parlé de *pondération* d'un graphe. On pose $w : E -> R$ une fonction qui associe à chaque arête un poids, et on l'étend a $V times V$ en posant $w(v_i, v_i) = 0$ et si il n'y a pas d'arête entre $v_i$ et $v_j$ on pose $w(v_i, v_j) = +infinity$.
+
+On peut donc voir un graphe pondéré comme une matrice $W$ telle que $W_(i,j) = w(v_i, v_j)$.
+
+La *longueur* d'un chemin est la somme des poids des arêtes du chemin.
+
+=== Algorithme de Floyd-Warshall
+
+L'algorithme de Floyd-Warshall permet de trouver le plus court chemin entre tous les sommets d'un graphe pondéré.
+
+Ainsi on travaille sur une matrice $D$ telle que $D_(i,j) = w(v_i, v_j)$, et on va calculer les exponentiations successives de cette matrice.
+
+#theorem([Principe de sous-optimalité],[
+  Si il existe un chemin de $v_i$ à $v_j$ passant par $v_k$ alors le plus court chemin de $v_i$ à $v_j$ est le plus court chemin de $v_i$ à $v_k$ suivi du plus court chemin de $v_k$ à $v_j$
+])
+
+#demo([
+  Si ce n'est pas le cas, on peut alors construire un plus court chemin ce qui est contradictoire
+])
+
+On remarque aussi que le terme $D^((k+1))_(i,j)$ peut se calculer à partir des coefficients de $D^k$ : $D^((k+1))_(i,j) = min(D^(k)_(i,j), D^(k)_(i,k+1) + D^(k)_(k+1,j))$
+
+En effet un plus court chemin ne passe soit pas par $v_k$ et est donc de longueur $D^(k)_(i,j)$, soit il passe par $v_k$ et est donc de longueur $D^(k)_(i,k+1) + D^(k)_(k+1,j)$.
+
+Enfin on remarquera qu'on peut bien évidemment calculer ces termes avec $D^((k+1))$
+
+On peut donc implémenter l'algorithme de Floyd-Warshall en OCaml :
+
+#algo([Floyd-Warshall],```ocaml
+let floyd_warshall w =
+  let n = Array.length w in
+  let m = Array.make_matrix n n infinity in
+    for i = 0 to n - 1 do
+      for j = 0 to n - 1 do
+        m.(i).(j) <- w.(i).(j)
+      done
+    done;
+    for k = 0 to n - 1 do
+      for i = 0 to n - 1 do
+        for j = 0 to n - 1 do
+          m.(i).(j) <- min m.(i).(j) (m.(i).(k) + m.(k).(j))
+        done
+      done
+    done;
+    m;;
+```)
+
+Il est bien évidemment ensuite possible d'adapter Floyd-Warshall pour trouver les chemins et non seulement les longueurs.
+
+=== Algorithme de Dijkstra
+
+L'algorithme de Dijkstra permet de trouver le plus court chemin entre un sommet de départ et tous les autres sommets d'un graphe pondéré.
+
+On pose $S$ l'ensemble des sommets pour lesquels on connait sa plus courte distance au départ et $overline(S)$ son complémentaire.
+
+On pose $delta$ de la manière suivante :
+
+- Pour les sommets $v in S, delta(v) = d(v_i,v)$
+- Pour les sommets $v in overline(S), delta(v)$ correspond à la longueur du plus court chemin dans le graphe menant de $v_i$ à $v$ et passant par les sommets de $S$
+
+Initialement on pose $S = {v_i}$ et $overline(S) = V\\{v_i}$, et on pose $delta(v_i) = 0$ et $delta(v) = +infinity$ pour tout $v in overline(S)$ (on peut aussi poser $delta(v) = w(v_i, v)$ pour tout voisin de $v_i$).
+
+#theorem([Invariants de Dijkstra],[
+  Après chaque étape de l'algorithme de Dijkstra, on a $delta(v) = d(v_i, v)$ pour tout $v in S$ et $delta(v)$ la longueur du plus court chemin menant de $v_i$ à $v$ et passant par les sommets de $S$ pour tout $v in overline(S)$
+])
+
+#demo([
+  Par récurrence :
+
+  - Initialement seul le sommet $v_i$ est dans $S$ et on a bien $delta(v_i) = 0$ et $delta(v) = +infinity$ pour tout $v in overline(S)$ d'où les deux invariants sont vérifiés.
+
+  - On suppose les deux invariants vérifiés à l'étape $k$ et on considère l'étape $k+1$. On a 3 cas pour étudier un sommet $v$ :
+
+    - Soit le sommet $v$ est déjà dans $S$, alors on a $delta(v) = d(v_i, v)$ et on ne fait rien
+
+    - Soit le sommet est celui qui entre dans $S$, alors on a $delta >= d(v_i, v)$ il suffit de montrer que $delta = d(v_i, v)$. Pour faire on considère un chemin de longueur minimale dans la totalité du graphe menant de $v_i$ à $v$ et on note $u$ le premier sommet de ce chemin
+
+      Alors on a $d(v_i, v) = d(v_i, u) + d(u,v) >= d(v_i, u) >= delta(u) >= delta(v)$, et on a donc $delta(v) = d(v_i, v)$
+
+    - Soit le sommet reste dans $overline(S)$, notons $u$ le sommet rentrant à cette étape et considérons un chemin de longueur minimale dans la totalité du graphe menant de $v_i$ à $v$ et passant par les sommets de $S$. On a encore 3 cas :
+
+      - Soit ce chemin ne passe pas par $u$, la valeur de $delta(v)$ est donc inchangée
+
+      - Soit ce chemin passe par $u$ en dernier, ainsi on a $d(v_i, u) + w(u, v) = delta(u) + w(u, v)$, et ainsi on a cette valeur qui est nécessairement inférieure ou égale à $delta(v)$
+
+      - Soit ce chemin passe par $u$ mais il existe un point $u'$ de $S$ suivant $u$ dans le chemin de $v_i$ à $v$ que l'on avait et $delta(u') <= delta(u)$ puisque $u'$ était présent avant, donc on peut trouver un chemin de longueur égale ou inférieure menant de $v_i$ à $u'$ ne passant pas par $u$ et donc on garde la valeur de $delta(v)$
+
+    Ainsi ça conclut sur la correction de l'algorithme
+])
+
+#theorem([Correction de Dijkstra],[
+  Quand Dijkstra termine, on a $delta(v) = d(v_i, v)$ pour tout $v in V$
+])
+
+#demo([
+  D'après les invariants c'est vrai pour tout sommet dans $S$
+
+  Et si il existe des sommets dans $overline(S)$ alors on n'a pu trouver d'arc menant de $v_i$ à $v$ d'où $delta(v) = +infinity$
+])
+
+Pour implémenter Dijkstra on va faire un parcours en profondeur de l'arbre et pour chaque sommet $v$, si $v in.not S$ (en arrivant de $u$), alors $delta(v) = delta(u) + w(u,v)$. Si $v in S$, alors on pose $delta(v) = min(delta(v), delta(u) + w(u,v))$.
+
+En OCaml on peut utiliser une `Heapq` pour Djikstra avec `Heapq.create` pour créer une file de priorité, `Heapq.push` pour ajouter un élément, `Heapq.pop` pour retirer l'élément de priorité minimale et `Heapq.is_empty` pour savoir si la file est vide.
+
+Ainsi on peut implémenter Dijkstra en OCaml :
+
+#algo([Dijkstra],```ocaml
+let dijkstra gr s =
+  let distances = Hashtbl.create 97 and openv = Heapq.create () in Heapq.push openv ((s, []), 0.0);
+
+  while not (Heapq.is_empty openv) do
+    let ((u, ch), du) = Heapq.pop openv in
+      if not (Hashtbl.mem distances u) then begin
+        Hashtbl.add distances u (du, List.rev (u::ch));
+        List.iter
+          (fun (v, w) -> Heapq.push openv ((v, u::ch), du +. w))
+          (neighbors gr u)
+      end
+  done;
+  distances;;
+```)
+
+On remarque ici que la `Heapq` nous garantit que quand on retire un élément de la file, c'est bien le plus petit chemin.
+
+=== Algorithme A\*
+
+L'algorithme de Dijkstra permet d'obtenir avec certitude le plus court chemin, mais il peut être très coûteux en temps de calcul, il n'est pas très efficace pour des graphes de grande taille.
+
+L'algorithme A\* est une amélioration de Dijkstra qui permet de trouver le plus court chemin en utilisant une heuristique pour guider la recherche : une *heuristique* est une fonction qui estime la distance entre un sommet et le sommet d'arrivée, qu'on notera $h(v)$.
+
+Ainsi on choisit le sommet suivant avec $delta(v) + h(v)$ et non plus $delta(v)$.
+
+#theorem([Heuristique admissible],[
+  Une heuristique est dite *admissible* si :
+  - $forall v in V$, $h(v) <= d(v, v_j)$
+  - $h(v_j) = 0$
+])
+
+#theorem([Correction de A\*],[
+  Si l'heuristique est admissible, alors A\* trouve le plus court chemin
+])
+
+#demo([
+  On va prouver par contraposée, supposons un chemin de $v_i$ à $v_j$ qui ne soit pas le plus court et que $h(v_j) = 0$
+
+  On considère un chemin plus court, ainsi il y a au moins un arc $v triangle.r v'$ qui n'a pas été parcouru et on choisit cet arc.
+
+  Si l'arc menant à $v_j$ a été sélectrionné avant c'est nécessairement que $delta(v_j) + h(v_j) <= delta(v') + h(v')$ or $h(v_j) = 0$ et $delta(v_j) >= d(v_i, v_j)$ d'où $delta(v') + h(v') > d(v_i, v_j)$.
+
+  D'où par principe de sous optimalité et puisque l'on est sur le plus court chemin, $delta(v') = d(v', v_1)$ et on a donc $d(v_i_, v') + h(v') > d(v_i, v_j)$ d'où $h(v') > d(v', v_j)$ ainsi l'heuristique n'est pas admissible
+])
 
 === Graphes avec poids négatifs
 
@@ -2218,6 +2802,8 @@ Dans un graphe on dit que l'arc $u triangle v$ est en *tension* si $delta(v) > d
 L'approche de Ford est donc d'éliminer les arcs en tension
 
 Tant qu'il existe des arcs en tension, on traite tous les arcs de $E$ et on traite ceux en tension, on a donc une complexité $O(n times p)$
+
+Voir dernière page du cours pour les infos
 
 #pagebreak()
 
@@ -2457,16 +3043,99 @@ L'avantage de la dichotomie est qu'elle a une complexité en $O(log(n))$ : elle 
 
 == Terminaison
 
+On dit que $(cal(E), <=)$ est un *ensemble bien fondé* si toute partie non vide de $cal(E)$ admet un élément minimal ($forall x in A, a <= x ==> x =a$)
+
+On dit que $(cal(E), <=)$ est un *ensemble bien ordonné* si toute partie non vide de $cal(E)$ admet un plus petit élément ($forall x in A, a <= x$)
+
+#theorem([Suite infinie],[
+  Il n'existe pas de suite infinie strictement décroissante dans un ensemble bien fondé
+])
+
+#demo([
+  On suppose qu'il existe une suite infinie strictement décroissante $a_0 > a_1 > a_2 > ...$
+
+  On considère l'ensemble $A = {a_i | i in NN}$, cet ensemble est non vide et admet un élément minimal $a_n$
+
+  Ainsi $forall k >= n$, on a $a_k >= a_n$ d'où $a_k = a_n$ d'où la suite est stationnaire ce qui est absurde
+])
+
+#theorem([Principe d'induction (prédicat)],[
+  Soit $(cal(E), <=)$ bien fondé, et $M$ l'ensemble des éléments minimaux. Alors si un prédicat $P$ est vrai pour tout $x in M$ et si $forall x in cal(E), (forall y < x, P(y)) => P(x)$, alors $forall x in cal(E), P(x)$
+])
+
+#demo([
+  Par l'absure en supposant qu'il existe $X$ tel que $forall x in X, not P(x)$ cet ensemble admet un élément minimal $x_0$ nécessairement dans $cal(E)\\M$
+
+  Or on a $forall y < x_0, P(y)$ d'où $P(x_0)$ ce qui est absurde
+])
+
+#theorem([Variant de boucle],[
+  Si dans une boucle on peut exhiber un variant choisi dans un ensemble bien fondé qui décroit strictement à chaque itération, alors la boucle se termine
+])
+
+#demo([
+  Par principe d'induction :
+  - Si $x in M$ alors la boucle se termine car il ne peut y avoir d'itération supplémentaire
+  - Si pour $x in cal(E)$ donné la boucle se termine $forall y < x$, alors l'itération suivante sera un de ces $y$ d'où la boucle se termine
+])
+
+L'ensemble des flottants positifs et bien fondé et bien ordonné mais les erreurs d'arrondis peuvent poser problème
+
+#theorem([Principe d'induction (récursif)],[
+  Soit $f$ récursive de $cal(E)$ vers $cal(F)$ et $phi$ de $cal(E)$ vers un ensemble bien fondé telle que pour tout $x in cal(E)$ :
+
+  - Soit $f$ renvoie un résultat
+  - Soit la fonction calcule le résultat par un nombre fini d'appels récursifs avec $phi(y_i) < phi(x)$
+
+  Alors la fonction termine pour tout $x in cal(E)$
+])
+
+Ordres utiles :
+
+- L'ordre des entiers ($NN, <=$)
+
+- L'ordre lexicographique ($NN^2, <=_l$): $(a,b)<=_l (c,d) <=> a < c or (a=c and b <= d)$ est bien ordonné (et donc bien fondé)
+
+- L'ordre produit ($NN^2,<=_times$): $(a,b)<=_times (c,d) <=> a <= c and b <= d$ n'est pas ordonné mais est bien fondé
+
 == Récursion terminale
+
+La récursion terminale est une récursion où le résultat de l'appel récursif est directement le résultat de la fonction, ie l'appel récursif est la dernière opération de la fonction
 
 == Retour sur trace
 
+Le retour sur trace est une technique de programmation qui consiste à sauvegarder l'état de la fonction à chaque appel récursif pour pouvoir revenir en arrière si besoin : on peut ainsi faire des essais et revenir en arrière (par exemple faire une hypothèse et revenir en arrière si elle est fausse et essayer une autre hypothèse)
+
+On pourra utiliser le type `Option` du OCaml pour gérer les retours sur trace :
+
+```ml
+type 'a option = None | Some of 'a;;
+```
+
 == Programmation dynamique
+
+Les approches récursives sont souvent inefficaces car elles recalculent plusieurs fois les mêmes valeurs, la programmation dynamique consiste à stocker les valeurs déjà calculées pour ne pas les recalculer.
+
+Par exemple pour trouver la distance d'édition entre deux chaînes de caractères on peut utiliser la programmation dynamique. Pour déterminer cette distance on peut se baser sur les propriétés suivantes :
+
+#todo(text: [(DISTANCE DE TEXTE)])
+
+On peut *mémoïser* les résultats pour ne pas les recalculer, notamment avec une `Hashtbl` ou un tableau
+
+On peut aussi au lieu de mémoïser faire une approche de type *bottom-up* où on part des valeurs les plus petites pour arriver aux valeurs les plus grandes : pour Fibonnaci on n'est pas obligés de stocker toutes les valeurs mais juste les deux dernières.
 
 #box(height: 1em)
 #heading([Stratégies algorithmiques], supplement: [theory],)
 
 == Algorithmes gloutons
+
+Il existe des problèmes pour lesquels on peut utiliser des algorithmes gloutons, qui consistent à prendre la meilleure solution locale à chaque étape.
+
+Par exemple pour le problème du rendu de monnaie on peut prendre la plus grosse pièce à chaque fois.
+
+Pour montrer qu'un algorithme glouton est optimal on suppose qu'il existe une solution optimale qui n'utilise pas la solution gloutonne, on obtient alors une contradiction.
+
+L'approche gloutonne est donc une bonne solution, mais il faut faire attention à la correction de l'algorithme.
 
 == Diviser pour régner
 
@@ -2512,10 +3181,9 @@ Plus mathématiquement on a pour $n >= 2$, $u_floor(n/2) + u_ceil(n/2) + n/2 <= 
 
 Pour l'implémenter en C on fait de la manière suivante :
 
-#todo(text: [(Réecrire)])
+#todo(text: [(A faire ça)])
 
-#algo([Tri fusion],```c
-```)
+Pour rechercher un pic dans un tableau par exemple, on peut utiliser une approche en diviser pour régner on considère $m$ et $m-1$ au milieu du tableau, si `t[m-1] >= t[m]` alors on a un pic à gauche et sinon on a un pic à droite
 
 #box(height: 1em)
 #heading([SQL], supplement: [theory],)
