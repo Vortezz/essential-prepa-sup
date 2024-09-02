@@ -166,8 +166,10 @@
 #let er = $arrow(e_r)$
 #let et = $arrow(e_theta)$
 #let ep = $arrow(e_phi)$
+#let integralp = $integral^(T/2)_(-T/2)$
 
 #let ext = $"ext"$
+#let eff = $"eff"$
 
 #let graph(funcs: (), size: (10,4), domain: (0, 10), tickx: none, ticky: none, lines: (), x_axis: $x$, y_axis: $y$, width: 100%) = box(width: width, 
   align(center, 
@@ -1227,6 +1229,71 @@ Les résultats suivants sont hors programme mais peuvent être utiles :
 
 #warning([
   On remarquera que la forme canonique a toujours un $1$ au dénominateur
+])
+
+
+#box(height: 1em)
+#heading([Signaux périodiques et filtrage linéaire], supplement: [elec])
+
+== Signaux périodiques et leur caractérisation
+
+L'analyse harmonique est importante, car les sinusoides sont stables par intégration et dérivation et parcequ'elles constituent la base de la décomposition de Fourier.
+
+On rappelle qu'on définit la *valeur efficace* par $E_"eff" = sqrt(expval(u^2))$ : la *valeur efficace* de $e(t)$ est la valeur de la tension continue qui déposerait la même énergie que $e(t)$ pendant une perière dans un résistor.
+
+Dans un résistor on a $P(t) = (e^2(t))/R$ d'où $cal(E) = 1/R integral^(T/2)_(-T/2) (e^2(t))$ d'où on retrouve l'expression de $E_"eff"$.
+
+Dans le cas d'un sinus on a bien $E_eff = S_0/sqrt(2)$ et $E_eff = 0$ dans le cas d'un signal créneau.
+
+#theorem([Décomposition de Fourier],[
+  Toute fonction $e(t)$ périodique de pulsation $w_1$ peut s'écrire de la façon unique suivante :
+
+  $ e(t) = sum_(n=0)^(+ infinity) a_n cos (w_n t) + b_n sin(w_n t) $
+
+  Les $a_n$ et $b_n$ sont les *coefficients de Fourier* de $e(t)$ et $omega_n = n omega_1$
+])
+
+#theorem([Expression des coefficients],[
+  Si $n = 0$, on a $a_n = 1/T integralp e(t) dt$ et $b_0 = 0$
+
+  Sinon on a :
+
+  $ a_n = 2/T integralp e(t) cos(omega_n t) dt " et " b_n = 2/T integralp e(t) sin(omega_n t) dt $
+])
+
+#warning([Attention au $1/T$ pour $a_0$ et $2/T$ pour les autres])
+
+On remarque que :
+
+- $a_0 = expval(e(t))$, aussi appelé *offset* en électronique
+
+- La série de Fournier d'une fonction impaire ne contient que des sinus et celle d'une fonction paire que des cosinus
+
+- Si $e(t + T/2) = - e(t)$, alors tous les termes de degré pair sont nuls
+
+- La décomposition est définie si $a_n, b_n$ tendent vers 0 quand $n$ tend vers l'infini
+
+On appelle *rapport cyclique* (entre 0 et 1) la proportion du temps passé en haut pour un signal créneau et la durée de la phase montante pour un signal triangle.
+
+On rappelle qu'un signal triangle est l'intégrale d'un signal créneau.
+
+On peut aussi tracer le *spectre en amplitude*, car tout signal peut s'écrire sous la forme $e(t) = sum_(n >= 0) A_n cos(omega_n t + phi_n)$ avec $A_n = sqrt(a_n^2 + b_n^2)$ et $tan(phi_n) = - b_n/a_n$
+
+Pour un signal périodique de fréquence $f_1$, le terme périodique de fréquence nulle est la *composante continue* d'amplitude $A_0$, le terme $A_1$ est le *fondamental* et $forall n >= 0, A_n$ est l'amplitude de l'*harmonique* de rang $n$.
+
+On peut ainsi tracer le spectre en amplitude, $A_n$ en fonction de $n$ ou de $f_n = n f_1$. Plus un spectre contient d'harmoniques, plus il est *riche*.
+
+#theorem([Formule de Parseval],[
+  On a $ E_eff = sqrt(A_0^2 + 1/2 sum_(n>=1) A_n) $
+])
+
+#demo([
+  On a $(sum_(n>=0) A_n cos(omega_n t + phi_n))^2 = sum_(n>=0) A_n^2 cos^2(omega_n t + phi_n) + sum_(n,m \ "tq" n!=m) A_n A_m cos(omega_n t + phi_n) cos(omega_m t + phi_m)$
+
+
+  Et $integralp cos^2(omega_n t) dt = cases(T/2 "si" n != 0, T "si" n = 0)$
+
+  D'où le résultat
 ])
 
 #pagebreak()
