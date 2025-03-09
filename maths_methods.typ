@@ -207,7 +207,7 @@
 
 #align(center, text([📋 Sommaire], weight: 800, size: 24pt))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Type :", target: heading.where(supplement: [type]))
+#outline(depth:1,indent: 10pt, title: "Type :", target: heading.where(supplement: [type]))
 
 #pagebreak()
 
@@ -228,6 +228,6 @@
   heading([Table des matières])
   box(height: 0pt)
   show heading: none
-  columns(2, outline(title: [Table des matières], indent: 10pt, fill: [], depth: 4))
+  columns(2, outline(title: [Table des matières], indent: 10pt, depth: 4))
   pagebreak(weak: true)
 }

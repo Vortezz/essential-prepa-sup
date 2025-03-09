@@ -8,20 +8,20 @@
 #let project(title: "", authors: (), date: none, body) = {
   set document(author: authors.map(a => a.name), title: "Essentiel d'informatique")
   
-  set page(numbering: "1", number-align: center, footer: locate(loc => 
-      if (loc.page() > 1) {
+  set page(numbering: "1", number-align: center, footer: context {
+      if (here().page() > 1) {
         box(width: 100%, grid(
           columns: (40%, 20%, 40%),
           rows: (20pt),
           [],
-          align(center + horizon, str(loc.page())),
+          align(center + horizon, str(here().page())),
           align(right + horizon, text("Victor Sarrazin", size: 9pt)),
         ))
     } else {
       []
     }
-  ))
-  set text(font: "Cantarell", lang: "en")
+  })
+  set text(font: "Poppins", lang: "en")
 
   align(center + horizon)[
     #block(text(weight: 800, 30pt, "💻 Essentiel d'informatique"))
@@ -216,11 +216,11 @@
 
 #align(center, text([📋 Sommaire], weight: 800, size: 24pt))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Introduction aux langages :", target: heading.where(supplement: [intro]))
+#outline(depth:1,indent: 10pt, title: "Introduction aux langages :", target: heading.where(supplement: [intro]))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Structures de données :", target: heading.where(supplement: [struct]))
+#outline(depth:1,indent: 10pt, title: "Structures de données :", target: heading.where(supplement: [struct]))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Informatique théorique :", target: heading.where(supplement: [theory]))
+#outline(depth:1,indent: 10pt, title: "Informatique théorique :", target: heading.where(supplement: [theory]))
 
 #pagebreak()
 
@@ -2866,7 +2866,7 @@ void selection_sort(int arr[], int n) {
     int min_i = i;
 
     for (int j = i+1; j<n; j++) {
-      if (arr[j] < arr(min_i)) {
+      if (arr[j] < arr[min_i]) {
         min_i = j;
       }
     }
@@ -2912,7 +2912,7 @@ let bubble_sort(int arr[], int n) {
 
     arr[i] = smallest;
     // On n'a pas besoin de regarder les éléments entre i+1 et k_last_perm car on n'a fait aucune modification
-    i = k_last_perm + 1;
+    i = k_last_perm;
   }
 }
 ```)
@@ -3639,6 +3639,6 @@ On va classer les problèmes en fonction de leur complexité :
   heading([Table des matières])
   box(height: 0pt)
   show heading: none
-  columns(2, outline(title: [Table des matières], indent: 10pt, fill: [], depth: 4,target: heading.where(bookmarked: auto)))
+  columns(2, outline(title: [Table des matières], indent: 10pt, depth: 4,target: heading.where(bookmarked: auto)))
   pagebreak(weak: true)
 }

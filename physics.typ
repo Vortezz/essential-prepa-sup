@@ -1,25 +1,27 @@
 #set heading(numbering: "I.1.a")
-#import "@local/unify:0.6.0": *
-#import "@local/physica:0.9.3": *
-#import "@local/cetz:0.2.2": *
+#import "@preview/unify:0.7.1": *
+#import "@preview/physica:0.9.3": *
+#import "@preview/cetz:0.3.3": *
+#import "@preview/cetz-plot:0.1.1": plot, chart
 
 #let project(title: "", authors: (), date: none, body) = {
   set document(author: authors.map(a => a.name), title: "Essentiel de physique")
   
-  set page(numbering: "1", number-align: center, footer: locate(loc => 
-      if (loc.page() > 1) {
+    set page(numbering: "1", number-align: center, footer: context {
+      if (here().page() > 1) {
         box(width: 100%, grid(
           columns: (40%, 20%, 40%),
           rows: (20pt),
           [],
-          align(center + horizon, str(loc.page())),
+          align(center + horizon, str(here().page())),
           align(right + horizon, text("Victor Sarrazin", size: 9pt)),
         ))
     } else {
       []
     }
-  ))
-  set text(font: "Cantarell", lang: "en")
+  })
+  
+  set text(font: "Poppins", lang: "en")
 
   align(center + horizon)[
     #block(text(weight: 800, 30pt, "🧪 Essentiel de physique"))
@@ -183,7 +185,7 @@
           plot.add-hline(line)
         }
       })
-    })
+    }),
   )
 )
 
@@ -205,29 +207,29 @@ _Dans la dernière partie une liste de méthodes est détaillée pour faciliter 
 
 #align(center, text([📋 Sommaire], weight: 800, size: 24pt))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Optique :", target: heading.where(supplement: [optical]))
+#outline(depth:1,indent: 10pt, title: "Optique :", target: heading.where(supplement: [optical]))
 
 // Faire des montages : https://phydemo.app/ray-optics/simulator/
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Électricité :", target: heading.where(supplement: [elec]))
+#outline(depth:1,indent: 10pt, title: "Électricité :", target: heading.where(supplement: [elec]))
 
 // Faire des circuits : https://www.circuit-diagram.org/editorb/
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Ondes :", target: heading.where(supplement: [waves]))
+#outline(depth:1,indent: 10pt, title: "Ondes :", target: heading.where(supplement: [waves]))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Mécanique :", target: heading.where(supplement: [meca]))
+#outline(depth:1,indent: 10pt, title: "Mécanique :", target: heading.where(supplement: [meca]))
 
 // Simu pendule : https://phet.colorado.edu/sims/html/pendulum-lab/latest/pendulum-lab_all.html
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Thermodynamique :", target: heading.where(supplement: [thermo]))
+#outline(depth:1,indent: 10pt, title: "Thermodynamique :", target: heading.where(supplement: [thermo]))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Magnétostatique :", target: heading.where(supplement: [magne]))
+#outline(depth:1,indent: 10pt, title: "Magnétostatique :", target: heading.where(supplement: [magne]))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Mécanique quantique :", target: heading.where(supplement: [quantum]))
+#outline(depth:1,indent: 10pt, title: "Mécanique quantique :", target: heading.where(supplement: [quantum]))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Fiches TP :", target: heading.where(supplement: [tp]))
+#outline(depth:1,indent: 10pt, title: "Fiches TP :", target: heading.where(supplement: [tp]))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Annexe :", target: heading.where(supplement: [annex]))
+#outline(depth:1,indent: 10pt, title: "Annexe :", target: heading.where(supplement: [annex]))
 
 #let pext = $P_"ext"$
 
@@ -264,7 +266,7 @@ On a $n_"vide" = 1$, $n_"air" - n_"vide" = num("3e-4")$ et $n_"eau" = 1.3$
 
 #figure(image("physics/optical/spectrum.png", width: 70%))
 
-On a $lambda_"violet" = qty("400", "nm")$ et $lambda_"rouge" = qty("800", "nm")$. Si $lambda < qty("400", "nm")$ on est dans le domaine des *ultraviolets* et si $lambda > qty("800", "nm")$ on est dans le domaine des *infrarouges*.
+On a $lambda_"violet" = qty("400", "nm")$ et $lambda_"rouge" = qty("650", "nm")$. Si $lambda < qty("400", "nm")$ on est dans le domaine des *ultraviolets* et si $lambda > qty("800", "nm")$ on est dans le domaine des *infrarouges*.
 
 La puissance lumineuse moyenne par unité de surface est appelée *éclairement* ($xi$) ou *intensité lumineuse* ($I$).
 
@@ -354,7 +356,7 @@ On parle de *système centré* pour un système possédant un axe de symétrie a
 
 On parle d'*aplanétisme* si $2$ points objets dans le même plan orthogonal à $O A$ sont conjugués à $2$ points image dans un même plan orthogonal à $O A$ (encore le cas du miroir plan)
 
-Un point est *réel* si il exist réellement, et *virtuel* un point où se coupent les prolongements des rayons incidents.
+Un point est *réel* si il existe réellement, et *virtuel* un point où se coupent les prolongements des rayons incidents.
 
 == Lentilles minces
 
@@ -579,6 +581,8 @@ Pour mesurer une tension on utilise un _voltmètre_ avec le $+$ sur la borne $Om
 
 #theorem([Critère d'ARQS],[
   Si $tau >> d/c$ avec $tau$ le temps caractéristique, $d$ la taille du circuit et $c$ la longueur du vide alors on est dans l'approximation.
+
+  Note spé : Si $lambda$ (extension spatiale du signal) $>> d$ on est dans l'ARQS
 ])
 
 Si ce critère est vérifié, tous les points du circuit "voient" le changement en direct. Ce critère est tout le temps vérifié en tp.
@@ -628,7 +632,7 @@ Le voltmètre ($approx 10 M Omega$) est modélisée par un interrupteur ouvert, 
 
 On a la *masse*, un point d'un circuit de potentiel nul, $V = 0 unit("V")$ c'est l'origine des potentiels.
 
-En théorie elle est choisie arbitrairement, mais en pratique elle est imposée par certails appareils reliés à la Terre.
+En théorie elle est choisie arbitrairement, mais en pratique elle est imposée par certains appareils reliés à la Terre.
 
 == Associations des résistors
 
@@ -943,7 +947,7 @@ On définit :
 - La *période* $T$ en $unit("s")$ correspondant à l'écart entre deux passages au même point
 - La *fréquence* $f$ en $unit("Hz")$ correspondant au nombre de périodes en une seconde d'où $f = 1/T$
 - La *valeur moyenne* $expval(u) = 1/T integral_t^(t + T) u (tilde(t)) dd(tilde(t))$
-- L'*amplitude crête à crête* (peak to peak) $Delta = u_"max" - u_"min"$
+- L'*amplitude crête à crête* (peak to peak) $Delta u = u_"max" - u_"min"$
 - La *valeur efficace*, $u_"eff" = sqrt(expval(u^2))$
 
 #theorem([Valeur efficace pour un signal sinusoïdal],[
@@ -1035,6 +1039,12 @@ On définit aussi l'*admittance complexe* comme étant $underline(y) = 1/underli
 Les lois de l'électricité restant valides dans l'ARQS, elles sont aussi valides si $omega << (2 pi c)/d$.
 
 Les impédances s'associent en série et en parallèle comme des résistances, et les ponts diviseurs s'appliquent aussi aux impédances.
+
+#theorem([Loi des noeuds en terme de potentiel],[
+  A un point $A$, on a $sum_"entrants" I = sum_"sortants" I$ d'où :
+
+  $ sum_"entrants" (V_A - V)/Z = sum_"entrants" (V - V_A)/Z $
+])
 
 == Étude d'un circuit
 
@@ -1233,7 +1243,7 @@ Les résultats suivants sont hors programme mais peuvent être utiles :
 
 
 #box(height: 1em)
-#heading([Signaux périodiques et filtrage linéaire], supplement: [elec])
+#heading([Signaux périodiques et filtrage linéaire (Spé)], supplement: [elec])
 
 == Signaux périodiques et leur caractérisation
 
@@ -1273,6 +1283,10 @@ On remarque que :
 
 - La décomposition est définie si $a_n, b_n$ tendent vers 0 quand $n$ tend vers l'infini
 
+#todo(text: [
+  Ajouter les décomps d'un carré et d'un triangle
+])
+
 On appelle *rapport cyclique* (entre 0 et 1) la proportion du temps passé en haut pour un signal créneau et la durée de la phase montante pour un signal triangle.
 
 On rappelle qu'un signal triangle est l'intégrale d'un signal créneau.
@@ -1284,7 +1298,7 @@ Pour un signal périodique de fréquence $f_1$, le terme périodique de fréquen
 On peut ainsi tracer le spectre en amplitude, $A_n$ en fonction de $n$ ou de $f_n = n f_1$. Plus un spectre contient d'harmoniques, plus il est *riche*.
 
 #theorem([Formule de Parseval],[
-  On a $ E_eff = sqrt(A_0^2 + 1/2 sum_(n>=1) A_n) $
+  On a $ E_eff = sqrt(A_0^2 + 1/2 sum_(n>=1) A_n^2) $
 ])
 
 #demo([
@@ -1295,6 +1309,55 @@ On peut ainsi tracer le spectre en amplitude, $A_n$ en fonction de $n$ ou de $f_
 
   D'où le résultat
 ])
+
+On note $T_n(t)$ la somme partielle des termes de $T(t)$ jusqu'au range $n$.
+
+Le fondamental et les premières harmoniques contiennent la forme générale du signal (cad la période, une approximation des valeurs extrêmes et groissièrement les parties plates). Les harmoniques de rang élevé contiennent les détails : éventuelles discontinuités du signal ou de ses dérivées (au voisinage des points anguleux) et le lissage des parties plates.
+
+Quand on a une discontinuité en pente seulement (ie la dérivée est discontinue), alors les $A_n$ décroissent rapidement (au moins en $1/n^2$), ainsi une bande passante limitée suffit souvent à la transmission d'un signal périodique continu.
+
+Pour un signal périodique avec discontinuités, les $A_n$ décroissent lentement (généralement en $1/n$). Un signal présentant des discontinuités nécessite souvent une bande passante plus large.
+
+== Filtrage linéaire d'un signal périodique
+
+Le *multiplexage* est le fait de faire transiter plusieurs signaux via un même fil.
+
+#theorem([Système linéaire],[
+  Un système est dit *linéaire* si avec $s_1(t)$ (resp $s_2(t)$) la sortie associée à $e_1(t)$ (resp $e_2(t)$), toute combinaison linéaire de $e_i$ appliquée au système fournit la même combinaison linéaire de $s_i$.
+
+  $ "ie " A e_1(t) + B e_2(t) -> A s_1(t) + B s_2(t) $
+])
+
+En particulier les systèmes qui lient $e(t)$ et $s(t)$ par la relation suivante sont linéaires :
+
+$ sum_(l=0)^L lambda_l dv(s, t, l) = sum_(m=0)^M mu_l dv(e, t, m) $
+
+On appelle *ALI* un Amplificateur Linéaire Intégré (ou AO, Amplificateur Opérationnel), schématisé de la manière suivante :
+
+L'ALI possède 2 entrées, l'entrée $-$ dite *inverseuse* et l'entrée $+$ est dite *non inverseuse*, et une sortie.
+
+#theorem([ALI idéal],[
+Un modèle simple est celui de l'ALI idéal : les impédances d'entrée sont supposées infinies.
+
+Celà a pour conséquence $i^+ = i^- = 0$
+])
+
+De plus si l'ALI est en *fonctionnement linéaire*, $v^+ = v^-$
+
+On peut déterminer $s(t)$ en cherchant l'équation différentielle, ou passer par les séries de Fourier avec le gain et le déphasage. On remarque qu'en traçant $S_20(t)$ on retombe sur un graphe de $s(t)$ proche de celui avec la premiere méthode.
+
+Pour tout signal d'entrée périodique $e(t) = sum^(+ infinity) A_n cos(omega_n t + phi_n)$, on a :
+
+$ s(t) = sum^(+ infinity) G(omega_n) A_n cos(omega_n t + phi_n + Phi(omega_n)) $
+
+De plus le spectre en sortie est inclus dans le spectre en entrée, c'est à dire que toute fréquence présente dans le spectre en sortie est nécessairement présente dans le spectre en entrée.
+
+Pour les filtres se référer au chapitre précédent mais il est important de noter que :
+
+- $G_0 in RR^+$ pour les filtres du premier ordre
+- Le déphasage est nul là où le filtre est passant et toujours décroissant
+- Pour un passe-bande plus le facteur de qualité est élevé et plus la bande est précise
+- Pour un passe bas du deuxième ordre on a une baisse de 40 par décade et une résonnance si $Q >= 1/sqrt(2)$ ce qu'on évite en pratique
 
 #pagebreak()
 
@@ -2565,6 +2628,8 @@ On définit la capacité thermique à pression fixée par $C_p = derivativePart(
 #theorem([Expression de $Delta H$], [On a $Delta H = integral_(T_i)^T_f C_p d T = C_p Delta T$])
 
 Dans le cas des phases condensées on a $P V << U$ d'où $U = H$ ainsi $C_p = C_v = C$
+
+Pour l'eau, on a $c_l = qty("4.2", "J/K/kg")$ pour la capacité massique
 
 #theorem([Relation de Mayer], [Dans le cas d'un gaz parfait on a $C_p = C_v + n R$])
 
@@ -4177,6 +4242,6 @@ Si on a une équation qui ne rentre pas dans ce cadre :
   heading([Table des matières])
   box(height: 0pt)
   show heading: none
-  columns(2, outline(title: [Table des matières], indent: 10pt, fill: [], depth: 4))
+  columns(2, outline(title: [Table des matières], indent: 10pt, depth: 4))
   pagebreak(weak: true)
 }

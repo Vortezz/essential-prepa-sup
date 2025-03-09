@@ -206,9 +206,9 @@
 
 #align(center, text([📋 Sommaire], weight: 800, size: 24pt))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Livres :", target: heading.where(supplement: [book]))
+#outline(depth:1,indent: 10pt, title: "Livres :", target: heading.where(supplement: [book]))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Citations :", target: heading.where(supplement: [quotes]))
+#outline(depth:1,indent: 10pt, title: "Citations :", target: heading.where(supplement: [quotes]))
 
 #pagebreak()
 
@@ -295,6 +295,6 @@ Mrs Augusta Welland est la mère de May Welland. Elle est une femme de la haute 
   heading([Table des matières])
   box(height: 0pt)
   show heading: none
-  columns(2, outline(title: [Table des matières], indent: 10pt, fill: [], depth: 4))
+  columns(2, outline(title: [Table des matières], indent: 10pt, depth: 4))
   pagebreak(weak: true)
 }

@@ -223,13 +223,13 @@
 
 #align(center, text([📋 Sommaire], weight: 800, size: 24pt))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Conjugaison :", target: heading.where(supplement: [conjug]))
+#outline(depth:1,indent: 10pt, title: "Conjugaison :", target: heading.where(supplement: [conjug]))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Grammaire :", target: heading.where(supplement: [grammar]))
+#outline(depth:1,indent: 10pt, title: "Grammaire :", target: heading.where(supplement: [grammar]))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Épreuves :", target: heading.where(supplement: [tests]))
+#outline(depth:1,indent: 10pt, title: "Épreuves :", target: heading.where(supplement: [tests]))
 
-#outline(depth:1,indent: 10pt, fill: [], title: "Exemples :", target: heading.where(supplement: [ex]))
+#outline(depth:1,indent: 10pt, title: "Exemples :", target: heading.where(supplement: [ex]))
 
 #pagebreak()
 
@@ -693,12 +693,30 @@ Finally in *1965*, the Voting Rights Act was passed to protect the right to vote
 
 #pagebreak()
 
+#set heading(numbering: "🌐 I.1.a")
+
+#align(center, text([🌐 Vocabulaire/Expressions], weight: 800, size: 24pt))
+
+#box(height: 1em)
+#heading([Vocabulaire], supplement: [voc],)
+
+*Immigration*
+
+#table([English],[French])
+
+#box(height: 1em)
+#heading([Expressions], supplement: [voc],)
+
+- *canary in a coalmine* : un indicateur précoce d'un danger
+
+#pagebreak()
+
 #{
   counter(heading).update(0)
   set heading(numbering: none)
   heading([Table des matières])
   box(height: 0pt)
   show heading: none
-  columns(2, outline(title: [Table des matières], indent: 10pt, fill: [], depth: 4))
+  columns(2, outline(title: [Table des matières], indent: 10pt, depth: 4))
   pagebreak(weak: true)
 }
