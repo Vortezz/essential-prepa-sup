@@ -4032,6 +4032,67 @@ Ainsi en identifiant les dimensions on a $[X] = A^(1 - z) C^(y - 1)$
 )
 
 #box(height: 1em)
+
+= Ordres de grandeur
+
+#let gray = rgb("#d3d3d3")
+
+#set text(size: 12pt)
+
+#align(center, table(
+    columns: 2,
+    [*Nom*], [*Valeur et symbole*],
+    // cell(fill: gray, colspan: 2, [#h(0pt)]),
+    [Permitivitté diélectrique (vide)], [$epsilon_0 = qty("8.9e-12", "F/m") = qty("1.0e-11", "F/m")$],
+    [Perméabilité magnétique (vide)], [$mu_0 = 4 pi times qty("1e-7", "H/m")$],
+    [Charge élémentaire], [$e = qty("1.6e-19", "C")$],
+    [Constante de gravitation], [$cal(G) = qty("6.67e-11", "N m^2 / kg^2")$],
+    [Vitesse de la lumière (vide)], [$c = qty("299792458", "m/s") = qty("3.0e8", "m/s")$],
+    [Rayon du Soleil], [$R_T = qty("70e5", "km")$],
+    [Masse du Soleil], [$M_T = qty("2e30", "kg")$],
+    [Rayon de la Terre], [$R_T = qty("6.4e3", "km")$],
+    [Masse de la Terre], [$M_T = qty("6e24", "kg")$],
+    [Vitesse de rotation de la Terre], [$Omega_(t/g) = qty("7e-5", "rad/s")$],
+    [Jour sidéral], [$T_s = qty("86164", "s") = qty("23", "h") #h(2pt) qty("56", "min") #h(2pt) qty("4", "s")$],
+    [Période orbitale de la Lune], [$T_l = qty("27.3", "jours")$],
+    [Constante de Planck réduite], [$hbar = qty("1e-34", "J s")$],
+    [Distance Terre-Lune], [$D_(T/L) = qty("4e5", "km")$],
+    [Distance Terre-Soleil], [$D_(T/S) = qty("1.5e8", "km")$],
+    [Constante de Faraday], [$cal(F) = qty("9.6e4", "C/mol")$],
+    [Constante K], [$K$]
+))
+
+#align(center, table(
+    columns: 2,
+    [*Nom*], [*Valeur et symbole*],
+    // cell(fill: gray, colspan: 2, [#h(0pt)]),
+    [Module de Young (métaux)], [$E = qty("1e2", "GPa")$],
+    [Masse volumique (métaux)], [$rho = qty("1e4", "kg/m^3")$],
+    [Fréquence haute tension], [$f = qty("50", "Hz")$],
+    [Champ magnétique Terrestre], [$B = qty("1e-5", "T")$],
+    [Champ magnétique d'un solénoïde], [$B = qty("1e-3", "T")$],
+    [Champ magnétique d'un aimant], [$B = qty("1e-1", "T") -> qty("1", "T")$],
+    [Champ magnétique d'un IRM], [$B = qty("1e1", "T")$],
+    [Valeur efficace champ électrique WIFI], [$E_(eff) = q q qty("1", "V/m")$],
+    [Valeur efficace champ électrique dû au Soleil sur le sol], [$E_(eff) = qty("1e3", "V/m")$],
+    [Champ électrique terrestre au sol], [$E = qty("1e2", "V/m")$],
+    [Champ de claquage de l'air au sol], [$E = qty("1e5", "V/m")$],
+    [Nombre de moles dans un litre d'eau], [$n = qty("55", "mol")$],
+    [Nombre d'atomes dans 1 mètre cube de cuivre], [$N = qty("1e30", "")$],
+    [Lumière solaire au niveau de la terre, intensité], [$I = qty("1", "kW/m^2")$],
+    [Intensité d'un pointeur laser], [$I = qty("1", "kW/m^2")$],
+    [Intensité d'une lampe à 1m], [$I = qty("1", "W/m^2")$],
+    [Taille d'un atome], [$L = qty("1e-10", "m")$],
+    [Masse d'un électron], [$m_e = qty("1e-30", "kg")$],
+    [Masse d'un proton], [$m_p = qty("1e-27", "kg")$],
+    [Conductivité d'un bon conducteur], [$gamma = qty("1e8", "S/m")$],
+    [Conductivité d'un isolant], [$gamma = qty("1e-8", "S/m")$],
+    [Durée de réponse oeil], [$tau_r = qty("1e-1", "s")$],
+    [Durée de réponse CCD], [$tau_r = qty("1e-2", "s")$],
+    [Durée de réponse photodiode], [$tau_r = qty("1e-6", "s")$],
+))
+
+#box(height: 1em)
 #heading([Incertitudes], supplement: [annex])
 
 En physique les mesures sont souvent associées à des incertitudes sur ces dernières. Il est important de les propager pour pouvoir vérifier nos résultats et les confronter à la réalité.
